@@ -5,10 +5,11 @@ import numpy as np
 from keras.models import Sequential
 from keras import layers
 
-
-dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
+dna_len=25
+n_rows = 10000
+dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= r_rows, delimiter ='\t', header =0)
 n,m=dna_data.shape
-dna_data.dna=dna_data.dna.str[:10]
+dna_data.dna=dna_data.dna.str[:dna_len]
 
 class CharacterTable(object):
     def __init__(self, chars):
@@ -43,8 +44,8 @@ print('shape of vector: ' ,x.shape)
 #y=x=np.zeros((n,MAXLEN,len(chars)),dtype=np.bool)
 for i, dna_str in enumerate(dna_data.dna):
     x[i]=ctable.encode(dna_str,MAXLEN)
-    if i<2:
-        print('dna: ', dna_str, x[i])
+    #if i<2:
+    #    print('dna: ', dna_str, x[i])
 
 split_at = int(.9*n)
 dna_train, dna_test= x[:split_at], x[split_at:]
@@ -61,35 +62,51 @@ HIDDEN_SIZE=128
 BATCH_SIZE=128
 LAYERS=1
 
-print('Build Model... if I am lucky')
+print('Build Model...')
 model=Sequential()
 model.add(RNN(HIDDEN_SIZE,input_shape=(MAXLEN,len(chars))))
-#model.add(layers.RepeatVector(1))
-#for _ in range(LAYERS):
-#    model.add(RNN(HIDDEN_SIZE,return_sequences=True))
+model.add(layers.RepeatVector(MAXLEN))
+for _ in range(LAYERS):
+    model.add(RNN(HIDDEN_SIZE,return_sequences=True))
 
-#model.add(layers.TimeDistributed(layers.Dense(len(chars))))
-#model.add(layers.Activation('softmax'))
+model.add(layers.TimeDistributed(layers.Dense(len(chars))))
+model.add(layers.Activation('softmax'))
 model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
 model.summary()
-model.fit(dna_train, dna_train, batch_size=BATCH_SIZE, epochs=1, validation_data=(dna_test, dna_test))
+#model.fit(dna_train, dna_train, batch_size=BATCH_SIZE, epochs=1, validation_data=(dna_test, dna_test))
+# for i in range(10):
+#        ind=np.random.randint(0, len(dna_test))
+#        rowx, rowy = dna_test[np.array([ind])], dna_test[np.array([ind])]
+#        preds=model.predict_classes(rowx, verbose=0)
+#        q = ctable.decode(rowx[0])
+#        correct = ctable.decode(rowx[0])
+#        guess = ctable.decode(preds[0],calc_argmax=False)
+#        print('Q', q[::-1] )
+#        print('T', correct)
+#        if correct == guess:
+#            print(colors.ok + '☑' + colors.close)
+#        else:
+#            print(colors.fail + '☒' + colors.close)
+#        print(guess)
+#        print('---')
 
-# for iteration in range(20):
-#     print()
-#     print('-'*50)
-#     print('Iteration',iteration)
-#     model.fit(dna_train, dna_train, batch_size=BATCH_SIZE, epochs=1, validation_data=(dna_test, dna_test))
-#     for i in range(10):
-#         ind=np.random.randit(0, len(dna_test))
-#         rowx, rowy = dna_test[np.array([ind])], dna_test[np.array([ind])]
-#         preds=model.predict_classes(rowx, verbose=0)
-#         correct = ctable.decode(rowx[0])
-#         guess = ctable.decode(pres[0],calc_argmax=False)
-#         print('Q', q[::-1] if INVERT else q)
-#         print('T', correct)
-#         if correct == guess:
-#             print(colors.ok + '☑' + colors.close)
-#         else:
-#             print(colors.fail + '☒' + colors.close)
-#         print(guess)
-#         print('---')
+
+for iteration in range(20):
+    print()
+    print('-'*50)
+    print('Iteration',iteration)
+    model.fit(dna_train, dna_train, batch_size=BATCH_SIZE, epochs=1, validation_data=(dna_test, dna_test))
+    for i in range(10):
+        ind=np.random.randit(0, len(dna_test))
+        rowx, rowy = dna_test[np.array([ind])], dna_test[np.array([ind])]
+        preds=model.predict_classes(rowx, verbose=0)
+        correct = ctable.decode(rowx[0])
+        guess = ctable.decode(preds[0],calc_argmax=False)
+        print('Q', q[::-1])
+        print('T', correct)
+        if correct == guess:
+            print(colors.ok + '☑' + colors.close)
+        else:
+            print(colors.fail + '☒' + colors.close)
+        print(guess)
+        print('---')
