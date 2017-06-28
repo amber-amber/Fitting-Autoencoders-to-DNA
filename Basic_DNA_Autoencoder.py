@@ -7,7 +7,7 @@ from keras import layers
 
 dna_len=25
 n_rows = 10000
-dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= r_rows, delimiter ='\t', header =0)
+dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 n,m=dna_data.shape
 dna_data.dna=dna_data.dna.str[:dna_len]
 
