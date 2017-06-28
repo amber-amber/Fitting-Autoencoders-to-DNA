@@ -114,4 +114,4 @@ def main(epochs):
 
 if __name__ == '__main__':
     args = sys.argv[1:]
-    main(args[0])
+    main(int(args[0]))
