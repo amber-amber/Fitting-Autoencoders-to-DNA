@@ -91,23 +91,22 @@ model.summary()
 #        print('---')
 
 
-for iteration in range(20):
-    print()
-    print('-'*50)
-    print('Iteration',iteration)
-    model.fit(dna_train, dna_train, batch_size=BATCH_SIZE, epochs=1, validation_data=(dna_test, dna_test))
-    for i in range(10):
-        ind=np.random.randint(0, len(dna_test))
-        rowx, rowy = dna_test[np.array([ind])], dna_test[np.array([ind])]
-        preds=model.predict_classes(rowx, verbose=0)
-        q = ctable.decode(rowx[0])
-        correct = ctable.decode(rowx[0])
-        guess = ctable.decode(preds[0],calc_argmax=False)
-        print('Q', q[::-1])
-        print('T', correct)
-        if correct == guess:
-            print(colors.ok + '☑' + colors.close)
-        else:
-            print(colors.fail + '☒' + colors.close)
-        print(guess)
-        print('---')
+
+print()
+print('-'*50)
+model.fit(dna_train, dna_train, batch_size=BATCH_SIZE, epochs=20, validation_data=(dna_test, dna_test))
+for i in range(10):
+    ind=np.random.randint(0, len(dna_test))
+    rowx, rowy = dna_test[np.array([ind])], dna_test[np.array([ind])]
+    preds=model.predict_classes(rowx, verbose=0)
+    q = ctable.decode(rowx[0])
+    correct = ctable.decode(rowx[0])
+    guess = ctable.decode(preds[0],calc_argmax=False)
+    print('Q', q[::-1])
+    print('T', correct)
+    if correct == guess:
+        print(colors.ok + '☑' + colors.close)
+    else:
+        print(colors.fail + '☒' + colors.close)
+    print(guess)
+    print('---')
