@@ -97,7 +97,7 @@ for iteration in range(20):
     print('Iteration',iteration)
     model.fit(dna_train, dna_train, batch_size=BATCH_SIZE, epochs=1, validation_data=(dna_test, dna_test))
     for i in range(10):
-        ind=np.random.randit(0, len(dna_test))
+        ind=np.random.randint(0, len(dna_test))
         rowx, rowy = dna_test[np.array([ind])], dna_test[np.array([ind])]
         preds=model.predict_classes(rowx, verbose=0)
         correct = ctable.decode(rowx[0])
