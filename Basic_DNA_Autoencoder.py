@@ -66,7 +66,7 @@ for MAXLEN in range(30,100,10):
     model.add(RNN(HIDDEN_SIZE,input_shape=(MAXLEN,len(chars))))
     model.add(layers.RepeatVector(MAXLEN))
     for _ in range(LAYERS):
-    model.add(RNN(HIDDEN_SIZE,return_sequences=True))
+        model.add(RNN(HIDDEN_SIZE,return_sequences=True))
 
     model.add(layers.TimeDistributed(layers.Dense(len(chars))))
     model.add(layers.Activation('softmax'))
