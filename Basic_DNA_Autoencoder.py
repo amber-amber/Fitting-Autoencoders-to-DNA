@@ -72,7 +72,8 @@ for _ in range(LAYERS):
 
 model.add(layers.TimeDistributed(layers.Dense(len(chars))))
 model.add(layers.Activation('softmax'))
-model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
+#model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
+model.compile(loss='MSE',optimizer='adam',metrics=['accuracy'])
 model.summary()
 #model.fit(dna_train, dna_train, batch_size=BATCH_SIZE, epochs=1, validation_data=(dna_test, dna_test))
 # for i in range(10):
