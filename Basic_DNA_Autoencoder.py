@@ -100,6 +100,7 @@ for iteration in range(20):
         ind=np.random.randint(0, len(dna_test))
         rowx, rowy = dna_test[np.array([ind])], dna_test[np.array([ind])]
         preds=model.predict_classes(rowx, verbose=0)
+        q = ctable.decode(rowx[0])
         correct = ctable.decode(rowx[0])
         guess = ctable.decode(preds[0],calc_argmax=False)
         print('Q', q[::-1])
