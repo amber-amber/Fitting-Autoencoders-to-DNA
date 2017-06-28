@@ -111,5 +111,5 @@ for MAXLEN in range(30,100,10):
             print('---')
 
     if __name__ == '__main__':
-    args = sys.argv[1:]
-    main(int(args[0]))
+        args = sys.argv[1:]
+        main(int(args[0]))
