@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os
 import pandas as pd
 import numpy as np
@@ -6,10 +8,13 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.layers import Embedding
 from keras.utils import np_utils
 
+BASE_DIR = ''
+GLOVE_DIR = BASE_DIR + '/glove.6B/'
+
 n_rows = 5000
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 
-#Tokenizing the data 
+#Tokenizing the data
 tokenizer = Tokenizer()
 tokenizer.fit_on_texts(dna_data.protein)
 sequences = tokenizer.texts_to_sequences(dna_data.protein)
