@@ -13,8 +13,8 @@ from keras import backend as K
 from keras import metrics
 #from keras.datasets import mnist
 
-mnist = gzip.open('mnist.pkl.gz mnist.pkl.gz','rb')
-train_set, valid_set, test_set = cPickle.load(mnist)
+with gzip.open('mnist.pkl.gz mnist.pkl.gz','rb') as mnist:
+    train_set, valid_set, test_set = cPickle.load(mnist)
 #mnist.close()
 
 batch_size = 100
