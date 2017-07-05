@@ -3,6 +3,7 @@
 Reference: "Auto-Encoding Variational Bayes" https://arxiv.org/abs/1312.6114
 '''
 import numpy as np
+from numpy import genfromtxt
 import gzip
 import cPickle as pickle
 import matplotlib.pyplot as plt
@@ -14,8 +15,25 @@ from keras import backend as K
 from keras import metrics
 #from keras.datasets import mnist
 
-with gzip.open('mnist.pkl.gz mnist.pkl.gz','wb') as mnist:
-    [[train_x, train_y], [valid_x, valid_y], [test_x, test_y]] = pickle.load(mnist)
+train_set_x = genfromtxt('train_x.csv', delimiter=',')
+train_set_y = genfromtxt('train_y.csv', delimiter=',')
+val_set_x = genfromtxt('val_x.csv', delimiter=',')
+val_set_y = genfromtxt('val_y.csv', delimiter=',')
+test_set_x = genfromtxt('test_x.csv', delimiter=',')
+test_set_y = genfromtxt('test_y.csv', delimiter=',')
+
+train_set = train_set_x, train_set_y
+val_set = val_set_x, val_set_y
+test_set = test_set_x, val_set_y
+
+dataset = [train_set, val_set, test_set]
+
+f = gzip.open('file.plk.gz','wb')
+pickle.dump(dataset, f, protocol=2)
+f.close()
+
+#with gzip.open('mnist.pkl.gz mnist.pkl.gz','wb') as mnist:
+#    [[train_x, train_y], [valid_x, valid_y], [test_x, test_y]] = pickle.load(mnist)
 #mnist.close()
 
 batch_size = 100
