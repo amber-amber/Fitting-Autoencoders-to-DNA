@@ -45,7 +45,7 @@ dna_data.dna=dna_data.dna.str[:MAXLEN]
 
 print('VECTORIZATION')
 hot=np.zeros((n,MAXLEN,len(chars)), dtype=np.bool)
-print('shape of vector: ',x.shape)
+print('shape of vector: ',hot.shape)
 for i, dna_str in enumerate(dna_data.dna):
     hot[i]=ctable.encode(dna_str, MAXLEN)
 
@@ -108,6 +108,6 @@ vae.fit(x_train,
         shuffle=True,
         epochs=epochs,
         batch_size=batch_size,
-        validation_data=(x_test, x_test))
+        validation_data=(dna_test, dna_test))
 
 
