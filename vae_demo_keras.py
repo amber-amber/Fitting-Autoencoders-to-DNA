@@ -14,7 +14,7 @@ from keras import backend as K
 from keras import metrics
 #from keras.datasets import mnist
 
-with gzip.open('mnist.pkl.gz mnist.pkl.gz','wb') as mnist:
+with gzip.open('mnist.pkl.gz mnist.pkl.gz','rb') as mnist:
     train_set, valid_set, test_set = pickle.load(mnist)
 #mnist.close()
 
