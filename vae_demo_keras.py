@@ -3,7 +3,7 @@
 Reference: "Auto-Encoding Variational Bayes" https://arxiv.org/abs/1312.6114
 '''
 import numpy as np
-import gzip
+import gzip, cPickle
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 
@@ -13,7 +13,9 @@ from keras import backend as K
 from keras import metrics
 #from keras.datasets import mnist
 
-mnist = gzip.open('mnist.pkl.gz mnist.pkl.gz','wb')
+mnist = gzip.open('mnist.pkl.gz mnist.pkl.gz','rb')
+train_set, valid_set, test_set = cPickle.load(mnist)
+mnist.close()
 
 batch_size = 100
 original_dim = 784
@@ -70,7 +72,7 @@ vae.compile(optimizer='rmsprop', loss=None)
 
 
 # train the VAE on MNIST digits
-(x_train, y_train), (x_test, y_test) = mnist.load_data()
+#(x_train, y_train), (x_test, y_test) = mnist.load_data()
 
 
 x_train = x_train.astype('float32') / 255.
