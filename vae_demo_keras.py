@@ -15,7 +15,7 @@ from keras import metrics
 
 mnist = gzip.open('mnist.pkl.gz mnist.pkl.gz','rb')
 train_set, valid_set, test_set = cPickle.load(mnist)
-mnist.close()
+#mnist.close()
 
 batch_size = 100
 original_dim = 784
