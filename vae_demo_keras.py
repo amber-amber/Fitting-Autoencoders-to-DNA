@@ -3,7 +3,8 @@
 Reference: "Auto-Encoding Variational Bayes" https://arxiv.org/abs/1312.6114
 '''
 import numpy as np
-import gzip, cPickle
+import gzip
+import cPickle as pickle
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 
@@ -14,7 +15,7 @@ from keras import metrics
 #from keras.datasets import mnist
 
 with gzip.open('mnist.pkl.gz mnist.pkl.gz','rb') as mnist:
-    train_set, valid_set, test_set = cPickle.load(mnist)
+    train_set, valid_set, test_set = pickle.load(mnist)
 #mnist.close()
 
 batch_size = 100
