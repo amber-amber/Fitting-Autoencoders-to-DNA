@@ -13,6 +13,7 @@ from keras import metrics
 from keras.datasets import mnist
 
 import gzip
+import sys 
 
 batch_size = 100
 original_dim = 784
