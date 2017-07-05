@@ -34,6 +34,9 @@ class CharacterTable(object):
             x = x. argmax(axis=-1)
         return ''.join(self.indices_char[x] for x in x)
 
+chars='actg'
+ctable= CharacterTable(chars)
+
 n_rows = 10000
 MAXLEN = 30
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
