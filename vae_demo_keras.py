@@ -14,8 +14,8 @@ from keras import backend as K
 from keras import metrics
 #from keras.datasets import mnist
 
-with gzip.open('mnist.pkl.gz mnist.pkl.gz') as mnist:
-    train_set, valid_set, test_set = pickle.load(mnist)
+with gzip.open('mnist.pkl.gz mnist.pkl.gz','wb') as mnist:
+    [[train_x, train_y], [valid_x, valid_y], [test_x, test_y]] = pickle.load(mnist)
 #mnist.close()
 
 batch_size = 100
@@ -74,8 +74,8 @@ vae.compile(optimizer='rmsprop', loss=None)
 
 # train the VAE on MNIST digits
 #(x_train, y_train), (x_test, y_test) = mnist.load_data()
-x_train, y_train = train_set
-x_test, y_test = test_set
+#x_train, y_train = train_set
+#x_test, y_test = test_set
 
 
 x_train = x_train.astype('float32') / 255.
