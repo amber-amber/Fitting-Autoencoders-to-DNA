@@ -56,9 +56,10 @@ class CharacterTable(object):
 chars='actg'
 ctable= CharacterTable(chars)
 
-print('VECTORIZATION')
-hot_x=np.zeros((n_patterns,MAXLEN,len(chars)), dtype=np.bool)
-#print('shape of vector: ',hot_x.shape)
+print 'VECTORIZATION, Bitches'
+hot_x=np.zeros((n_patterns,MAXLEN,len(chars)),dtype=np.bool)
+print 'Shape of vector: ', hot_x.shape
 for i, dna_str in enumerate(bases_in):
     hot_x[i]=ctable.encode(dna_str, MAXLEN)
 print hot_x[1]
+#should this really be false for everyhing past 20??
