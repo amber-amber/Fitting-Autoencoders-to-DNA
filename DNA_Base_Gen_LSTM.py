@@ -1,12 +1,12 @@
 import numpy as np
 import pandas as pd
 
-from keras.models import Sequential
-from keras.layers import Dense, Dropout,LSTM
+#from keras.models import Sequential
+#from keras.layers import Dense, Dropout,LSTM
 
 n_rows = 10000
 MAXLEN = 60
-dna_data = pd.read_csv('coreseed.train.tsv', names="dna", usecols=5, nrows= n_rows, delimiter ='\t', header =0)
+dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 #n,m = dna_data.shape
 dna_data.dna=dna_data.dna.str[:MAXLEN]
 print "DNA shape: ", dna_data.shape
