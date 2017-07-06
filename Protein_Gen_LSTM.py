@@ -64,6 +64,6 @@ ctable= CharacterTable(chars)
 print 'VECTORIZATION'
 hot_x=np.zeros((n_patterns,protein_in_len,len(chars)),dtype=np.bool)
 print 'Shape of vector: ', hot_x.shape
-for i, dna_str in enumerate(protein_in):
-    hot_x[i]=ctable.encode(dna_str, MAXLEN)
+for i, prot_str in enumerate(protein_in):
+    hot_x[i]=ctable.encode(prot_str, protein_in_len)
 print hot_x[1]
