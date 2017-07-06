@@ -35,7 +35,7 @@ for i in range(n_rows):
             protein_out.append(current_protein_out)
 n_patterns = len(protein_in)
 chars = sorted(set(chars))
-print "Number of protein characters", len(chars)
+print "Number of protein characters: ", len(chars)
 print "Number of patterns: ", n_patterns
 print "Sample of bases in:", protein_in[889]
 print "Sample of base_out:", protein_out[889]
@@ -63,7 +63,11 @@ ctable= CharacterTable(chars)
 
 print 'VECTORIZATION'
 hot_x=np.zeros((n_patterns,protein_in_len,len(chars)),dtype=np.bool)
-print 'Shape of vector: ', hot_x.shape
+hot_y=np.zeros((n_patterns, 1, len(chars)),dtype=np.bool)
+print 'Shape of input vector: ', hot_x.shape
 for i, prot_str in enumerate(protein_in):
     hot_x[i]=ctable.encode(prot_str, protein_in_len)
+for i, next_prot in enumerate(protein_out):
+    hot_y[i]=ctable.encode(next_prot,1)
 print hot_x[1]
+print hot_y[1]
