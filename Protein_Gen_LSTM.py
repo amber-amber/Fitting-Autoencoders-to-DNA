@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 
-#from keras.models import Sequential
-#from keras.layers import Dense, Dropout,LSTM
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, LSTM
 
 n_rows = 10000
 MAXLEN = 60
@@ -71,3 +71,15 @@ for i, next_prot in enumerate(protein_out):
     hot_y[i]=ctable.encode(next_prot,1)
 print hot_x[1]
 print hot_y[1]
+
+#The Single Layer LSTM Model
+
+HIDDEN_SIZE =128
+model = Sequential()
+model.add(LSTM(HIDDEN_SIZE,input_shape=(MAXLEN, len(chars))))
+model.add(Dropout(0.2))
+model.add(Dense(1, activation='softmax'))
+model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
+model.summary()
+
+model.fit(hot_x, hot_y, epochs=25, batch_size=128)
