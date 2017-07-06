@@ -12,14 +12,14 @@ dna_data.dna=dna_data.dna.str[:MAXLEN]
 print "DNA shape: ", dna_data.shape
 
 #We need to come up with the list of training patterns
-# base_in_len = 20
-# bases_in = []
-# base_out = []
-# for i in range(n_rows):
-#     for j in range(0, MAXLEN-base_in_len):
-#         current_base_in = dna_data.dna[i,j:j+base_in_len]
-#         current_base_out = dna_data.dna[i,j+base_in_len]
-#         bases_in.append(current_base_in)
-#         base_out.append(current_base_out)
-# n_patterns = len(bases_in)
-# print "Number of patterns: ", n_patterns
+base_in_len = 20
+bases_in = []
+base_out = []
+for i in range(n_rows):
+    for j in range(0, MAXLEN-base_in_len):
+        current_base_in = dna_data.dna[i][j:j+base_in_len]
+        current_base_out = dna_data.dna[i][j+base_in_len]
+        bases_in.append(current_base_in)
+        base_out.append(current_base_out)
+n_patterns = len(bases_in)
+print "Number of patterns: ", n_patterns
