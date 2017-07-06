@@ -69,8 +69,8 @@ for i, prot_str in enumerate(protein_in):
     hot_x[i]=ctable.encode(prot_str, protein_in_len)
 for i, next_prot in enumerate(protein_out):
     hot_y[i]=ctable.encode(next_prot,1)
-print hot_x[1]
-print hot_y[1]
+#print hot_x[1]
+#print hot_y[1]
 
 #The Single Layer LSTM Model
 
@@ -78,7 +78,7 @@ HIDDEN_SIZE =128
 model = Sequential()
 model.add(LSTM(HIDDEN_SIZE,input_shape=(MAXLEN, len(chars))))
 model.add(Dropout(0.2))
-model.add(Dense(1, activation='softmax'))
+model.add(Dense(hot_y.shape[1], activation='softmax'))
 model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
 model.summary()
 
