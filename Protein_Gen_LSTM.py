@@ -27,12 +27,14 @@ chars = ''
 for i in range(n_rows):
     for j in range(len(dna_data.protein[i])-protein_in_len):
          current_protein_in = dna_data.protein[i][j:j+protein_in_len]
-         chars = chars+sorted(set(str(current_protein_in)))
+         prot_string = str(current_protein_in)
+         chars= chars + prot_string
          if (j+protein_in_len) < (MAXLEN-2):
             current_protein_out = dna_data.protein[i][j+protein_in_len]
             protein_in.append(current_protein_in)
             protein_out.append(current_protein_out)
 n_patterns = len(protein_in)
+chars = sorted(set(chars))
 print "Number of protein characters", len(chars)
 print "Number of patterns: ", n_patterns
 print "Sample of bases in:", protein_in[889]
