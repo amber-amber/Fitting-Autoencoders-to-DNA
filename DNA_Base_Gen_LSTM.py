@@ -32,8 +32,8 @@ for i in range(n_rows):
             base_out.append(current_base_out)
 n_patterns = len(bases_in)
 print "Number of patterns: ", n_patterns
-print "Sample of bases in:", bases_in[888]
-print "Sample of base_out:", base_out[888]
+print "Sample of bases in:", bases_in[889]
+print "Sample of base_out:", base_out[889]
 
 #Vectorization
 class CharacterTable(object):
@@ -61,4 +61,4 @@ hot_x=np.zeros((n_patterns,MAXLEN,len(chars)), dtype=np.bool)
 #print('shape of vector: ',hot_x.shape)
 for i, dna_str in enumerate(bases_in):
     hot_x[i]=ctable.encode(dna_str, MAXLEN)
-print hot_x[1:3]
+print hot_x[1]
