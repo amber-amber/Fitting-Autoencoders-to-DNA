@@ -27,7 +27,7 @@ chars = ''
 for i in range(n_rows):
     for j in range(len(dna_data.protein[i])-protein_in_len):
          current_protein_in = dna_data.protein[i][j:j+protein_in_len]
-         chars.append(sorted(set(current_protein_in)))
+         chars = chars+sorted(set(current_protein_in))
          if (j+protein_in_len) < (MAXLEN-2):
             current_protein_out = dna_data.protein[i][j+protein_in_len]
             protein_in.append(current_protein_in)
