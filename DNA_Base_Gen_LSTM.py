@@ -16,10 +16,13 @@ print len(teststring)
 #letters_in =[]
 #letter_out =[]
 length=8
+counter=0
 for j in range(len(teststring)-length):
     current_letters_in = teststring[j:j+length]
+    counter= counter+1
     print current_letters_in
     print teststring[j+length]
+print counter
 
 #print teststring[3:3+8] #this is xanderni
 #print teststring[11] #this is c
