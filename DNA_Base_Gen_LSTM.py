@@ -32,8 +32,8 @@ for i in range(n_rows):
             base_out.append(current_base_out)
 n_patterns = len(bases_in)
 print "Number of patterns: ", n_patterns
-print "Sample of bases in:" bases_in[888]
-print "Sample of base_out:" base_out[888]
+print "Sample of bases in:", bases_in[888]
+print "Sample of base_out:", base_out[888]
 
 #Vectorization
 class CharacterTable(object):
