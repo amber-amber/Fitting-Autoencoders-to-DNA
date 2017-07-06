@@ -56,7 +56,7 @@ class CharacterTable(object):
 chars='actg'
 ctable= CharacterTable(chars)
 
-print 'VECTORIZATION, Bitches'
+print 'VECTORIZATION'
 hot_x=np.zeros((n_patterns,MAXLEN,len(chars)),dtype=np.bool)
 print 'Shape of vector: ', hot_x.shape
 for i, dna_str in enumerate(bases_in):
