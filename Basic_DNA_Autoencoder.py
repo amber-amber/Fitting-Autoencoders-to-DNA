@@ -36,16 +36,16 @@ n_rows = 50000
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 n,m=dna_data.shape
 #for MAXLEN in range(30,100,10):
-    print('The number of bases in the DNA is ', MAXLEN)
-    print('\n')
-    dna_data.dna=dna_data.dna.str[:MAXLEN]
+    #print('The number of bases in the DNA is ', MAXLEN)
+    #print('\n')
+dna_data.dna=dna_data.dna.str[:MAXLEN]
 
-    print('VECTORIZATION')
-    x=np.zeros((n,MAXLEN,len(chars)),dtype=np.bool)
-    print('shape of vector: ' ,x.shape)
-    for i, dna_str in enumerate(dna_data.dna):
-        x[i]=ctable.encode(dna_str,MAXLEN)
-    print x[1]
+print('VECTORIZATION')
+x=np.zeros((n,MAXLEN,len(chars)),dtype=np.bool)
+print('shape of vector: ' ,x.shape)
+for i, dna_str in enumerate(dna_data.dna):
+    x[i]=ctable.encode(dna_str,MAXLEN)
+print x[1]
 
     # split_at = int(.9*n)
     # dna_train, dna_test= x[:split_at], x[split_at:]
