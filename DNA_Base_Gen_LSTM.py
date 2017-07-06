@@ -23,8 +23,8 @@ base_out = []
 for i in range(n_rows):
     for j in range(0, MAXLEN-base_in_len,1):
         if j+base_in_len < MAXLEN-1:
-            current_base_in = dna_data.dna[i][j:j+base_in_len]
-            current_base_out = dna_data.dna[i][j+base_in_len]
+            current_base_in = dna_data.dna[i][j:j+base_in_len-1]
+            current_base_out = dna_data.dna[i][j+base_in_len-1]
             bases_in.append(current_base_in)
             base_out.append(current_base_out)
 n_patterns = len(bases_in)
