@@ -78,7 +78,7 @@ HIDDEN_SIZE =128
 model = Sequential()
 model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(MAXLEN, len(chars))))
 model.add(layers.RepeatVector(MAXLEN))
-model.add(Dense(hot_y.shape[1], activation='softmax'))
+model.add(layers.Dense(hot_y.shape[1], activation='softmax'))
 model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
 model.summary()
 
