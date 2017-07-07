@@ -82,7 +82,7 @@ model = Sequential()
 model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(MAXLEN, len(chars))))
 model.add(layers.RepeatVector(MAXLEN))
 for _ in range(LAYERS):
-    model.add(RNN(HIDDEN_SIZE, return_sequences=True))
+    model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
 
 model.add(layers.TimeDistributed(layers.Dense(len(chars))))
 model.add(layers.Activation('softmax'))
