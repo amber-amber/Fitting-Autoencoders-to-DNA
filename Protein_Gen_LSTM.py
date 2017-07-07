@@ -3,6 +3,7 @@ import pandas as pd
 
 from keras.models import Sequential
 from keras import layers
+from keras.optimizers import RMSprop
 
 n_rows = 10000
 MAXLEN = 60
@@ -75,19 +76,24 @@ for i, next_prot in enumerate(protein_out):
 
 #The Single Layer LSTM Model
 #
-# HIDDEN_SIZE =128
-# BATCH_SIZE=128
-# LAYERS=1
-#
-# model = Sequential()
-# model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2])))
+HIDDEN_SIZE =128
+BATCH_SIZE=128
+LAYERS=1
+
+model = Sequential()
+model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2])))
+model.add(layers.Dense(len(chars)))
+model.add(layers.Activation('softmax'))
 # model.add(layers.RepeatVector(MAXLEN))
 # for _ in range(LAYERS):
 #     model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
 #
 # model.add(layers.TimeDistributed(layers.Dense(len(chars))))
 # model.add(layers.Activation('softmax'))
-# model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
-# model.summary()
-#
-# model.fit(hot_x, hot_y, epochs=25, batch_size=128)
+#model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
+optimizer = RMSprop(lr=0.01)
+model.compile(loss='categorical_crossentropy', optimizer=optimizer)
+
+model.summary()
+
+model.fit(hot_x, hot_y, epochs=5, batch_size=128)
