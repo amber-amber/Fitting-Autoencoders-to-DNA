@@ -79,7 +79,7 @@ BATCH_SIZE=128
 LAYERS=1
 
 model = Sequential()
-model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(MAXLEN, len(chars))))
+model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2])))
 model.add(layers.RepeatVector(MAXLEN))
 for _ in range(LAYERS):
     model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
