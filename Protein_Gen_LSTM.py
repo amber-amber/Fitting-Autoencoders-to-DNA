@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, LSTM
+from keras import layers
 
 n_rows = 10000
 MAXLEN = 60
@@ -77,7 +77,7 @@ for i, next_prot in enumerate(protein_out):
 HIDDEN_SIZE =128
 model = Sequential()
 model.add(LSTM(HIDDEN_SIZE,input_shape=(MAXLEN, len(chars))))
-model.add(Dropout(0.2))
+model.add(layers.RepeatVector(MAXLEN))
 model.add(Dense(hot_y.shape[1], activation='softmax'))
 model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
 model.summary()
