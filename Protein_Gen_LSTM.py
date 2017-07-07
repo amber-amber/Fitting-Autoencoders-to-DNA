@@ -65,6 +65,7 @@ print 'VECTORIZATION'
 hot_x=np.zeros((n_patterns,protein_in_len,len(chars)),dtype=np.bool)
 hot_y=np.zeros((n_patterns, 1, len(chars)),dtype=np.bool)
 print 'Shape of input vector: ', hot_x.shape
+print 'Shape of output vector: ', hot_y.shape
 for i, prot_str in enumerate(protein_in):
     hot_x[i]=ctable.encode(prot_str, protein_in_len)
 for i, next_prot in enumerate(protein_out):
@@ -73,20 +74,20 @@ for i, next_prot in enumerate(protein_out):
 #print hot_y[1]
 
 #The Single Layer LSTM Model
-
-HIDDEN_SIZE =128
-BATCH_SIZE=128
-LAYERS=1
-
-model = Sequential()
-model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2])))
-model.add(layers.RepeatVector(MAXLEN))
-for _ in range(LAYERS):
-    model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
-
-model.add(layers.TimeDistributed(layers.Dense(len(chars))))
-model.add(layers.Activation('softmax'))
-model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
-model.summary()
-
-model.fit(hot_x, hot_y, epochs=25, batch_size=128)
+#
+# HIDDEN_SIZE =128
+# BATCH_SIZE=128
+# LAYERS=1
+#
+# model = Sequential()
+# model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2])))
+# model.add(layers.RepeatVector(MAXLEN))
+# for _ in range(LAYERS):
+#     model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
+#
+# model.add(layers.TimeDistributed(layers.Dense(len(chars))))
+# model.add(layers.Activation('softmax'))
+# model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
+# model.summary()
+#
+# model.fit(hot_x, hot_y, epochs=25, batch_size=128)
