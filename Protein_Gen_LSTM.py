@@ -76,7 +76,7 @@ for i, next_prot in enumerate(protein_out):
 
 HIDDEN_SIZE =128
 model = Sequential()
-model.add(LSTM(HIDDEN_SIZE,input_shape=(MAXLEN, len(chars))))
+model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(MAXLEN, len(chars))))
 model.add(layers.RepeatVector(MAXLEN))
 model.add(Dense(hot_y.shape[1], activation='softmax'))
 model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
