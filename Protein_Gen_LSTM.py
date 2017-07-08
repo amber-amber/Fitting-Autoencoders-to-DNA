@@ -75,22 +75,20 @@ for i, prot_str in enumerate(protein_in):
     hot_y[i, char_indices[protein_out[i]]] = 1
 # for i, next_prot in enumerate(protein_out):
 #     hot_y[i]=ctable.encode(next_prot,1)
-print 'example of encoded protein: ', hot_x[8]
-print 'example of encoded next protein: ', hot_y[8]
-
-#print hot_x[1]
-#print hot_y[1]
+#print 'example of encoded protein: ', hot_x[8]
+#print 'example of encoded next protein: ', hot_y[8]
 
 #The Single Layer LSTM Model
 #
-# HIDDEN_SIZE =128
-# BATCH_SIZE=128
+HIDDEN_SIZE =128
+BATCH_SIZE=128
 # LAYERS=1
-#
-# model = Sequential()
-# model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2])))
-# model.add(layers.Dense(len(chars)))
-# model.add(layers.Activation('softmax'))
+
+print 'Build Model...'
+model = Sequential()
+model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2])))
+model.add(layers.Dense(len(chars)))
+model.add(layers.Activation('softmax'))
 # # model.add(layers.RepeatVector(MAXLEN))
 # # for _ in range(LAYERS):
 # #     model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
@@ -98,9 +96,9 @@ print 'example of encoded next protein: ', hot_y[8]
 # # model.add(layers.TimeDistributed(layers.Dense(len(chars))))
 # # model.add(layers.Activation('softmax'))
 # #model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
-# optimizer = RMSprop(lr=0.01)
-# model.compile(loss='categorical_crossentropy', optimizer=optimizer)
+optimizer = RMSprop(lr=0.01)
+model.compile(loss='categorical_crossentropy', optimizer=optimizer)
 #
-# model.summary()
+model.summary()
 #
-# model.fit(hot_x, hot_y, epochs=5, batch_size=128)
+model.fit(hot_x, hot_y, epochs=5, batch_size=BATCH_SIZE)
