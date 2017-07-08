@@ -76,8 +76,8 @@ for i, prot_str in enumerate(protein_in):
     hot_y[i, char_indices[protein_out[i]]] = 1
 # for i, next_prot in enumerate(protein_out):
 #     hot_y[i]=ctable.encode(next_prot,1)
-print 'example of encoded protein: ' hot_x[8]
-print 'example of encoded next protein: ' hot_y[8]
+print 'example of encoded protein: ', hot_x[8]
+print 'example of encoded next protein: ', hot_y[8]
 
 #print hot_x[1]
 #print hot_y[1]
