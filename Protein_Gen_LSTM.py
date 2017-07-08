@@ -66,7 +66,7 @@ print "Sample of base_out:", protein_out[889]
 
 print 'VECTORIZATION'
 hot_x=np.zeros((n_patterns,protein_in_len,len(chars)),dtype=np.bool)
-hot_y=np.zeros((n_patterns, 1, len(chars)),dtype=np.bool)
+hot_y=np.zeros((n_patterns, len(chars)),dtype=np.bool)
 print 'Shape of input vector: ', hot_x.shape
 print 'Shape of output vector: ', hot_y.shape
 for i, prot_str in enumerate(protein_in):
