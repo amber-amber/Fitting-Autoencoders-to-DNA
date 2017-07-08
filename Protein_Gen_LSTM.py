@@ -97,8 +97,6 @@ model.add(layers.Activation('softmax'))
 # # model.add(layers.Activation('softmax'))
 # #model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
 optimizer = RMSprop(lr=0.01)
-model.compile(loss='categorical_crossentropy', optimizer=optimizer)
-#
+model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
-#
 model.fit(hot_x, hot_y, epochs=5, batch_size=BATCH_SIZE)
