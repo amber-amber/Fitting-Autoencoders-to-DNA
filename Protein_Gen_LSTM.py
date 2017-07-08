@@ -62,7 +62,7 @@ print "Sample of base_out:", protein_out[889]
 #             x = x. argmax(axis=-1)
 #         return ''.join(self.indices_char[x] for x in x)
 
-ctable= CharacterTable(chars)
+#ctable= CharacterTable(chars)
 
 print 'VECTORIZATION'
 hot_x=np.zeros((n_patterns,protein_in_len,len(chars)),dtype=np.bool)
