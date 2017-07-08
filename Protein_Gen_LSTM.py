@@ -8,7 +8,6 @@ from keras.optimizers import RMSprop
 n_rows = 10000
 MAXLEN = 60
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
-#n,m = dna_data.shape
 dna_data.protein=dna_data.protein.str[:MAXLEN]
 print "DNA shape: ", dna_data.shape
 
