@@ -63,7 +63,7 @@ print "Sample of base_out:", protein_out[889]
 #         return ''.join(self.indices_char[x] for x in x)
 
 #ctable= CharacterTable(chars)
-
+#ONE HOT ENCODING
 print 'VECTORIZATION'
 hot_x=np.zeros((n_patterns,protein_in_len,len(chars)),dtype=np.bool)
 hot_y=np.zeros((n_patterns, len(chars)),dtype=np.bool)
@@ -81,6 +81,9 @@ for i, prot_str in enumerate(protein_in):
 
 #The Single Layer LSTM Model
 #
+
+#Can we try SOME OTHER ENCODING
+
 HIDDEN_SIZE =128
 BATCH_SIZE=128
 # LAYERS=1
