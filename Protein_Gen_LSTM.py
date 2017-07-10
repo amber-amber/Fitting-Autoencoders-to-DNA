@@ -80,7 +80,6 @@ for i, prot_str in enumerate(protein_in):
 #print 'example of encoded next protein: ', hot_y[8]
 
 #The Single Layer LSTM Model
-#
 
 #Can we try SOME OTHER ENCODING
 
@@ -90,6 +89,8 @@ BATCH_SIZE=128
 
 print 'Build Model...'
 model = Sequential()
+#What if we wanted to use an embedding?
+#model.add(layers.Embedding(BATCH_SIZE, input_length = protein_in_len, embeddings_initializer='uniform')
 model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2])))
 model.add(layers.Dense(len(chars)))
 model.add(layers.Activation('softmax'))
