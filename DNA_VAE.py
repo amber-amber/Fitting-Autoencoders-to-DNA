@@ -8,15 +8,6 @@ from keras.models import Model
 from keras import backend as K
 from keras import metrics
 
-#batch_size = 100
-#original_dim = 784
-latent_dim = 2
-intermediate_dim = 256
-epochs = 50
-epsilon_std = 1.0
-
-#the vectorization
-
 class CharacterTable(object):
     def __init__(self, chars):
         self.chars=sorted(set(chars))
@@ -48,10 +39,19 @@ hot=np.zeros((n,MAXLEN,len(chars)), dtype=np.bool)
 print('shape of vector: ',hot.shape)
 for i, dna_str in enumerate(dna_data.dna):
     hot[i]=ctable.encode(dna_str, MAXLEN)
+#Do we need to vectorize if we are using variational autoencoder? I don't think so!?!?
 
 #the VAE
+batch_size = 100
+#original_dim = 784
+original_dim = MAXLEN #maybe?
+latent_dim = 2
+#intermediate_dim = 256
+intermediate_dim = 10
+epochs = 30
+epsilon_std = 1.0
 
-x = Input(batch_shape=(hot.shape))
+x = Input(batch_shape=(batch_size, original_dim))
 h = Dense(intermediate_dim, activation='relu')(x)
 z_mean = Dense(latent_dim)(h)
 z_log_var = Dense(latent_dim)(h)
@@ -94,7 +94,8 @@ class CustomVariationalLayer(Layer):
 
 y = CustomVariationalLayer()([x, x_decoded_mean])
 vae = Model(x, y)
-vae.compile(optimizer='rmsprop', loss=None)
+vae.compile(optimizer='rmsprop', loss=None, metrics=['accuracy'])
+vae.summary()
 
 #fit to DNA data
 split_at = int(.9 * n)
@@ -110,4 +111,6 @@ vae.fit(x_train,
         batch_size=batch_size,
         validation_data=(dna_test, dna_test))
 
+encoder = Model(x, z_mean)
 
+#We want to somehow determine the generated DNA seqences 
