@@ -21,7 +21,8 @@ import random
 import sys
 
 #path = get_file('nietzsche.txt', origin='https://s3.amazonaws.com/text-datasets/nietzsche.txt')
-text = open('nietzsche.txt')
+text = open('nietzsche.txt','r')
+text.read()
 print('corpus length:', len(text))
 
 chars = sorted(list(set(text)))
