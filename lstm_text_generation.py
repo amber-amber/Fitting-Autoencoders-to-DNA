@@ -22,10 +22,10 @@ import sys
 
 #path = get_file('nietzsche.txt', origin='https://s3.amazonaws.com/text-datasets/nietzsche.txt')
 text = open('nietzsche.txt','r')
-text.read()
-print('corpus length:', len(text))
+nietzsche = text.read()
+print('corpus length:', len(nietzsche))
 
-chars = sorted(list(set(text)))
+chars = sorted(list(set(nietzsche)))
 print('total chars:', len(chars))
 char_indices = dict((c, i) for i, c in enumerate(chars))
 indices_char = dict((i, c) for i, c in enumerate(chars))
@@ -35,12 +35,12 @@ maxlen = 40
 step = 3
 sentences = []
 next_chars = []
-for i in range(0, len(text) - maxlen, step):
-    sentences.append(text[i: i + maxlen])
-    next_chars.append(text[i + maxlen])
+for i in range(0, len(nietzsche) - maxlen, step):
+    sentences.append(nietzsche[i: i + maxlen])
+    next_chars.append(nietzsche[i + maxlen])
 print('nb sequences:', len(sentences))
-print('example of a sentence: ',sentences[12])
-print('example of next char: ', next_chars[12])
+print('example of a sentence: ',sentences[69])
+print('example of next char: ', next_chars[69])
 
 print('Vectorization...')
 X = np.zeros((len(sentences), maxlen, len(chars)), dtype=np.bool)
@@ -84,14 +84,14 @@ for iteration in range(1, 60):
               batch_size=128,
               epochs=1)
 
-    start_index = random.randint(0, len(text) - maxlen - 1)
+    start_index = random.randint(0, len(nietzsche) - maxlen - 1)
 
     for diversity in [0.2, 0.5, 1.0, 1.2]:
         print()
         print('----- diversity:', diversity)
 
         generated = ''
-        sentence = text[start_index: start_index + maxlen]
+        sentence = nietzsche[start_index: start_index + maxlen]
         generated += sentence
         print('----- Generating with seed: "' + sentence + '"')
         sys.stdout.write(generated)
