@@ -8,7 +8,7 @@ from keras import layers
 from keras.optimizers import RMSprop
 
 n_rows = 10000
-MAXLEN = 30
+MAXLEN = 40
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 dna_data.protein=dna_data.protein.str[:MAXLEN]
 print "DNA shape: ", dna_data.shape
@@ -23,11 +23,12 @@ print "DNA shape: ", dna_data.shape
 
 #We need to come up with the list of training patterns
 protein_in_len = 10
+step = 3
 protein_in = []
 protein_out = []
 chars = ''
 for i in range(n_rows):
-    for j in range(len(dna_data.protein[i])-protein_in_len):
+    for j in range(0,len(dna_data.protein[i])-protein_in_len, step):
          current_protein_in = dna_data.protein[i][j:j+protein_in_len]
          prot_string = str(current_protein_in)
          chars= chars + prot_string
