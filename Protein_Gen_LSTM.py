@@ -8,7 +8,7 @@ from keras import layers
 from keras.optimizers import RMSprop
 
 n_rows = 10000
-MAXLEN = 60
+MAXLEN = 70
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 dna_data.protein=dna_data.protein.str[:MAXLEN]
 print "DNA shape: ", dna_data.shape
@@ -22,7 +22,7 @@ print "DNA shape: ", dna_data.shape
 
 
 #We need to come up with the list of training patterns
-protein_in_len = 20
+protein_in_len = 40
 protein_in = []
 protein_out = []
 chars = ''
@@ -41,8 +41,8 @@ char_indices = dict((c, i) for i, c in enumerate(chars))
 indices_char = dict((i, c) for i, c in enumerate(chars))
 print "Number of protein characters: ", len(chars)
 print "Number of patterns: ", n_patterns
-print "Sample of bases in:", protein_in[889]
-print "Sample of base_out:", protein_out[889]
+print "Sample of bases in:", protein_in[8289]
+print "Sample of base_out:", protein_out[8289]
 
 #Vectorization
 #Let's just use one hot encoding because that's all I know fml
@@ -88,52 +88,52 @@ HIDDEN_SIZE =128
 BATCH_SIZE=128
 # LAYERS=1
 
-print 'Build Model...'
-model = Sequential()
-#What if we wanted to use an embedding?
-#model.add(layers.Embedding(BATCH_SIZE, input_length = protein_in_len, embeddings_initializer='uniform')
-model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2])))
-model.add(layers.Dense(len(chars)))
-model.add(layers.Activation('softmax'))
-# # model.add(layers.RepeatVector(MAXLEN))
-# # for _ in range(LAYERS):
-# #     model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
-# #
-# # model.add(layers.TimeDistributed(layers.Dense(len(chars))))
-# # model.add(layers.Activation('softmax'))
-# #model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
-optimizer = RMSprop(lr=0.01)
-model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
-model.summary()
-model.fit(hot_x, hot_y, epochs=5, batch_size=BATCH_SIZE)
-
-def sample(preds, temperature=1.0):
-    # helper function to sample an index from a probability array
-    preds = np.asarray(preds).astype('float64')
-    preds = np.log(preds) / temperature
-    exp_preds = np.exp(preds)
-    preds = exp_preds / np.sum(exp_preds)
-    probas = np.random.multinomial(1, preds, 1)
-    return np.argmax(probas)
-
-start_index = random.randint(0, n_patterns)
-generated = ''
-this_prot = str(protein_in[start_index])
-generated += this_prot
-print 'Generating with protein: ', generated
-
-
-for diversity in [0.2, 0.5, 1.0, 1.2]:
-    print 'Diversity: ', diversity
-    for i in range(400):
-        x = np.zeros((1, protein_in_len, len(chars)))
-        for t, char in enumerate(this_prot):
-            x[0,t,char_indices[char]] = 1
-        preds = model.predict(x, verbose=0)[0]
-        next_index = sample(preds, diversity)
-        next_char = indices_char[next_index]
-        generated += next_char
-        this_prot = this_prot[1:]+next_char
-        sys.stdout.write(next_char)
-        sys.stdout.flush()
-    print()
+# print 'Build Model...'
+# model = Sequential()
+# #What if we wanted to use an embedding?
+# #model.add(layers.Embedding(BATCH_SIZE, input_length = protein_in_len, embeddings_initializer='uniform')
+# model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2])))
+# model.add(layers.Dense(len(chars)))
+# model.add(layers.Activation('softmax'))
+# # # model.add(layers.RepeatVector(MAXLEN))
+# # # for _ in range(LAYERS):
+# # #     model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
+# # #
+# # # model.add(layers.TimeDistributed(layers.Dense(len(chars))))
+# # # model.add(layers.Activation('softmax'))
+# # #model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
+# optimizer = RMSprop(lr=0.01)
+# model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+# model.summary()
+# model.fit(hot_x, hot_y, epochs=5, batch_size=BATCH_SIZE)
+#
+# def sample(preds, temperature=1.0):
+#     # helper function to sample an index from a probability array
+#     preds = np.asarray(preds).astype('float64')
+#     preds = np.log(preds) / temperature
+#     exp_preds = np.exp(preds)
+#     preds = exp_preds / np.sum(exp_preds)
+#     probas = np.random.multinomial(1, preds, 1)
+#     return np.argmax(probas)
+#
+# start_index = random.randint(0, n_patterns)
+# generated = ''
+# this_prot = str(protein_in[start_index])
+# generated += this_prot
+# print 'Generating with protein: ', generated
+#
+#
+# for diversity in [0.2, 0.5, 1.0, 1.2]:
+#     print 'Diversity: ', diversity
+#     for i in range(400):
+#         x = np.zeros((1, protein_in_len, len(chars)))
+#         for t, char in enumerate(this_prot):
+#             x[0,t,char_indices[char]] = 1
+#         preds = model.predict(x, verbose=0)[0]
+#         next_index = sample(preds, diversity)
+#         next_char = indices_char[next_index]
+#         generated += next_char
+#         this_prot = this_prot[1:]+next_char
+#         sys.stdout.write(next_char)
+#         sys.stdout.flush()
+#     print()
