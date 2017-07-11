@@ -8,8 +8,8 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.layers import Embedding
 from keras.utils import np_utils
 
-BASE_DIR = ''
-GLOVE_DIR = BASE_DIR + '/glove.6B/'
+#BASE_DIR = ''
+#GLOVE_DIR = BASE_DIR + '/glove.6B/'
 
 n_rows = 5000
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
@@ -33,14 +33,16 @@ split_at = int(.9*n_rows)
 protein_train, protein_val = data[:split_at], data[split_at:]
 
 #Need to make an embedding matrix
-embeddings_index = {}
-f = open(os.path.join(GLOVE_DIR, 'glove.6B.100d.txt'))
-what is this os.path.join
-for line in f:
-    values = line.split()
-    word = values[0]
-    coefs = np.asarray(values[1:], dtype='float32')
-    embeddings_index[word] = coefs
-f.close()
+# embeddings_index = {}
+# f = open(os.path.join(GLOVE_DIR, 'glove.6B.100d.txt'))
+# what is this os.path.join
+# for line in f:
+#     values = line.split()
+#     word = values[0]
+#     coefs = np.asarray(values[1:], dtype='float32')
+#     embeddings_index[word] = coefs
+# f.close()
 
-print('Found %s word vectors.' % len(embeddings_index))
+#print('Found %s word vectors.' % len(embeddings_index))
+
+embedding_layer=Embedding(len(word_index)+1)
