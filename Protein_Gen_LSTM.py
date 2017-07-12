@@ -7,10 +7,10 @@ from keras.models import Sequential
 from keras import layers
 from keras.optimizers import RMSprop
 
-n_rows = 10000
+n_rows = 20000
 MAXLEN = 455
-dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
-#dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
+#dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
+dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 dna_data.protein=dna_data.protein.str[:MAXLEN]
 print "DNA shape: ", dna_data.shape
 
@@ -24,7 +24,7 @@ print "DNA shape: ", dna_data.shape
 
 #We need to come up with the list of training patterns
 protein_in_len = 15
-step = 10
+step = 5
 protein_in = []
 protein_out = []
 chars = ''
@@ -95,8 +95,8 @@ model = Sequential()
 #What if we wanted to use an embedding?
 #model.add(layers.Embedding(BATCH_SIZE, input_length = protein_in_len, embeddings_initializer='uniform'))
 
-embedding_layer= layers.Embedding(BATCH_SIZE, len(chars), input_length = protein_in_len)
-
+#embedding_layer= layers.Embedding(BATCH_SIZE, len(chars), input_length = protein_in_len)
+model.add(Layers.Embedding(n_patterns))
 model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2])))
 model.add(layers.Dense(len(chars)))
 model.add(layers.Activation('softmax'))
