@@ -59,13 +59,16 @@ sequences = tokenizer.texts_to_sequences(protein_in)
 
 word_index=tokenizer.word_index
 print('Found %s unique tokens.' % len(word_index))
-
+num_words = len(word_index)#I think this is our num_words
+print "But what even is a word index? " type(word_index)
 data = pad_sequences(sequences)
 
 print('Shape of data tensor:', data.shape)
-print "Example of padded sequence: ", data[0]
+#but this a column vector pretty much
+print "Example of padded sequence: ", data[69]
 
-
+#start the embedding
+#embedding_layer=Embedding(num_words, ???
 
 
 #Vectorization
