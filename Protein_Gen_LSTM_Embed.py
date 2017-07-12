@@ -18,7 +18,7 @@ MAXLEN = 40
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 dna_data_dict = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 dna_data_dict.protein=dna_data_dict.protein.str[:MAXLEN]
-print "DNA shape: ", dna_data.shape
+#print "DNA shape: ", dna_data.shape
 
 # teststring = 'alexandernicholasskolnick'
 # print len(teststring)
