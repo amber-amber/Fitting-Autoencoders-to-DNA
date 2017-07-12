@@ -63,7 +63,7 @@ print('Found %s unique tokens.' % len(word_index))
 data = pad_sequences(sequences)
 
 print('Shape of data tensor:', data.shape)
-print data.shape[0]
+print "Example of padded sequence: ", data[0]
 
 
 
