@@ -63,7 +63,7 @@ print('Found %s unique tokens.' % len(word_index))
 data = pad_sequences(sequences)
 
 print('Shape of data tensor:', data.shape)
-data.shape[0]
+print data.shape[0]
 
 
 
