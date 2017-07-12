@@ -8,14 +8,15 @@ import sys
 
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
-from keras.layers import Embedding
+from keras.layers import Embedding, Input, LSTM, Dense
+from keras.models import Model
 
 from keras.models import Sequential
 from keras.optimizers import RMSprop
 
 n_rows = 20000
 MAXLEN = 40
-#dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
+dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 dna_data_dict = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 dna_data_dict.protein=dna_data_dict.protein.str[:MAXLEN]
 #print "DNA shape: ", dna_data.shape
@@ -60,17 +61,30 @@ sequences = tokenizer.texts_to_sequences(protein_in)
 word_index=tokenizer.word_index
 print('Found %s unique tokens.' % len(word_index))
 num_words = len(word_index)#I think this is our num_words
-print "But what even is a word index? " type(word_index)
-data = pad_sequences(sequences)
+#print "But what even is a word index? " type(word_index)
 
+data = pad_sequences(sequences)
 print('Shape of data tensor:', data.shape)
 #but this a column vector pretty much
 print "Example of padded sequence: ", data[69]
 
 #start the embedding
-#embedding_layer=Embedding(num_words, ???
+#What is this EMBEDDING DIM
+EMBEDDING_DIM = 100
+HIDDEN_SIZE =128
+BATCH_SIZE=128
+embedding_layer=Embedding(num_words, EMBEDDING_DIM)
 
+HIDDEN_SIZE =128
+BATCH_SIZE=128
 
+sequence_input = Input(shape=(MAXLEN,))
+embedded_sequences = embedding_layer(sequence_input)
+x= LSTM(HIDDEN_SIZE, activation = 'relu') (embedded_sequences)
+x= Dense(len(chars))
+
+model = Model(sequence_input)
+model.summary()
 #Vectorization
 #Let's just use one hot encoding because that's all I know fml
 # class CharacterTable(object):
