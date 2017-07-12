@@ -96,7 +96,7 @@ model = Sequential()
 #model.add(layers.Embedding(BATCH_SIZE, input_length = protein_in_len, embeddings_initializer='uniform'))
 
 #embedding_layer= layers.Embedding(BATCH_SIZE, len(chars), input_length = protein_in_len)
-model.add(Layers.Embedding(n_patterns))
+model.add(layers.Embedding(n_patterns))
 model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2])))
 model.add(layers.Dense(len(chars)))
 model.add(layers.Activation('softmax'))
