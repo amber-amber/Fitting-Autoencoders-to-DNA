@@ -109,7 +109,7 @@ model.add(layers.Activation('softmax'))
 optimizer = RMSprop(lr=0.01)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
-model.fit(hot_x, hot_y, epochs=60, batch_size=BATCH_SIZE)
+model.fit(hot_x, hot_y, epochs=75, batch_size=BATCH_SIZE)
 
 def sample(preds, temperature=1.0):
     # helper function to sample an index from a probability array
