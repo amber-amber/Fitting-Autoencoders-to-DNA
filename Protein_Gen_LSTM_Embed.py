@@ -13,7 +13,7 @@ from keras.layers import Embedding
 from keras.models import Sequential
 from keras.optimizers import RMSprop
 
-n_rows = 10000
+n_rows = 20000
 MAXLEN = 40
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 dna_data_dict = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
@@ -63,8 +63,9 @@ print('Found %s unique tokens.' % len(word_index))
 data = pad_sequences(sequences)
 
 print('Shape of data tensor:', data.shape)
+data.shape[0]
 
-#I don't think we need to split up stuff
+
 
 
 #Vectorization
