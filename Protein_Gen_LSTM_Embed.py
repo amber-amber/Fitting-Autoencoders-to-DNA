@@ -54,8 +54,8 @@ print "Sample of base_out:", protein_out[5452]
 
 #Vectorize the protein samples into a 2D integer tensor
 tokenizer = Tokenizer()
-tokenizer.fit_on_texts(n_patterns)
-sequences = tokenizer.texts_to_sequences(n_patterns)
+tokenizer.fit_on_texts(protein_in)
+sequences = tokenizer.texts_to_sequences(protein_in)
 
 word_index=tokenizer.word_index
 print('Found %s unique tokens.' % len(word_index))
