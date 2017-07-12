@@ -7,8 +7,10 @@ import random
 import sys
 
 from keras.preprocessing.text import Tokenizer
+from keras.preprocessing.sequence import pad_sequences
+from keras.layers import Embedding
+
 from keras.models import Sequential
-from keras import layers
 from keras.optimizers import RMSprop
 
 n_rows = 10000
@@ -61,6 +63,9 @@ print('Found %s unique tokens.' % len(word_index))
 data = pad_sequences(sequences)
 
 print('Shape of data tensor:', data.shape)
+
+#I don't think we need to split up stuff
+
 
 #Vectorization
 #Let's just use one hot encoding because that's all I know fml
