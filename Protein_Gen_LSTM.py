@@ -8,7 +8,7 @@ from keras import layers
 from keras.optimizers import RMSprop
 
 n_rows = 20000
-MAXLEN = 455
+MAXLEN = 60
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 dna_data.protein=dna_data.protein.str[:MAXLEN]
