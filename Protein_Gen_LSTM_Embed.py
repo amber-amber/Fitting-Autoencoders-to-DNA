@@ -80,10 +80,10 @@ BATCH_SIZE=128
 
 sequence_input = Input(shape=(MAXLEN,))
 embedded_sequences = embedding_layer(sequence_input)
-x= LSTM(HIDDEN_SIZE, activation = 'relu') (embedded_sequences)
+x= LSTM(HIDDEN_SIZE, activation = 'softmax') (embedded_sequences)
 x= Dense(len(chars))
 
-model = Model(sequence_input)
+model = Model(sequence_input, protein_out)
 model.summary()
 #Vectorization
 #Let's just use one hot encoding because that's all I know fml
