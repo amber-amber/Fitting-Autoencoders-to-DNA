@@ -88,6 +88,7 @@ for i, prot_str in enumerate(protein_in):
 
 HIDDEN_SIZE =128
 BATCH_SIZE=128
+EMBEDDING_DIM = 100
 # LAYERS=1
 
 print 'Build Model...'
@@ -96,7 +97,7 @@ model = Sequential()
 #model.add(layers.Embedding(BATCH_SIZE, input_length = protein_in_len, embeddings_initializer='uniform'))
 
 #embedding_layer= layers.Embedding(BATCH_SIZE, len(chars), input_length = protein_in_len)
-model.add(layers.Embedding(n_patterns))
+model.add(layers.Embedding(n_patterns, EMBEDDING_DIM))
 model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2])))
 model.add(layers.Dense(len(chars)))
 model.add(layers.Activation('softmax'))
