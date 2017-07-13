@@ -120,7 +120,7 @@ model.add(layers.Activation('softmax'))
 optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
-model.fit(hot_x, hot_y, epochs=75, batch_size=BATCH_SIZE)
+model.fit(hot_x, hot_y, epochs=150, batch_size=BATCH_SIZE)
 
 def sample(preds, temperature=1.0):
     # helper function to sample an index from a probability array
