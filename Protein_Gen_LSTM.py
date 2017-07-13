@@ -26,7 +26,7 @@ print "DNA shape: ", dna_data.shape
 
 
 #We need to come up with the list of training patterns
-protein_in_len = 8
+protein_in_len = 15
 step = 5
 protein_in = []
 protein_out = []
@@ -85,9 +85,9 @@ for i, prot_str in enumerate(protein_in):
 #print 'example of encoded protein: ', hot_x[8]
 #print 'example of encoded next protein: ', hot_y[8]
 
-#The Single Layer LSTM Model
-
 #Can we try SOME OTHER ENCODING
+
+
 
 HIDDEN_SIZE =128
 BATCH_SIZE=128
@@ -120,7 +120,7 @@ model.add(layers.Activation('softmax'))
 optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
-model.fit(hot_x, hot_y, epochs=150, batch_size=BATCH_SIZE)
+model.fit(hot_x, hot_y, epochs=75, batch_size=BATCH_SIZE)
 
 def sample(preds, temperature=1.0):
     # helper function to sample an index from a probability array
