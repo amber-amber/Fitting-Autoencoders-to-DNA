@@ -90,9 +90,10 @@ model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2])))
 
 #Adding LSTM layers
 model.add(layers.RepeatVector(MAXLEN))
-for _ in range(LAYERS):
-    model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
-model.add(layers.TimeDistributed(layers.Dense(len(chars))))
+model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
+#for _ in range(LAYERS):
+#   model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
+#model.add(layers.TimeDistributed(layers.Dense(len(chars))))
 #model.add(layers.Activation('softmax'))
 
 # #model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
