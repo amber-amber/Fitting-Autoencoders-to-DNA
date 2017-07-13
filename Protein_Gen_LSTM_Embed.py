@@ -187,12 +187,12 @@ import pandas as pd
 import random
 import sys
 
-from keras.models import Sequential
-from keras import layers
+from keras.models import Sequential, Model
+from keras.layers import Embedding, LSTM
+from keras.layers import Input, Dense, Activation
 #from keras.optimizers import RMSprop
 #from keras.optimizers import SGD
 from keras.optimizers import Adam
-
 
 n_rows = 20000
 MAXLEN = 60
@@ -231,8 +231,8 @@ indices_char = dict((i, c) for i, c in enumerate(chars))
 print "Number of protein characters: ", len(chars)
 print "The Proteins are: ", chars
 print "Number of patterns: ", n_patterns
-print "Sample of bases in:", protein_in[8289]
-print "Sample of base_out:", protein_out[8289]
+print "Sample of bases in:", protein_in[12345]
+print "Sample of base_out:", protein_out[12345]
 
 #Vectorization
 #Let's just use one hot encoding because that's all I know fml
@@ -274,47 +274,62 @@ print 'VECTORIZATION...'
 #Can we try SOME OTHER ENCODING
 #Need to create the 2D input for the embedding layer
 embedding_input = np.zeros((n_patterns, protein_in_len),dtype=int)
+output_vec = np.zeros(n_patterns, dtype=int)
 print 'Shape of input matrix: ', embedding_input.shape
 for i, prot_str in enumerate(protein_in):
     for j in range(protein_in_len):
         for p in chars:
             if prot_str[j] == p:
                 embedding_input[i][j] = chars.index(p)
-print 'example of embedding matrix row', embedding_input[888]
+for i, prot_name in enumerate(protein_out):
+    for p in chars:
+        if prot_name == p:
+            output_vec[i] = chars.index(p)
+print 'example of embedding matrix row', embedding_input[12345]
+print 'example of output vector row', output_vec[12345]
 
 #
-# HIDDEN_SIZE =128
-# BATCH_SIZE=128
-# EMBEDDING_DIM = 100 #embedding dim should be
+HIDDEN_SIZE =128
+BATCH_SIZE=128
+EMBEDDING_DIM = 10
 # # LAYERS=1
 #
-# print 'Build Model...'
-# model = Sequential()
+print 'Build Model...'
+#model = Sequential()
 #
 # #What if we wanted to use an embedding?
-# #model.add(layers.Embedding(BATCH_SIZE, input_length = protein_in_len, embeddings_initializer='uniform'))
-# #embedding_layer= layers.Embedding(BATCH_SIZE, len(chars), input_length = protein_in_len)
-# #model.add(layers.Embedding(len(chars), input_length=protein_in_len))
-#
-# model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2])))
+# model.add(Embedding(len(chars), EMBEDDING_DIM, input_shape= embedding_input.shape))
+# model.add(LSTM(HIDDEN_SIZE))
 # model.add(layers.Dense(len(chars)))
 # model.add(layers.Activation('softmax'))
+#embedding_layer= Embedding(len(chars), EMBEDDING_DIM, input_dim=embedding_input.shape)
+#model.add(layers.Embedding(embedding_input)
+#embedded = embedding_layer(embedding_input)
+#x = LSTM
+
+the_input = Input(shape=embedding_input.shape)
+x = Embedding(len(chars), EMBEDDING_DIM)(the_input)
+x = LSTM(HIDDEN_SIZE)(x)
+x = Dense(len(chars))(x)
+preds = Activation('softmax')(x)
+
+model = Model(the_input, preds)
 #
-# #Adding LSTM layers
+# #Adding additional LSTM layers
 # # # model.add(layers.RepeatVector(MAXLEN))
 # # # for _ in range(LAYERS):
 # # #     model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
 # # #
 # # # model.add(layers.TimeDistributed(layers.Dense(len(chars))))
 # # # model.add(layers.Activation('softmax'))
-#
-# # #model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
+
 # #optimizer = RMSprop(lr=0.01)
 # #optimizer = SGD(lr=.01)
-# optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
-# model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
-# model.summary()
-# model.fit(hot_x, hot_y, epochs=75, batch_size=BATCH_SIZE)
+optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
+
+model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+model.summary()
+model.fit(embedding_input, output_vec, epochs=75, batch_size=BATCH_SIZE)
 #
 # def sample(preds, temperature=1.0):
 #     # helper function to sample an index from a probability array
