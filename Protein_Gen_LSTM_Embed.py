@@ -103,6 +103,7 @@ for i, prot_name in enumerate(protein_out):
             output_vec[i] = chars.index(p)
 print 'example of embedding matrix row', embedding_input[12345]
 print 'example of output vector row', output_vec[12345]
+some_shape = embedding_input.shape
 
 #
 HIDDEN_SIZE =128
@@ -123,9 +124,9 @@ print 'Build Model...'
 #embedded = embedding_layer(embedding_input)
 #x = LSTM
 
-#the_input = Input(shape=embedding_input.shape)
-x = Embedding(len(chars), EMBEDDING_DIM)(embedding_input)
-x = LSTM(HIDDEN_SIZE, input_shape=embedding_input.shape)(x)
+the_input = Input(shape=embedding_input.shape)
+x = Embedding(len(chars), EMBEDDING_DIM)(the_input)
+x = LSTM(HIDDEN_SIZE, input_shape=some_shape)(x)
 x = Dense(len(chars))(x)
 preds = Activation('softmax')(x)
 
