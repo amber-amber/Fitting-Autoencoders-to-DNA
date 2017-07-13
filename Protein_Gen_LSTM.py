@@ -84,7 +84,7 @@ LAYERS=1
 print 'Build Model...'
 model = Sequential()
 
-model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2]), return_sequences=true))
+model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2]), return_sequences=True))
 #model.add(layers.Dense(len(chars)))
 #model.add(layers.Activation('softmax'))
 
