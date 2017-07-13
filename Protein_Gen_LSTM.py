@@ -23,7 +23,7 @@ print "DNA shape: ", dna_data.shape
 
 
 #We need to come up with the list of training patterns
-protein_in_len = 15
+protein_in_len = 8
 step = 5
 protein_in = []
 protein_out = []
@@ -97,7 +97,7 @@ model = Sequential()
 #model.add(layers.Embedding(BATCH_SIZE, input_length = protein_in_len, embeddings_initializer='uniform'))
 
 #embedding_layer= layers.Embedding(BATCH_SIZE, len(chars), input_length = protein_in_len)
-model.add(layers.Embedding(len(chars), input_length=protein_in_len))
+#model.add(layers.Embedding(len(chars), input_length=protein_in_len))
 model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2])))
 model.add(layers.Dense(len(chars)))
 model.add(layers.Activation('softmax'))
