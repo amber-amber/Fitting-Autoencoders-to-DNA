@@ -124,7 +124,7 @@ print 'Build Model...'
 #embedded = embedding_layer(embedding_input)
 #x = LSTM
 
-the_input = Input(shape=embedding_input.shape)
+the_input = Input(shape=(embedding_input.shape))
 x = Embedding(len(chars), EMBEDDING_DIM)(the_input)
 #x = LSTM(HIDDEN_SIZE, input_shape=some_shape)(x)
 x = LSTM(HIDDEN_SIZE)(x)
