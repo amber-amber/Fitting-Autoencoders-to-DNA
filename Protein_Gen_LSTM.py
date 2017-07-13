@@ -5,7 +5,9 @@ import sys
 
 from keras.models import Sequential
 from keras import layers
-from keras.optimizers import RMSprop
+#from keras.optimizers import RMSprop
+from keras.optimizers import SGD
+
 
 n_rows = 20000
 MAXLEN = 60
@@ -93,22 +95,27 @@ EMBEDDING_DIM = 100
 
 print 'Build Model...'
 model = Sequential()
+
 #What if we wanted to use an embedding?
 #model.add(layers.Embedding(BATCH_SIZE, input_length = protein_in_len, embeddings_initializer='uniform'))
-
 #embedding_layer= layers.Embedding(BATCH_SIZE, len(chars), input_length = protein_in_len)
 #model.add(layers.Embedding(len(chars), input_length=protein_in_len))
+
 model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2])))
 model.add(layers.Dense(len(chars)))
 model.add(layers.Activation('softmax'))
+
+#Adding LSTM layers
 # # model.add(layers.RepeatVector(MAXLEN))
 # # for _ in range(LAYERS):
 # #     model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
 # #
 # # model.add(layers.TimeDistributed(layers.Dense(len(chars))))
 # # model.add(layers.Activation('softmax'))
+
 # #model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
-optimizer = RMSprop(lr=0.01)
+#optimizer = RMSprop(lr=0.01)
+optimizer = SGD(lr=.01)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
 model.fit(hot_x, hot_y, epochs=75, batch_size=BATCH_SIZE)
