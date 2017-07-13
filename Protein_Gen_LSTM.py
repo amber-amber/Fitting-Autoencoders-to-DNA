@@ -6,7 +6,8 @@ import sys
 from keras.models import Sequential
 from keras import layers
 #from keras.optimizers import RMSprop
-from keras.optimizers import SGD
+#from keras.optimizers import SGD
+from keras.optimizers import Adam
 
 
 n_rows = 20000
@@ -115,7 +116,8 @@ model.add(layers.Activation('softmax'))
 
 # #model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
 #optimizer = RMSprop(lr=0.01)
-optimizer = SGD(lr=.01)
+#optimizer = SGD(lr=.01)
+optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
 model.fit(hot_x, hot_y, epochs=75, batch_size=BATCH_SIZE)
