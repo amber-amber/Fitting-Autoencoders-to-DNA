@@ -9,21 +9,12 @@ from keras import layers
 #from keras.optimizers import SGD
 from keras.optimizers import Adam
 
-
 n_rows = 20000
 MAXLEN = 60
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 dna_data.protein=dna_data.protein.str[:MAXLEN]
 print "DNA shape: ", dna_data.shape
-
-# teststring = 'alexandernicholasskolnick'
-# print len(teststring)
-# length=8
-# for j in range(len(teststring)-length):
-#     print current_letters_in
-#     print teststring[j+length]
-
 
 #We need to come up with the list of training patterns
 protein_in_len = 15
@@ -85,34 +76,25 @@ for i, prot_str in enumerate(protein_in):
 #print 'example of encoded protein: ', hot_x[8]
 #print 'example of encoded next protein: ', hot_y[8]
 
-#Can we try SOME OTHER ENCODING
-
-
-
 HIDDEN_SIZE =128
 BATCH_SIZE=128
 EMBEDDING_DIM = 100
-# LAYERS=1
+LAYERS=1
 
 print 'Build Model...'
 model = Sequential()
-
-#What if we wanted to use an embedding?
-#model.add(layers.Embedding(BATCH_SIZE, input_length = protein_in_len, embeddings_initializer='uniform'))
-#embedding_layer= layers.Embedding(BATCH_SIZE, len(chars), input_length = protein_in_len)
-#model.add(layers.Embedding(len(chars), input_length=protein_in_len))
 
 model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2])))
 model.add(layers.Dense(len(chars)))
 model.add(layers.Activation('softmax'))
 
 #Adding LSTM layers
-# # model.add(layers.RepeatVector(MAXLEN))
-# # for _ in range(LAYERS):
-# #     model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
+model.add(layers.RepeatVector(MAXLEN))
+for _ in range(LAYERS):
+    model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
 # #
-# # model.add(layers.TimeDistributed(layers.Dense(len(chars))))
-# # model.add(layers.Activation('softmax'))
+    model.add(layers.TimeDistributed(layers.Dense(len(chars))))
+    model.add(layers.Activation('softmax'))
 
 # #model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
 #optimizer = RMSprop(lr=0.01)
