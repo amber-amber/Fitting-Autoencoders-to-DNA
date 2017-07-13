@@ -126,7 +126,8 @@ print 'Build Model...'
 
 the_input = Input(shape=embedding_input.shape)
 x = Embedding(len(chars), EMBEDDING_DIM)(the_input)
-x = LSTM(HIDDEN_SIZE, input_shape=some_shape)(x)
+#x = LSTM(HIDDEN_SIZE, input_shape=some_shape)(x)
+x = LSTM(HIDDEN_SIZE)(x)
 x = Dense(len(chars))(x)
 preds = Activation('softmax')(x)
 
