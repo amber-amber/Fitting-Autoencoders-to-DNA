@@ -84,12 +84,14 @@ LAYERS=1
 print 'Build Model...'
 model = Sequential()
 
-model.add(LSTM(HIDDEN_SIZE, return_sequences= True, input_shape=(hot_x.shape[1], hot_x.shape[2])))
+#model.add(LSTM(HIDDEN_SIZE, return_sequences= True, input_shape=(hot_x.shape[1], hot_x.shape[2])))
+model.add(LSTM(HIDDEN_SIZE, return_sequences=True, input_shape=(protein_in_len,len(chars))))
+
 #model.add(layers.Dense(len(chars)))
 #model.add(layers.Activation('softmax'))
 
 #Adding LSTM layers
-model.add(RepeatVector(MAXLEN))
+#model.add(RepeatVector(MAXLEN))
 model.add(LSTM(HIDDEN_SIZE))
 #for _ in range(LAYERS):
 #   model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
