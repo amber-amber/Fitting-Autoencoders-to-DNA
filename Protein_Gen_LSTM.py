@@ -4,7 +4,7 @@ import random
 import sys
 
 from keras.models import Sequential
-from keras.layers import LSTM, RepeatVector, Dense
+from keras.layers import LSTM, RepeatVector, Dense, Activation
 #from keras.optimizers import RMSprop
 #from keras.optimizers import SGD
 from keras.optimizers import Adam
@@ -88,15 +88,15 @@ model.add(LSTM(HIDDEN_SIZE, return_sequences= True, input_shape=(hot_x.shape[1],
 print "output shape after first LSTM layer", model.output_shape
 #model.add(LSTM(HIDDEN_SIZE, return_sequences=True, input_shape=(protein_in_len,len(chars))))
 
-model.add(Dense(len(chars)))
-print "output shape after dense", model.output_shape
-model.add(layers.Activation('softmax'))
-print "output shape after activation", model.output_shape
+#model.add(Dense(len(chars)))
+#print "output shape after dense", model.output_shape
+#model.add(Activation('softmax'))
+#print "output shape after activation", model.output_shape
 
 #Adding LSTM layers
-#model.add(RepeatVector(MAXLEN))
+model.add(RepeatVector(protein_in_len))
 #print "output shape after repeat vector", model.output_shape
-#model.add(LSTM(HIDDEN_SIZE))
+model.add(LSTM(HIDDEN_SIZE))
 #for _ in range(LAYERS):
 #   model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
 #model.add(layers.TimeDistributed(layers.Dense(len(chars))))
