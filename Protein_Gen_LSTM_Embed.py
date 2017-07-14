@@ -112,27 +112,30 @@ EMBEDDING_DIM = 10
 # # LAYERS=1
 #
 print 'Build Model...'
-#model = Sequential()
+model = Sequential()
 #
 # #What if we wanted to use an embedding?
-# model.add(Embedding(len(chars), EMBEDDING_DIM, input_shape= embedding_input.shape))
-# model.add(LSTM(HIDDEN_SIZE))
+#model.add(Embedding(len(chars), EMBEDDING_DIM, output_dim=(protein_in_len, len(chars))))
+#model.output_shape
+#model.add(LSTM(HIDDEN_SIZE))
 # model.add(layers.Dense(len(chars)))
 # model.add(layers.Activation('softmax'))
 #embedding_layer= Embedding(len(chars), EMBEDDING_DIM, input_dim=embedding_input.shape)
-#model.add(layers.Embedding(embedding_input)
-#embedded = embedding_layer(embedding_input)
-#x = LSTM
 
-the_input = Input(shape=(embedding_input.shape))
-x = Embedding(len(chars), EMBEDDING_DIM)(the_input)
+model.add(LSTM(HIDDEN_SIZE, input_shape=some_shape))
+model.add(Dense(len(chars)))
+model.add(Activation('softmax'))
+
+#the_input = Input(shape=(embedding_input.shape))
+#x = Embedding(len(chars), EMBEDDING_DIM)(the_input)
+#print x._keras_shape
 #x = LSTM(HIDDEN_SIZE, input_shape=some_shape)(x)
 #x = LSTM(HIDDEN_SIZE, return_sequences=True)(x)
-x = LSTM(input_shape=embedding_input.shape, return_sequences=True)(x)
-x = Dense(len(chars))(x)
-preds = Activation('softmax')(x)
+#x = LSTM(HIDDEN_SIZE, input_shape=embedding_input.shape)(x)
+#x = Dense(len(chars))(x)
+#preds = Activation('softmax')(x)
 
-model = Model(embedding_input, preds)
+#model = Model(embedding_input, preds)
 #
 # #Adding additional LSTM layers
 # # # model.add(layers.RepeatVector(MAXLEN))
@@ -145,38 +148,38 @@ model = Model(embedding_input, preds)
 # #optimizer = RMSprop(lr=0.01)
 # #optimizer = SGD(lr=.01)
 optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
-
+#
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
 model.fit(embedding_input, output_vec, epochs=75, batch_size=BATCH_SIZE)
-#
-# def sample(preds, temperature=1.0):
-#     # helper function to sample an index from a probability array
-#     preds = np.asarray(preds).astype('float64')
-#     preds = np.log(preds) / temperature
-#     exp_preds = np.exp(preds)
-#     preds = exp_preds / np.sum(exp_preds)
-#     probas = np.random.multinomial(1, preds, 1)
-#     return np.argmax(probas)
-#
-# start_index = random.randint(0, n_patterns)
-# generated = ''
-# this_prot = str(protein_in[start_index])
-# generated += this_prot
-# print 'Generating with protein: ', generated
-#
-#
-# for diversity in [0.2, 0.5, 1.0, 1.2]:
-#     print 'Diversity: ', diversity
-#     for i in range(400):
-#         x = np.zeros((1, protein_in_len, len(chars)))
-#         for t, char in enumerate(this_prot):
-#             x[0,t,char_indices[char]] = 1
-#         preds = model.predict(x, verbose=0)[0]
-#         next_index = sample(preds, diversity)
-#         next_char = indices_char[next_index]
-#         generated += next_char
-#         this_prot = this_prot[1:]+next_char
-#         sys.stdout.write(next_char)
-#         sys.stdout.flush()
-#     print()
+
+def sample(preds, temperature=1.0):
+    # helper function to sample an index from a probability array
+    preds = np.asarray(preds).astype('float64')
+    preds = np.log(preds) / temperature
+    exp_preds = np.exp(preds)
+    preds = exp_preds / np.sum(exp_preds)
+    probas = np.random.multinomial(1, preds, 1)
+    return np.argmax(probas)
+
+start_index = random.randint(0, n_patterns)
+generated = ''
+this_prot = str(protein_in[start_index])
+generated += this_prot
+print 'Generating with protein: ', generated
+
+
+for diversity in [0.2, 0.5, 1.0, 1.2]:
+    print 'Diversity: ', diversity
+    for i in range(400):
+        x = np.zeros((1, protein_in_len, len(chars)))
+        for t, char in enumerate(this_prot):
+            x[0,t,char_indices[char]] = 1
+        preds = model.predict(x, verbose=0)[0]
+        next_index = sample(preds, diversity)
+        next_char = indices_char[next_index]
+        generated += next_char
+        this_prot = this_prot[1:]+next_char
+        sys.stdout.write(next_char)
+        sys.stdout.flush()
+    print()
