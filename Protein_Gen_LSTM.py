@@ -4,7 +4,7 @@ import random
 import sys
 
 from keras.models import Sequential
-from keras import layers
+from keras.layers import LSTM
 #from keras.optimizers import RMSprop
 #from keras.optimizers import SGD
 from keras.optimizers import Adam
@@ -84,16 +84,16 @@ LAYERS=1
 print 'Build Model...'
 model = Sequential()
 
-model.add(layers.LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2]), return_sequences=True))
+model.add(LSTM(HIDDEN_SIZE,input_shape=(hot_x.shape[1], hot_x.shape[2]), return_sequences=True))
 #model.add(layers.Dense(len(chars)))
 #model.add(layers.Activation('softmax'))
 
 #Adding LSTM layers
-model.add(layers.RepeatVector(MAXLEN))
-model.add(layers.LSTM(HIDDEN_SIZE))
+#model.add(layers.RepeatVector(MAXLEN))
+model.add(LSTM(HIDDEN_SIZE))
 #for _ in range(LAYERS):
 #   model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
-model.add(layers.TimeDistributed(layers.Dense(len(chars))))
+#model.add(layers.TimeDistributed(layers.Dense(len(chars))))
 #model.add(layers.Activation('softmax'))
 
 # #model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
