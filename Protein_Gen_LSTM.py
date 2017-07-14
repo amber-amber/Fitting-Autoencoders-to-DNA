@@ -93,7 +93,7 @@ model.add(layers.RepeatVector(MAXLEN))
 model.add(layers.LSTM(HIDDEN_SIZE))
 #for _ in range(LAYERS):
 #   model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
-#model.add(layers.TimeDistributed(layers.Dense(len(chars))))
+model.add(layers.TimeDistributed(layers.Dense(len(chars))))
 #model.add(layers.Activation('softmax'))
 
 # #model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
