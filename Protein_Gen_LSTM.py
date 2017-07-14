@@ -91,7 +91,7 @@ model.add(LSTM(HIDDEN_SIZE, return_sequences=True, input_shape=(protein_in_len,l
 #model.add(layers.Activation('softmax'))
 
 #Adding LSTM layers
-#model.add(RepeatVector(MAXLEN))
+model.add(RepeatVector(MAXLEN))
 #model.add(LSTM(HIDDEN_SIZE))
 #for _ in range(LAYERS):
 #   model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
