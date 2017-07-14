@@ -110,35 +110,35 @@ model.add(Activation('softmax'))
 optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
-# model.fit(hot_x, hot_y, epochs=75, batch_size=BATCH_SIZE)
-#
-# def sample(preds, temperature=1.0):
-#     # helper function to sample an index from a probability array
-#     preds = np.asarray(preds).astype('float64')
-#     preds = np.log(preds) / temperature
-#     exp_preds = np.exp(preds)
-#     preds = exp_preds / np.sum(exp_preds)
-#     probas = np.random.multinomial(1, preds, 1)
-#     return np.argmax(probas)
-#
-# start_index = random.randint(0, n_patterns)
-# generated = ''
-# this_prot = str(protein_in[start_index])
-# generated += this_prot
-# print 'Generating with protein: ', generated
-#
-#
-# for diversity in [0.2, 0.5, 1.0, 1.2]:
-#     print 'Diversity: ', diversity
-#     for i in range(455):
-#         x = np.zeros((1, protein_in_len, len(chars)))
-#         for t, char in enumerate(this_prot):
-#             x[0,t,char_indices[char]] = 1
-#         preds = model.predict(x, verbose=0)[0]
-#         next_index = sample(preds, diversity)
-#         next_char = indices_char[next_index]
-#         generated += next_char
-#         this_prot = this_prot[1:]+next_char
-#         sys.stdout.write(next_char)
-#         sys.stdout.flush()
-#     print()
+model.fit(hot_x, hot_y, epochs=75, batch_size=BATCH_SIZE)
+
+def sample(preds, temperature=1.0):
+    # helper function to sample an index from a probability array
+    preds = np.asarray(preds).astype('float64')
+    preds = np.log(preds) / temperature
+    exp_preds = np.exp(preds)
+    preds = exp_preds / np.sum(exp_preds)
+    probas = np.random.multinomial(1, preds, 1)
+    return np.argmax(probas)
+
+start_index = random.randint(0, n_patterns)
+generated = ''
+this_prot = str(protein_in[start_index])
+generated += this_prot
+print 'Generating with protein: ', generated
+
+
+for diversity in [0.2, 0.5, 1.0, 1.2]:
+    print 'Diversity: ', diversity
+    for i in range(455):
+        x = np.zeros((1, protein_in_len, len(chars)))
+        for t, char in enumerate(this_prot):
+            x[0,t,char_indices[char]] = 1
+        preds = model.predict(x, verbose=0)[0]
+        next_index = sample(preds, diversity)
+        next_char = indices_char[next_index]
+        generated += next_char
+        this_prot = this_prot[1:]+next_char
+        sys.stdout.write(next_char)
+        sys.stdout.flush()
+    print()
