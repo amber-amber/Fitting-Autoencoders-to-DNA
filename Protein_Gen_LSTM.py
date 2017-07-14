@@ -84,7 +84,7 @@ LAYERS=1
 print 'Build Model...'
 model = Sequential()
 
-model.add(LSTM(HIDDEN_SIZE, return_sequences= True, input_shape=(hot_x.shape[1], hot_x.shape[2])))
+model.add(LSTM(HIDDEN_SIZE, input_shape=(hot_x.shape[1], hot_x.shape[2])))
 print "output shape after first LSTM layer", model.output_shape
 #model.add(LSTM(HIDDEN_SIZE, return_sequences=True, input_shape=(protein_in_len,len(chars))))
 
