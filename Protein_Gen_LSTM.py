@@ -88,12 +88,14 @@ model.add(LSTM(HIDDEN_SIZE, return_sequences= True, input_shape=(hot_x.shape[1],
 print "output shape after first LSTM layer", model.output_shape
 #model.add(LSTM(HIDDEN_SIZE, return_sequences=True, input_shape=(protein_in_len,len(chars))))
 
-#model.add(Dense(len(chars)))
-#model.add(layers.Activation('softmax'))
+model.add(Dense(len(chars)))
+print "output shape after dense", model.output_shape
+model.add(layers.Activation('softmax'))
+print "output shape after activation", model.output_shape
 
 #Adding LSTM layers
-model.add(RepeatVector(MAXLEN))
-print "output shape after repeat vector", model.output_shape
+#model.add(RepeatVector(MAXLEN))
+#print "output shape after repeat vector", model.output_shape
 #model.add(LSTM(HIDDEN_SIZE))
 #for _ in range(LAYERS):
 #   model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
@@ -103,9 +105,9 @@ print "output shape after repeat vector", model.output_shape
 # #model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
 #optimizer = RMSprop(lr=0.01)
 #optimizer = SGD(lr=.01)
-# optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
-# model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
-# model.summary()
+optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
+model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+model.summary()
 # model.fit(hot_x, hot_y, epochs=75, batch_size=BATCH_SIZE)
 #
 # def sample(preds, temperature=1.0):
