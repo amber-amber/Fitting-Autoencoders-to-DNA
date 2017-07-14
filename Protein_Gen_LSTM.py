@@ -4,7 +4,7 @@ import random
 import sys
 
 from keras.models import Sequential
-from keras.layers import LSTM, RepeatVector
+from keras.layers import LSTM, RepeatVector, Dense
 #from keras.optimizers import RMSprop
 #from keras.optimizers import SGD
 from keras.optimizers import Adam
@@ -87,12 +87,12 @@ model = Sequential()
 #model.add(LSTM(HIDDEN_SIZE, return_sequences= True, input_shape=(hot_x.shape[1], hot_x.shape[2])))
 model.add(LSTM(HIDDEN_SIZE, return_sequences=True, input_shape=(protein_in_len,len(chars))))
 
-#model.add(layers.Dense(len(chars)))
+#model.add(Dense(len(chars)))
 #model.add(layers.Activation('softmax'))
 
 #Adding LSTM layers
 #model.add(RepeatVector(MAXLEN))
-model.add(LSTM(HIDDEN_SIZE))
+#model.add(LSTM(HIDDEN_SIZE))
 #for _ in range(LAYERS):
 #   model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
 #model.add(layers.TimeDistributed(layers.Dense(len(chars))))
@@ -124,7 +124,7 @@ print 'Generating with protein: ', generated
 
 for diversity in [0.2, 0.5, 1.0, 1.2]:
     print 'Diversity: ', diversity
-    for i in range(400):
+    for i in range(455):
         x = np.zeros((1, protein_in_len, len(chars)))
         for t, char in enumerate(this_prot):
             x[0,t,char_indices[char]] = 1
