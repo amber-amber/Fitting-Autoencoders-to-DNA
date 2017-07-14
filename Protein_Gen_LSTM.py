@@ -4,7 +4,7 @@ import random
 import sys
 
 from keras.models import Sequential
-from keras.layers import LSTM
+from keras.layers import LSTM, RepeatVector
 #from keras.optimizers import RMSprop
 #from keras.optimizers import SGD
 from keras.optimizers import Adam
@@ -89,7 +89,7 @@ model.add(LSTM(HIDDEN_SIZE, return_sequences= True, input_shape=(hot_x.shape[1],
 #model.add(layers.Activation('softmax'))
 
 #Adding LSTM layers
-model.add(layers.RepeatVector(MAXLEN))
+model.add(RepeatVector(MAXLEN))
 model.add(LSTM(HIDDEN_SIZE))
 #for _ in range(LAYERS):
 #   model.add(layers.LSTM(HIDDEN_SIZE, return_sequences=True))
