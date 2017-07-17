@@ -112,27 +112,27 @@ EMBEDDING_DIM = len(chars)
 # # LAYERS=1
 #
 print 'Build Model...'
-# model = Sequential()
-# model.add(Input((shape=(protein_in_len,))))
-# model.add(Embedding(BATCH_SIZE,EMBEDDING_DIM,input_length=protein_in_len))
-# model.add(LSTM(HIDDEN_SIZE))
-# model.add(Dense(len(chars)))
-# model.add(Activation('softmax'))
 
 the_input = Input(shape=(protein_in_len,))
 print "shape of the input", the_input._keras_shape
-#this is (None, n_patterns, protein_in_len)
+#this is (None, protein_in_len)
 
 #x = Embedding(len(chars), EMBEDDING_DIM, input_length=protein_in_len)(the_input)
 #print "shape of the embedding layer output", x._keras_shape
-#This is (none, 8, 10). aka (none, protein_in_len, EMBEDDING DIM)
-x = Embedding(BATCH_SIZE, EMBEDDING_DIM, input_length=protein_in_len)(the_input)
+#This is (none, protein_in_len, EMBEDDING DIM)
+
+x = Embedding(BATCH_SIZE, EMBEDDING_DIM, input_len=protein_in_len)(the_input)
 print "shape of the embedding layer output", x._keras_shape
-
-
 #(None, n_patters, protein_in_len, EMBEDDING_DIM)
-preds = LSTM(HIDDEN_SIZE, input_shape = embedding_input.shape, return_sequences= True, activation='softmax')(x)
+
+# preds = LSTM(HIDDEN_SIZE, input_shape = embedding_input.shape, return_sequences= True, activation='softmax')(x)
+# print "shape of LSTM output", preds._keras_shape
+#(None, 8, 128)
+
+preds = LSTM(HIDDEN_SIZE, input_shape = embedding_input.shape, activation='softmax')(x)
 print "shape of LSTM output", preds._keras_shape
+#(None, 128), which should be correct
+
 #x = RepeatVector(protein_in_len)(x)
 #x = LSTM(HIDDEN_SIZE, return_sequences=True)(x)
 #x = LSTM(HIDDEN_SIZE, input_shape=embedding_input.shape)(x)
