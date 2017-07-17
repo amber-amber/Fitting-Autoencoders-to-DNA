@@ -58,6 +58,7 @@ def sampling(args):
                               stddev=epsilon_std)
     return z_mean + K.exp(z_log_var / 2) * epsilon
 
+
 x = Input(batch_shape=(batch_size, original_dim))
 print 'Input shape: ', x._keras_shape
 h = Dense(intermediate_dim, activation='relu')(x)
@@ -67,7 +68,7 @@ z_log_var = Dense(latent_dim)(h)
 print "z_mean shape: ", z_mean.shape
 print "z_log_var shape: ", z_log_var.shape
 z = Lambda(sampling)([z_mean, z_log_var])
-
+print "Shape after lambda layer: ", z._keras_shape
 
 # def sampling2(a, b):
 #     epsilon = K.random_normal(shape=(n_rows, latent_dim), mean=0.,
@@ -77,7 +78,7 @@ z = Lambda(sampling)([z_mean, z_log_var])
 #
 # # note that "output_shape" isn't necessary with the TensorFlow backend
 #z = Lambda(sampling, output_shape=(latent_dim,))([z_mean, z_log_var])
-z = Lambda(sampling)([z_mean, z_log_var])
+#z = Lambda(sampling)([z_mean, z_log_var])
 # #this is giving me some sort of error although both z_mean shape and z_log_var shape are (100,2)
 
 
