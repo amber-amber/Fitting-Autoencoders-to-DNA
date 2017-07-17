@@ -5,12 +5,12 @@ import sys
 
 from keras.models import Sequential, Model
 from keras.layers import Embedding, LSTM
-from keras.layers import Input, Dense, Activation
+from keras.layers import Input, Dense, Activation, RepeatVector
 #from keras.optimizers import RMSprop
 #from keras.optimizers import SGD
 from keras.optimizers import Adam
 
-n_rows = 20000
+n_rows = 500
 MAXLEN = 60
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
@@ -47,8 +47,8 @@ indices_char = dict((i, c) for i, c in enumerate(chars))
 print "Number of protein characters: ", len(chars)
 print "The Proteins are: ", chars
 print "Number of patterns: ", n_patterns
-print "Sample of bases in:", protein_in[12345]
-print "Sample of base_out:", protein_out[12345]
+print "Sample of bases in:", protein_in[1234]
+print "Sample of base_out:", protein_out[1234]
 
 #Vectorization
 #Let's just use one hot encoding because that's all I know fml
@@ -101,41 +101,47 @@ for i, prot_name in enumerate(protein_out):
     for p in chars:
         if prot_name == p:
             output_vec[i] = chars.index(p)
-print 'example of embedding matrix row', embedding_input[12345]
-print 'example of output vector row', output_vec[12345]
+print 'example of embedding matrix row', embedding_input[1234]
+print 'example of output vector row', output_vec[1234]
 some_shape = embedding_input.shape
 
 #
 HIDDEN_SIZE =128
 BATCH_SIZE=128
-EMBEDDING_DIM = 10
+EMBEDDING_DIM = len(chars)
 # # LAYERS=1
 #
 print 'Build Model...'
-model = Sequential()
-#
-# #What if we wanted to use an embedding?
-#model.add(Embedding(len(chars), EMBEDDING_DIM, output_dim=(protein_in_len, len(chars))))
-#model.output_shape
-#model.add(LSTM(HIDDEN_SIZE))
-# model.add(layers.Dense(len(chars)))
-# model.add(layers.Activation('softmax'))
-#embedding_layer= Embedding(len(chars), EMBEDDING_DIM, input_dim=embedding_input.shape)
+# model = Sequential()
+# model.add(Input((shape=(protein_in_len,))))
+# model.add(Embedding(BATCH_SIZE,EMBEDDING_DIM,input_length=protein_in_len))
+# model.add(LSTM(HIDDEN_SIZE))
+# model.add(Dense(len(chars)))
+# model.add(Activation('softmax'))
 
-model.add(LSTM(HIDDEN_SIZE, input_shape=some_shape))
-model.add(Dense(len(chars)))
-model.add(Activation('softmax'))
+the_input = Input(shape=(protein_in_len,))
+print "shape of the input", the_input._keras_shape
+#this is (None, n_patterns, protein_in_len)
 
-#the_input = Input(shape=(embedding_input.shape))
-#x = Embedding(len(chars), EMBEDDING_DIM)(the_input)
-#print x._keras_shape
-#x = LSTM(HIDDEN_SIZE, input_shape=some_shape)(x)
+#x = Embedding(len(chars), EMBEDDING_DIM, input_length=protein_in_len)(the_input)
+#print "shape of the embedding layer output", x._keras_shape
+#This is (none, 8, 10). aka (none, protein_in_len, EMBEDDING DIM)
+x = Embedding(BATCH_SIZE, EMBEDDING_DIM, input_length=protein_in_len)(the_input)
+print "shape of the embedding layer output", x._keras_shape
+
+
+#(None, n_patters, protein_in_len, EMBEDDING_DIM)
+preds = LSTM(HIDDEN_SIZE, input_shape = embedding_input.shape, return_sequences= True, activation='softmax')(x)
+print "shape of LSTM output", preds._keras_shape
+#x = RepeatVector(protein_in_len)(x)
 #x = LSTM(HIDDEN_SIZE, return_sequences=True)(x)
 #x = LSTM(HIDDEN_SIZE, input_shape=embedding_input.shape)(x)
-#x = Dense(len(chars))(x)
+#preds = Dense(len(chars))(x)
+#print "shape of dense output", x._keras_shape
 #preds = Activation('softmax')(x)
+#print "shape of activation output", preds._keras_shape
 
-#model = Model(embedding_input, preds)
+model = Model(the_input, preds)
 #
 # #Adding additional LSTM layers
 # # # model.add(layers.RepeatVector(MAXLEN))
@@ -148,38 +154,38 @@ model.add(Activation('softmax'))
 # #optimizer = RMSprop(lr=0.01)
 # #optimizer = SGD(lr=.01)
 optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
-#
+# #
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
 model.fit(embedding_input, output_vec, epochs=75, batch_size=BATCH_SIZE)
-
-def sample(preds, temperature=1.0):
-    # helper function to sample an index from a probability array
-    preds = np.asarray(preds).astype('float64')
-    preds = np.log(preds) / temperature
-    exp_preds = np.exp(preds)
-    preds = exp_preds / np.sum(exp_preds)
-    probas = np.random.multinomial(1, preds, 1)
-    return np.argmax(probas)
-
-start_index = random.randint(0, n_patterns)
-generated = ''
-this_prot = str(protein_in[start_index])
-generated += this_prot
-print 'Generating with protein: ', generated
-
-
-for diversity in [0.2, 0.5, 1.0, 1.2]:
-    print 'Diversity: ', diversity
-    for i in range(400):
-        x = np.zeros((1, protein_in_len, len(chars)))
-        for t, char in enumerate(this_prot):
-            x[0,t,char_indices[char]] = 1
-        preds = model.predict(x, verbose=0)[0]
-        next_index = sample(preds, diversity)
-        next_char = indices_char[next_index]
-        generated += next_char
-        this_prot = this_prot[1:]+next_char
-        sys.stdout.write(next_char)
-        sys.stdout.flush()
-    print()
+#
+# def sample(preds, temperature=1.0):
+#     # helper function to sample an index from a probability array
+#     preds = np.asarray(preds).astype('float64')
+#     preds = np.log(preds) / temperature
+#     exp_preds = np.exp(preds)
+#     preds = exp_preds / np.sum(exp_preds)
+#     probas = np.random.multinomial(1, preds, 1)
+#     return np.argmax(probas)
+#
+# start_index = random.randint(0, n_patterns)
+# generated = ''
+# this_prot = str(protein_in[start_index])
+# generated += this_prot
+# print 'Generating with protein: ', generated
+#
+#
+# for diversity in [0.2, 0.5, 1.0, 1.2]:
+#     print 'Diversity: ', diversity
+#     for i in range(400):
+#         x = np.zeros((1, protein_in_len, len(chars)))
+#         for t, char in enumerate(this_prot):
+#             x[0,t,char_indices[char]] = 1
+#         preds = model.predict(x, verbose=0)[0]
+#         next_index = sample(preds, diversity)
+#         next_char = indices_char[next_index]
+#         generated += next_char
+#         this_prot = this_prot[1:]+next_char
+#         sys.stdout.write(next_char)
+#         sys.stdout.flush()
+#     print()
