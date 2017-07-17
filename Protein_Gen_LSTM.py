@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib as plt
 import random
 import sys
 
@@ -8,7 +9,7 @@ from keras.layers import LSTM, RepeatVector, Dense, Activation
 #from keras.optimizers import RMSprop
 #from keras.optimizers import SGD
 from keras.optimizers import Adam
-from keras.callbacks import EarlyStopping, TensorBoard
+from keras.callbacks import EarlyStopping, History
 
 n_rows = 20000
 MAXLEN = 60
@@ -111,9 +112,21 @@ model.add(Activation('softmax'))
 optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
-tb_callback = TensorBoard(log_dir='./2LayerLSTM_Graph', histogram_freq=0, write_graph=True, write_images=True)
-model.fit(hot_x, hot_y, epochs=130, batch_size=BATCH_SIZE, callbacks=[tb_callback])
+#tb_callback = TensorBoard(log_dir='./2LayerLSTM_Graph', histogram_freq=0, write_graph=True, write_images=True)
+history = model.fit(hot_x, hot_y, epochs=130, batch_size=BATCH_SIZE)
 EarlyStopping(monitor='val_loss', min_delta=0.001, patience=3, mode='auto')
+
+plt.plot(history.history['acc'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.show()
+
+plt.plot(history.history['loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.show()
 
 def sample(preds, temperature=1.0):
     # helper function to sample an index from a probability array
