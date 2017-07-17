@@ -48,31 +48,33 @@ original_dim = MAXLEN #maybe?
 latent_dim = 2
 #intermediate_dim = 256
 intermediate_dim = 10
-epochs = 3
+epochs = 30
 epsilon_std = 1.0
 
 x = Input(batch_shape=(batch_size, original_dim))
+print 'Input shape ', x._keras_shape
 h = Dense(intermediate_dim, activation='relu')(x)
+print 'Dense shape ', h._keras_shape
 z_mean = Dense(latent_dim)(h)
 z_log_var = Dense(latent_dim)(h)
 print "z_mean shape: ", z_mean.shape
 print "z_log_var shape: ", z_log_var.shape
 
-def sampling(args):
-    z_mean, z_log_var = args
-    epsilon = K.random_normal(shape=(batch_size, latent_dim), mean=0.,
-                              stddev=epsilon_std)
-    return z_mean + K.exp(z_log_var / 2) * epsilon
-
-def sampling2(a, b):
-    epsilon = K.random_normal(shape=(n_rows, latent_dim), mean=0.,
-                              stddev=epsilon_std)
-    return a + K.exp(b / 2) * epsilon
-print sampling2(z_mean, z_log_var)
-
-# note that "output_shape" isn't necessary with the TensorFlow backend
-z = Lambda(sampling, output_shape=(latent_dim,))([z_mean, z_log_var])
-#this is giving me some sort of error although both z_mean shape and z_log_var shape are (100,2)
+# def sampling(args):
+#     z_mean, z_log_var = args
+#     epsilon = K.random_normal(shape=(batch_size, latent_dim), mean=0.,
+#                               stddev=epsilon_std)
+#     return z_mean + K.exp(z_log_var / 2) * epsilon
+#
+# def sampling2(a, b):
+#     epsilon = K.random_normal(shape=(n_rows, latent_dim), mean=0.,
+#                               stddev=epsilon_std)
+#     return a + K.exp(b / 2) * epsilon
+# print sampling2(z_mean, z_log_var)
+#
+# # note that "output_shape" isn't necessary with the TensorFlow backend
+# z = Lambda(sampling, output_shape=(latent_dim,))([z_mean, z_log_var])
+# #this is giving me some sort of error although both z_mean shape and z_log_var shape are (100,2)
 
 
 
