@@ -70,12 +70,6 @@ print "z_log_var shape: ", z_log_var.shape
 z = Lambda(sampling)([z_mean, z_log_var])
 print "Shape after lambda layer: ", z._keras_shape
 
-# def sampling2(a, b):
-#     epsilon = K.random_normal(shape=(n_rows, latent_dim), mean=0.,
-#                               stddev=epsilon_std)
-#     return a + K.exp(b / 2) * epsilon
-# print sampling2(z_mean, z_log_var)
-#
 # # note that "output_shape" isn't necessary with the TensorFlow backend
 #z = Lambda(sampling, output_shape=(latent_dim,))([z_mean, z_log_var])
 #z = Lambda(sampling)([z_mean, z_log_var])
@@ -84,10 +78,10 @@ print "Shape after lambda layer: ", z._keras_shape
 
 
 # we instantiate these layers separately so as to reuse them later
-# decoder_h = Dense(intermediate_dim, activation='relu')
-# decoder_mean = Dense(MAXLEN, activation='sigmoid')
-# h_decoded = decoder_h(z)
-# x_decoded_mean = decoder_mean(h_decoded)
+decoder_h = Dense(intermediate_dim, activation='relu')
+decoder_mean = Dense(MAXLEN, activation='sigmoid')
+h_decoded = decoder_h(z)
+x_decoded_mean = decoder_mean(h_decoded)
 
 
 # Custom loss layer
