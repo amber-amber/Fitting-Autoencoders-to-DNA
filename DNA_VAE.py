@@ -48,69 +48,79 @@ original_dim = MAXLEN #maybe?
 latent_dim = 2
 #intermediate_dim = 256
 intermediate_dim = 10
-epochs = 30
+epochs = 3
 epsilon_std = 1.0
 
 x = Input(batch_shape=(batch_size, original_dim))
 h = Dense(intermediate_dim, activation='relu')(x)
 z_mean = Dense(latent_dim)(h)
 z_log_var = Dense(latent_dim)(h)
-
+print "z_mean shape: ", z_mean.shape
+print "z_log_var shape: ", z_log_var.shape
 
 def sampling(args):
     z_mean, z_log_var = args
-    epsilon = K.random_normal(shape=(n_rows, latent_dim), mean=0.,
+    epsilon = K.random_normal(shape=(batch_size, latent_dim), mean=0.,
                               stddev=epsilon_std)
     return z_mean + K.exp(z_log_var / 2) * epsilon
 
+def sampling2(a, b):
+    epsilon = K.random_normal(shape=(n_rows, latent_dim), mean=0.,
+                              stddev=epsilon_std)
+    return a + K.exp(b / 2) * epsilon
+print sampling2(z_mean, z_log_var)
+
 # note that "output_shape" isn't necessary with the TensorFlow backend
 z = Lambda(sampling, output_shape=(latent_dim,))([z_mean, z_log_var])
+#this is giving me some sort of error although both z_mean shape and z_log_var shape are (100,2)
+
+
 
 # we instantiate these layers separately so as to reuse them later
-decoder_h = Dense(intermediate_dim, activation='relu')
-decoder_mean = Dense(MAXLEN, activation='sigmoid')
-h_decoded = decoder_h(z)
-x_decoded_mean = decoder_mean(h_decoded)
+# decoder_h = Dense(intermediate_dim, activation='relu')
+# decoder_mean = Dense(MAXLEN, activation='sigmoid')
+# h_decoded = decoder_h(z)
+# x_decoded_mean = decoder_mean(h_decoded)
 
 
 # Custom loss layer
-class CustomVariationalLayer(Layer):
-    def __init__(self, **kwargs):
-        self.is_placeholder = True
-        super(CustomVariationalLayer, self).__init__(**kwargs)
+# class CustomVariationalLayer(Layer):
+#     def __init__(self, **kwargs):
+#         self.is_placeholder = True
+#         super(CustomVariationalLayer, self).__init__(**kwargs)
+#
+#     def vae_loss(self, x, x_decoded_mean):
+#         xent_loss = MAXLEN * metrics.binary_crossentropy(x, x_decoded_mean)
+#         kl_loss = - 0.5 * K.sum(1 + z_log_var - K.square(z_mean) - K.exp(z_log_var), axis=-1)
+#         return K.mean(xent_loss + kl_loss)
+#
+#     def call(self, inputs):
+#         x = inputs[0]
+#         x_decoded_mean = inputs[1]
+#         loss = self.vae_loss(x, x_decoded_mean)
+#         self.add_loss(loss, inputs=inputs)
+#         # We won't actually use the output.
+#         return x
+#
+# y = CustomVariationalLayer()([x, x_decoded_mean])
+# vae = Model(x, y)
+# vae.compile(optimizer='rmsprop', loss=None, metrics=['accuracy'])
+# vae.summary()
+#
+# #fit to DNA data
+# split_at = int(.9 * n)
+# dna_train, dna_test = hot[:split_at], hot[split_at:]
+#
+# dna_train = dna_train.reshape((len(dna_train), np.prod(dna_train.shape[1:])))
+# dna_test = dna_test.reshape((len(dna_test), np.prod(dna_test.shape[1:])))
+#
+#
+# vae.fit(dna_train,
+#         shuffle=True,
+#         epochs=epochs,
+#         batch_size=batch_size,
+#         validation_data=(dna_test, dna_test))
+#
+# encoder = Model(x, z_mean)
 
-    def vae_loss(self, x, x_decoded_mean):
-        xent_loss = MAXLEN * metrics.binary_crossentropy(x, x_decoded_mean)
-        kl_loss = - 0.5 * K.sum(1 + z_log_var - K.square(z_mean) - K.exp(z_log_var), axis=-1)
-        return K.mean(xent_loss + kl_loss)
-
-    def call(self, inputs):
-        x = inputs[0]
-        x_decoded_mean = inputs[1]
-        loss = self.vae_loss(x, x_decoded_mean)
-        self.add_loss(loss, inputs=inputs)
-        # We won't actually use the output.
-        return x
-
-y = CustomVariationalLayer()([x, x_decoded_mean])
-vae = Model(x, y)
-vae.compile(optimizer='rmsprop', loss=None, metrics=['accuracy'])
-vae.summary()
-
-#fit to DNA data
-split_at = int(.9 * n)
-dna_train, dna_test = hot[:split_at], hot[split_at:]
-
-dna_train = dna_train.reshape((len(dna_train), np.prod(dna_train.shape[1:])))
-dna_test = dna_test.reshape((len(dna_test), np.prod(dna_test.shape[1:])))
-
-
-vae.fit(x_train,
-        shuffle=True,
-        epochs=epochs,
-        batch_size=batch_size,
-        validation_data=(dna_test, dna_test))
-
-encoder = Model(x, z_mean)
-
-#We want to somehow determine the generated DNA seqences 
+#We want to somehow determine the generated DNA seqences
