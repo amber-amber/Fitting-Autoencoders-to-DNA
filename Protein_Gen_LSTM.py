@@ -8,6 +8,7 @@ from keras.layers import LSTM, RepeatVector, Dense, Activation
 #from keras.optimizers import RMSprop
 #from keras.optimizers import SGD
 from keras.optimizers import Adam
+from keras.callbacks import EarlyStopping, TensorBoard
 
 n_rows = 20000
 MAXLEN = 60
@@ -110,7 +111,9 @@ model.add(Activation('softmax'))
 optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
-model.fit(hot_x, hot_y, epochs=130, batch_size=BATCH_SIZE)
+tb_callback = TensorBoard(log_dir='./2LayerLSTM_Graph', histogram_freq=0, write_graph=True, write_images=True))
+model.fit(hot_x, hot_y, epochs=130, batch_size=BATCH_SIZE, callbacks=[tb_callback])
+EarlyStopping(monitor='val_loss', min_delta=0.001, patience=3, mode='auto')
 
 def sample(preds, temperature=1.0):
     # helper function to sample an index from a probability array
