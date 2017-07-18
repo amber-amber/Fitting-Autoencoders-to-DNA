@@ -34,20 +34,31 @@ dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5
 n,m=dna_data.shape
 dna_data.dna=dna_data.dna.str[:MAXLEN]
 
-print('VECTORIZATION')
+print('VECTORIZATION and CREATING TRAIN/TEST SETS.......')
 hot=np.zeros((n,MAXLEN,len(chars)), dtype=np.bool)
 print('shape of vector: ',hot.shape)
 for i, dna_str in enumerate(dna_data.dna):
     hot[i]=ctable.encode(dna_str, MAXLEN)
-#Do we need to vectorize if we are using variational autoencoder? I don't think so!?!?
+#Do we need to one hot vectorize if we are using variational autoencoder?
+
+# Split the DNA data
+split_at = int(.75 * n)
+dna_train, dna_test = hot[:split_at], hot[split_at:]
+print "Previous training set shape", dna_train.shape
+print "Previous test set shape", dna_test.shape
+#
+dna_train = dna_train.reshape((len(dna_train), np.prod(dna_train.shape[1:])))
+dna_test = dna_test.reshape((len(dna_test), np.prod(dna_test.shape[1:])))
+print "New training set shape", dna_train.shape
+print "New test set shape", dna_test.shape
 
 #the VAE
 batch_size = 100
 #original_dim = 784
-original_dim = MAXLEN #maybe?
+original_dim = dna_train.shape[1]
 latent_dim = 2
 #intermediate_dim = 256
-intermediate_dim = 10
+intermediate_dim = 60
 epochs = 30
 epsilon_std = 1.0
 
@@ -119,7 +130,7 @@ dna_test = dna_test.reshape((len(dna_test), np.prod(dna_test.shape[1:])))
 print "New training set shape", dna_train.shape
 print "New test set shape", dna_test.shape
 #
-vae.fit(dna_train, shuffle=True, epochs=75,batch_size=batch_size, validation_data=(dna_test, dna_test))
+vae.fit(dna_train, shuffle=True, epochs=epochs,batch_size=batch_size, validation_data=(dna_test, dna_test))
 #
 # encoder = Model(x, z_mean)
 
