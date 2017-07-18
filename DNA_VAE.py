@@ -146,7 +146,7 @@ generator = Model(decoder_input, _x_decoded_mean)
 for i in range(10):
     Gaussian_sample_x = np.random.normal(0,1)
     Gaussian_sample_y = np.random.normal(0,1)
-    z_sample = np.array([Gaussian_sample_x,Gaussian_sample_y])
+    z_sample = np.array([[Gaussian_sample_x,Gaussian_sample_y]])
     sample_decoded = generator.predict(z_sample)
     print sample_decoded.shape
     i+=1
