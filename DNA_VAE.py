@@ -134,9 +134,10 @@ vae.summary()
 
 print('GENERATING TEST SAMPLE...')
 decoder_input = Input(shape=(latent_dim,))
-print "Shape of the decoder input: " decoder_input._keras_shape
+#print "Shape of the decoder input: " decoder_input._keras_shape
 _h_decoded = decoder_h(decoder_input)
 print "What is this? ", _h_decoded._keras_shape
 _x_decoded_mean = decoder_mean(_h_decoded)
 print "And what is this?! ", _x_decoded_mean._keras_shape
 generator = Model(decoder_input, _x_decoded_mean)
+generator.summary()
