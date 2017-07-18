@@ -120,8 +120,8 @@ vae = Model(x, y)
 vae.compile(optimizer='rmsprop', loss=None, metrics=['accuracy'])
 vae.summary()
 
-vae.fit(hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25)
+#vae.fit(hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25)
 #
-# encoder = Model(x, z_mean)
+encoder = Model(x, z_mean)
 
 #We want to somehow determine the generated DNA seqences
