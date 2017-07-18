@@ -134,12 +134,15 @@ vae.summary()
 
 print('GENERATING TEST SAMPLE...')
 
-#this is the decoder that will generate the sample 
+#this is the decoder that will generate the sample
 decoder_input = Input(shape=(latent_dim,))
 _h_decoded = decoder_h(decoder_input)
 print "Test sample in the intermediate dim: ", _h_decoded._keras_shape
 _x_decoded_mean = decoder_mean(_h_decoded)
 print "Test sample in the orginal dim", _x_decoded_mean._keras_shape
 generator = Model(decoder_input, _x_decoded_mean)
-generator.shape()
 
+#let's sample a random Gaussian which we will plug into the decoder
+Gaussian_sample = np.random.normal(0, 1)
+sample_decoded = generator.predict(Gaussian_sample)
+print sample_decoded.shape
