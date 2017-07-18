@@ -36,7 +36,7 @@ dna_data.dna=dna_data.dna.str[:MAXLEN]
 
 print('VECTORIZATION and CREATING TRAIN/TEST SETS.......')
 hot=np.zeros((n,MAXLEN,len(chars)), dtype=np.bool)
-print 'shape of vector: ',hot.shape
+print 'Shape of encoded data: ',hot.shape
 for i, dna_str in enumerate(dna_data.dna):
     hot[i]=ctable.encode(dna_str, MAXLEN)
 #Do we need to one hot vectorize if we are using variational autoencoder?
@@ -53,13 +53,13 @@ for i, dna_str in enumerate(dna_data.dna):
 # print "New test set shape", dna_test.shape
 
 hot = hot.reshape(len(hot), np.prod(hot.shape[1:]))
+print "New Shape of encoded data: ", hot.shape
 
 #the VAE
 batch_size = 100
-#original_dim = 784
-original_dim = dna_train.shape[1]
+#original_dim = dna_train.shape[1]
+original_dim = hot.shape[1]
 latent_dim = 2
-#intermediate_dim = 256
 intermediate_dim = 60
 epochs = 30
 epsilon_std = 1.0
