@@ -1,7 +1,10 @@
 import numpy as np
 import pandas as pd
-import random
-import sys
+import os
+import warnings
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' #Hide messy TensorFlow warnings
+warnings.filterwarnings("ignore") #Hide messy Numpy warnings
+
 
 from keras.models import Sequential, Model
 from keras.layers import Embedding, LSTM
@@ -127,7 +130,7 @@ print 'Build Model...'
 #
 # #preds = LSTM(HIDDEN_SIZE, input_shape = embedding_input.shape, return_sequences= True, activation='softmax')(x)
 # # print "shape of LSTM output", preds._keras_shape
-# #(None, 8, 128)
+# #(None, 8, 128), is incorrect
 #
 # preds = LSTM(HIDDEN_SIZE, input_shape = embedding_input.shape, activation='softmax')(x)
 # print "shape of LSTM output", preds._keras_shape
