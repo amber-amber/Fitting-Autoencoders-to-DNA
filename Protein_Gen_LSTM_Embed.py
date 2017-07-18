@@ -30,7 +30,7 @@ print "DNA shape: ", dna_data.shape
 
 
 #We need to come up with the list of training patterns
-protein_in_len = 8
+protein_in_len = 15
 step = 5
 protein_in = []
 protein_out = []
@@ -148,7 +148,6 @@ model.add(Dense(len(chars),activation='softmax'))
 # #optimizer = RMSprop(lr=0.01)
 # #optimizer = SGD(lr=.01)
 optimizer = Adam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
-# #
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
 
