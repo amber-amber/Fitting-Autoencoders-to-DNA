@@ -149,7 +149,8 @@ print 'Build Model...'
 model = Sequential()
 model.add(Embedding(BATCH_SIZE, EMBEDDING_DIM, input_length = protein_in_len))
 print "Shape of the embedding layer output", model.output_shape
-model.add(LSTM(HIDDEN_SIZE, input_shape=(protein_in_len, len(chars))))
+#model.add(LSTM(HIDDEN_SIZE, input_shape=(protein_in_len, len(chars))))
+model.add(LSTM(HIDDEN_SIZE, input_shape=(protein_in_len, EMBEDDING_DIM)))
 
 # #optimizer = RMSprop(lr=0.01)
 # #optimizer = SGD(lr=.01)
