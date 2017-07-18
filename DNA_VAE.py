@@ -133,11 +133,13 @@ vae.summary()
 #Based off the Variational Autoencoders tutorial, we should be sampling from a normal distribution to get the test samples
 
 print('GENERATING TEST SAMPLE...')
+
+#this is the decoder that will generate the sample 
 decoder_input = Input(shape=(latent_dim,))
-#print "Shape of the decoder input: " decoder_input._keras_shape
 _h_decoded = decoder_h(decoder_input)
-print "What is this? ", _h_decoded._keras_shape
+print "Test sample in the intermediate dim: ", _h_decoded._keras_shape
 _x_decoded_mean = decoder_mean(_h_decoded)
-print "And what is this?! ", _x_decoded_mean._keras_shape
+print "Test sample in the orginal dim", _x_decoded_mean._keras_shape
 generator = Model(decoder_input, _x_decoded_mean)
-generator.summary()
+generator.shape()
+
