@@ -9,11 +9,12 @@ warnings.filterwarnings("ignore") #Hide messy Numpy warnings
 from keras.models import Sequential, Model
 from keras.layers import Embedding, LSTM
 from keras.layers import Input, Dense, Activation, RepeatVector
+from keras.utils import to_categorical
 #from keras.optimizers import RMSprop
 #from keras.optimizers import SGD
 from keras.optimizers import Adam
 
-n_rows = 500
+n_rows = 20000
 MAXLEN = 60
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
@@ -106,7 +107,7 @@ for i, prot_name in enumerate(protein_out):
             output_vec[i] = chars.index(p)
 print 'example of embedding matrix row', embedding_input[1234]
 print 'example of output vector row', output_vec[1234]
-some_shape = embedding_input.shape
+y_train = to_categorical(output_vec)
 
 #
 HIDDEN_SIZE =128
@@ -116,7 +117,7 @@ EMBEDDING_DIM = 10
 #
 print 'Build Model...'
 
-the_input = Input(shape=(protein_in_len,))
+#the_input = Input(shape=(protein_in_len,))
 # #print "shape of the input", the_input._keras_shape
 # #this is (None, protein_in_len)
 #
@@ -124,41 +125,34 @@ the_input = Input(shape=(protein_in_len,))
 # #print "shape of the embedding layer output", x._keras_shape
 # #This is (none, protein_in_len, EMBEDDING DIM)
 #
-x = Embedding(BATCH_SIZE, EMBEDDING_DIM, input_length=protein_in_len)(the_input)
-print "shape of the embedding layer output", x._keras_shape
+#x = Embedding(BATCH_SIZE, EMBEDDING_DIM, input_length=protein_in_len)(the_input)
+#print "shape of the embedding layer output", x._keras_shape
 # #(None, n_patterns, protein_in_len, EMBEDDING_DIM)
 #
 # #preds = LSTM(HIDDEN_SIZE, input_shape = embedding_input.shape, return_sequences= True, activation='softmax')(x)
 # # print "shape of LSTM output", preds._keras_shape
 # #(None, 8, 128), is incorrect
 #
-preds = LSTM(HIDDEN_SIZE, input_shape = embedding_input.shape, activation='softmax')(x)
+#preds = LSTM(HIDDEN_SIZE, input_shape = embedding_input.shape, activation='softmax')(x)
 # print "shape of LSTM output", preds._keras_shape
 # #(None, 128), which should be correct
 
-#x = RepeatVector(protein_in_len)(x)
-#x = LSTM(HIDDEN_SIZE, return_sequences=True)(x)
-#x = LSTM(HIDDEN_SIZE, input_shape=embedding_input.shape)(x)
-#preds = Dense(len(chars))(x)
-#print "shape of dense output", x._keras_shape
-#preds = Activation('softmax')(x)
-#print "shape of activation output", preds._keras_shape
-
 #model = Model(the_input, preds)
 
-# model = Sequential()
-# model.add(Embedding(BATCH_SIZE, EMBEDDING_DIM, input_length = protein_in_len))
-# print "Shape of the embedding layer output", model.output_shape
-# #model.add(LSTM(HIDDEN_SIZE, input_shape=(protein_in_len, len(chars))))
-# model.add(LSTM(HIDDEN_SIZE, input_shape=(protein_in_len, EMBEDDING_DIM)))
-
+model = Sequential()
+model.add(Embedding(len(chars), EMBEDDING_DIM))
+#print("Shape of the embedding layer output", model.output_shape)
+model.add(LSTM(HIDDEN_SIZE))
+#model.add(LSTM(HIDDEN_SIZE, input_shape=(protein_in_len, EMBEDDING_DIM)))
+model.add(Dense(len(chars),activation='softmax'))
 # #optimizer = RMSprop(lr=0.01)
 # #optimizer = SGD(lr=.01)
-optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
+optimizer = Adam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 # #
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
-model.fit(embedding_input, output_vec, epochs=75, batch_size=BATCH_SIZE)
+
+model.fit(embedding_input, y_train, epochs=75, batch_size=BATCH_SIZE)
 #
 # def sample(preds, temperature=1.0):
 #     # helper function to sample an index from a probability array
