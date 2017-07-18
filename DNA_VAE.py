@@ -133,5 +133,7 @@ vae.summary()
 
 decoder_input = Input(shape=(latent_dim,))
 _h_decoded = decoder_h(decoder_input)
+print "What is this? ", _h_decoded._keras_shape
 _x_decoded_mean = decoder_mean(_h_decoded)
+print "And what is this?! ", _x_decoded_mean._keras_shape
 generator = Model(decoder_input, _x_decoded_mean)
