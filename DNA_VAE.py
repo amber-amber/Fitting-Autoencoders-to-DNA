@@ -136,18 +136,19 @@ vae.summary()
 #We want to somehow determine the generated DNA seqences
 #Based off the Variational Autoencoders tutorial, we should be sampling from a normal distribution to get the test samples
 
-print('GENERATING TEST SAMPLE...')
+print('GENERATING TEST SAMPLES...')
 
 #this is the decoder that will generate the sample
 decoder_input = Input(shape=(latent_dim,))
 _h_decoded = decoder_h(decoder_input)
-print "Test sample in the intermediate dim: ", _h_decoded._keras_shape
+#print "Test sample in the intermediate dim: ", _h_decoded._keras_shape
 _x_decoded_mean = decoder_mean(_h_decoded)
-print "Test sample in the orginal dim", _x_decoded_mean._keras_shape
+#print "Test sample in the orginal dim", _x_decoded_mean._keras_shape
 generator = Model(decoder_input, _x_decoded_mean)
 
 #let's sample some random Gaussians which we will plug into the decoder
-for i in range(10):
+num_test_samples = 15
+for i in range(num_test_samples):
     Gaussian_sample_x = np.random.normal(0,1)
     Gaussian_sample_y = np.random.normal(0,1)
     z_sample = np.array([[Gaussian_sample_x,Gaussian_sample_y]])
@@ -155,3 +156,4 @@ for i in range(10):
     sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
     print ctable.decode(sample_decoded)
     i+=1
+
