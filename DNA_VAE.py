@@ -143,6 +143,8 @@ print "Test sample in the orginal dim", _x_decoded_mean._keras_shape
 generator = Model(decoder_input, _x_decoded_mean)
 
 #let's sample a random Gaussian which we will plug into the decoder
-Gaussian_sample = np.random.normal(0, 1)
-sample_decoded = generator.predict(Gaussian_sample)
-print sample_decoded.shape
+for i in range(5):
+    Gaussian_sample = np.random.normal(0, 1)
+    sample_decoded = generator.predict(Gaussian_sample)
+    print sample_decoded.shape
+    i+=1
