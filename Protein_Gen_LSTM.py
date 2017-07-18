@@ -4,6 +4,11 @@ import matplotlib as plt
 import random
 import sys
 
+import os
+import warnings
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' #Hide messy TensorFlow warnings
+warnings.filterwarnings("ignore") #Hide messy Numpy warnings
+
 from keras.models import Sequential
 from keras.layers import LSTM, RepeatVector, Dense, Activation
 #from keras.optimizers import RMSprop
@@ -101,7 +106,7 @@ print "output shape after first LSTM layer", model.output_shape
 
 #Adding LSTM layers
 model.add(RepeatVector(protein_in_len))
-model.add(LSTM(HIDDEN_SIZE))
+model.add(LSTM(HIDDEN_SIZE,return_sequences=True))
 model.add(LSTM(HIDDEN_SIZE))
 model.add(Dense(len(chars)))
 model.add(Activation('softmax'))
