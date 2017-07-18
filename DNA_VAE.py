@@ -34,7 +34,7 @@ dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5
 n,m=dna_data.shape
 dna_data.dna=dna_data.dna.str[:MAXLEN]
 
-print('VECTORIZATION and CREATING TRAIN/TEST SETS.......')
+print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
 hot=np.zeros((n,MAXLEN,len(chars)), dtype=np.bool)
 print 'Shape of encoded data: ',hot.shape
 for i, dna_str in enumerate(dna_data.dna):
@@ -118,6 +118,7 @@ class CustomVariationalLayer(Layer):
 y = CustomVariationalLayer()([x, x_decoded_mean])
 vae = Model(x, y)
 vae.compile(optimizer='rmsprop', loss=None, metrics=['accuracy'])
+print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
 #vae.fit(hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25)
@@ -131,7 +132,9 @@ vae.summary()
 #We want to somehow determine the generated DNA seqences
 #Based off the Variational Autoencoders tutorial, we should be sampling from a normal distribution to get the test samples
 
+print('GENERATING TEST SAMPLE...')
 decoder_input = Input(shape=(latent_dim,))
+print "Shape of the decoder input: " decoder_input._keras_shape
 _h_decoded = decoder_h(decoder_input)
 print "What is this? ", _h_decoded._keras_shape
 _x_decoded_mean = decoder_mean(_h_decoded)
