@@ -15,6 +15,7 @@ n_rows = 20000
 MAXLEN = 60
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
+num_amino_acids = len(dna_data.protein[0])
 dna_data.protein=dna_data.protein.str[:MAXLEN]
 print "DNA shape: ", dna_data.shape
 
@@ -82,12 +83,15 @@ HIDDEN_SIZE =128
 BATCH_SIZE=128
 EMBEDDING_DIM = 100
 LAYERS=1
+epochs=50
 
 print 'Build Model...'
 model = Sequential()
 
 model.add(LSTM(HIDDEN_SIZE, input_shape=(hot_x.shape[1], hot_x.shape[2])))
+#here, the input shape is (protein_in_len, len(chars))
 print "output shape after first LSTM layer", model.output_shape
+#should be (None, HIDDEN_SIZE)
 #model.add(LSTM(HIDDEN_SIZE, return_sequences=True, input_shape=(protein_in_len,len(chars))))
 
 #model.add(Dense(len(chars)))
@@ -97,6 +101,7 @@ print "output shape after first LSTM layer", model.output_shape
 
 #Adding LSTM layers
 model.add(RepeatVector(protein_in_len))
+model.add(LSTM(HIDDEN_SIZE))
 model.add(LSTM(HIDDEN_SIZE))
 model.add(Dense(len(chars)))
 model.add(Activation('softmax'))
@@ -113,7 +118,7 @@ optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
 #tb_callback = TensorBoard(log_dir='./2LayerLSTM_Graph', histogram_freq=0, write_graph=True, write_images=True)
-history = model.fit(hot_x, hot_y, epochs=130, batch_size=BATCH_SIZE)
+history = model.fit(hot_x, hot_y, epochs=epochs, batch_size=BATCH_SIZE)
 EarlyStopping(monitor='val_loss', min_delta=0.001, patience=3, mode='auto')
 
 plt.plot(history.history['acc'])
@@ -146,7 +151,7 @@ print 'Generating with protein: ', generated
 
 for diversity in [0.2, 0.5, 1.0, 1.2]:
     print 'Diversity: ', diversity
-    for i in range(455):
+    for i in range(num_amino_acids):
         x = np.zeros((1, protein_in_len, len(chars)))
         for t, char in enumerate(this_prot):
             x[0,t,char_indices[char]] = 1
