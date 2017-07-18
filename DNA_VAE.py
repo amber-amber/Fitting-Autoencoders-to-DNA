@@ -109,12 +109,14 @@ vae.compile(optimizer='rmsprop', loss=None, metrics=['accuracy'])
 vae.summary()
 #
 # #fit to DNA data
-# split_at = int(.9 * n)
-# dna_train, dna_test = hot[:split_at], hot[split_at:]
+split_at = int(.8 * n)
+dna_train, dna_test = hot[:split_at], hot[split_at:]
+print "Training set shape", dna_train.shape
+print "Test set shape", dna_test.shape
 #
 # dna_train = dna_train.reshape((len(dna_train), np.prod(dna_train.shape[1:])))
 # dna_test = dna_test.reshape((len(dna_test), np.prod(dna_test.shape[1:])))
-#
+#jk I don't think we need to reshape
 #
 # vae.fit(dna_train,
 #         shuffle=True,
