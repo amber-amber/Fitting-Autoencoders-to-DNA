@@ -36,7 +36,7 @@ dna_data.dna=dna_data.dna.str[:MAXLEN]
 
 print('VECTORIZATION and CREATING TRAIN/TEST SETS.......')
 hot=np.zeros((n,MAXLEN,len(chars)), dtype=np.bool)
-print('shape of vector: ',hot.shape)
+print 'shape of vector: ',hot.shape
 for i, dna_str in enumerate(dna_data.dna):
     hot[i]=ctable.encode(dna_str, MAXLEN)
 #Do we need to one hot vectorize if we are using variational autoencoder?
@@ -86,14 +86,12 @@ print "Shape after lambda layer: ", z._keras_shape
 #z = Lambda(sampling)([z_mean, z_log_var])
 # #this is giving me some sort of error although both z_mean shape and z_log_var shape are (100,2)
 
-
-
 # we instantiate these layers separately so as to reuse them later
 decoder_h = Dense(intermediate_dim, activation='relu')
 decoder_mean = Dense(MAXLEN, activation='sigmoid')
 h_decoded = decoder_h(z)
 x_decoded_mean = decoder_mean(h_decoded)
-
+print "x_decoded_mean shape: " x_decoded_mean._keras_shape
 
 #Custom loss layer
 class CustomVariationalLayer(Layer):
