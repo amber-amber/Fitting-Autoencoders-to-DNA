@@ -111,18 +111,15 @@ vae.summary()
 # #fit to DNA data
 split_at = int(.8 * n)
 dna_train, dna_test = hot[:split_at], hot[split_at:]
-print "Training set shape", dna_train.shape
-print "Test set shape", dna_test.shape
+print "Previous training set shape", dna_train.shape
+print "Previous test set shape", dna_test.shape
 #
-# dna_train = dna_train.reshape((len(dna_train), np.prod(dna_train.shape[1:])))
-# dna_test = dna_test.reshape((len(dna_test), np.prod(dna_test.shape[1:])))
-#jk I don't think we need to reshape
+dna_train = dna_train.reshape((len(dna_train), np.prod(dna_train.shape[1:])))
+dna_test = dna_test.reshape((len(dna_test), np.prod(dna_test.shape[1:])))
+print "New training set shape", dna_train.shape
+print "New test set shape", dna_test.shape
 #
-# vae.fit(dna_train,
-#         shuffle=True,
-#         epochs=epochs,
-#         batch_size=batch_size,
-#         validation_data=(dna_test, dna_test))
+vae.fit(dna_train, shuffle=True, epochs=75,batch_size=batch_size, validation_data=(dna_test, dna_test))
 #
 # encoder = Model(x, z_mean)
 
