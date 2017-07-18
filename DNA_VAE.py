@@ -54,7 +54,6 @@ for i, dna_str in enumerate(dna_data.dna):
 
 hot = hot.reshape(len(hot), np.prod(hot.shape[1:]))
 print "New Shape of encoded data: ", hot.shape
-print hot.type()
 
 #the VAE
 batch_size = 100
