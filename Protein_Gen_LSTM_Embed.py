@@ -142,7 +142,7 @@ print 'Build Model...'
 model = Sequential()
 model.add(Embedding(len(chars), EMBEDDING_DIM))
 #print("Shape of the embedding layer output", model.output_shape)
-model.add(LSTM(HIDDEN_SIZE))
+model.add(LSTM(HIDDEN_SIZE, return_sequences=True))
 model.add(LSTM(HIDDEN_SIZE))
 #model.add(LSTM(HIDDEN_SIZE, input_shape=(protein_in_len, EMBEDDING_DIM)))
 model.add(Dense(len(chars),activation='softmax'))
