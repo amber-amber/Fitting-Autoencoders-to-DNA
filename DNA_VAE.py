@@ -122,10 +122,11 @@ class CustomVariationalLayer(Layer):
 y = CustomVariationalLayer()([x, x_decoded_mean])
 vae = Model(x, y)
 vae.compile(optimizer='rmsprop', loss=None, metrics=['accuracy'])
+#metrics = correlation?!?!
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
-#vae.fit(hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25)
+vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25)
 #why is this giving me >>>>> TypeError: unhashable type: 'list' <<<<< omg hot is not a list. can't use this because hot is hashable?!
 #vae.fit(dna_test, shuffle=True, epochs=epochs, batch_size=batch_size, test_data=(dna_test, dna_test))
 #but this will give me the error ValueError: The model expects 0 input arrays, but only received one array.
