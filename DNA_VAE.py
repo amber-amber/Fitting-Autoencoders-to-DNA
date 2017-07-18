@@ -3,7 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 import os
-os.environ['TF_CPP_MIN_LOG_Level'] = '3'
+import warnings
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' #Hide messy TensorFlow warnings
+warnings.filterwarnings("ignore") #Hide messy Numpy warnings
 
 from keras.layers import Input, Dense, Lambda, Layer
 from keras.models import Model
