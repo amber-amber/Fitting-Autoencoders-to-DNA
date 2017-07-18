@@ -54,6 +54,7 @@ for i, dna_str in enumerate(dna_data.dna):
 
 hot = hot.reshape(len(hot), np.prod(hot.shape[1:]))
 print "New Shape of encoded data: ", hot.shape
+print hot.type()
 
 #the VAE
 batch_size = 100
@@ -119,7 +120,7 @@ vae = Model(x, y)
 vae.compile(optimizer='rmsprop', loss=None, metrics=['accuracy'])
 vae.summary()
 
-vae.fit(hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.75)
+vae.fit(hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25)
 #
 # encoder = Model(x, z_mean)
 
