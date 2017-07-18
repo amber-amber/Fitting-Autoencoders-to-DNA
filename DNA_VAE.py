@@ -148,5 +148,6 @@ for i in range(10):
     Gaussian_sample_y = np.random.normal(0,1)
     z_sample = np.array([[Gaussian_sample_x,Gaussian_sample_y]])
     sample_decoded = generator.predict(z_sample)
-    print sample_decoded.shape
+    sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
+    print ctable.decode(sample_decoded)
     i+=1
