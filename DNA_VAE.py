@@ -117,7 +117,7 @@ vae = Model(x, y)
 vae.compile(optimizer='rmsprop', loss=None, metrics=['accuracy'])
 vae.summary()
 
-vae.fit(dna_train, shuffle=True, epochs=epochs,batch_size=batch_size, validation_data=dna_test)
+vae.fit(dna_train, shuffle=True, epochs=epochs,batch_size=batch_size)
 #
 # encoder = Model(x, z_mean)
 
