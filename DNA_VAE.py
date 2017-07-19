@@ -45,7 +45,7 @@ for i, dna_str in enumerate(dna_data.dna):
     hot[i]=ctable.encode(dna_str, MAXLEN)
 #Do we need to one hot vectorize if we are using variational autoencoder?
 
-Split the DNA data
+#Split the DNA data
 split_at = int(.75 * n)
 dna_train, dna_test = hot[:split_at], hot[split_at:]
 print "Previous training set shape", dna_train.shape
