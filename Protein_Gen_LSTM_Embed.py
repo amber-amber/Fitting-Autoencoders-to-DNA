@@ -148,7 +148,7 @@ model.add(LSTM(HIDDEN_SIZE))
 model.add(Dense(len(chars),activation='softmax'))
 # #optimizer = RMSprop(lr=0.01)
 # #optimizer = SGD(lr=.01)
-optimizer = Adam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
+optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
 
