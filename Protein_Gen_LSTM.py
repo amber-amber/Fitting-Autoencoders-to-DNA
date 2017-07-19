@@ -90,7 +90,7 @@ EMBEDDING_DIM = 100
 LAYERS=1
 dropout_rate = 0.2
 learning_rate = 0.0001
-epochs=50
+epochs=3
 
 print 'Build Model...'
 model = Sequential()
@@ -128,6 +128,7 @@ model.summary()
 #tb_callback = TensorBoard(log_dir='./2LayerLSTM_Graph', histogram_freq=0, write_graph=True, write_images=True)
 history = model.fit(hot_x, hot_y, epochs=epochs, batch_size=BATCH_SIZE, validation_split=.25)
 EarlyStopping(monitor='val_loss', min_delta=0.001, patience=3, mode='auto')
+print(history.history.keys())
 
 plt.plot(history.history['acc'])
 plt.plot(history.history['val_acc'])
