@@ -10,7 +10,7 @@ warnings.filterwarnings("ignore") #Hide messy Numpy warnings
 from keras.layers import Input, Dense, Lambda, Layer
 from keras.models import Model
 from keras import backend as K
-from keras import metrics
+#from keras import metrics
 
 class CharacterTable(object):
     def __init__(self, chars):
