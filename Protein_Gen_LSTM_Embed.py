@@ -161,6 +161,7 @@ model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['ac
 model.summary()
 
 history = model.fit(embedding_input, y_train, epochs=epochs, batch_size=BATCH_SIZE, validation_split=.25)
+print(history.history.keys())
 
 plt.plot(history.history['acc'])
 plt.plot(history.history['val_acc'])
