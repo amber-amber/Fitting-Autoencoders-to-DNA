@@ -116,6 +116,7 @@ HIDDEN_SIZE =128
 BATCH_SIZE=128
 EMBEDDING_DIM = 10
 epochs = 50
+learning_rate = .0001
 # # LAYERS=1
 #
 print 'Build Model...'
@@ -153,7 +154,7 @@ model.add(Dense(len(chars)))
 model.add(Activation('softmax'))
 # #optimizer = RMSprop(lr=0.01)
 # #optimizer = SGD(lr=.01)
-optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
+optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
 
