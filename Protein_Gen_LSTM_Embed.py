@@ -113,6 +113,7 @@ y_train = to_categorical(output_vec)
 HIDDEN_SIZE =128
 BATCH_SIZE=128
 EMBEDDING_DIM = 10
+epochs = 50
 # # LAYERS=1
 #
 print 'Build Model...'
@@ -152,7 +153,7 @@ optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
 
-model.fit(embedding_input, y_train, epochs=75, batch_size=BATCH_SIZE, validation_split=.25)
+model.fit(embedding_input, y_train, epochs=epochs, batch_size=BATCH_SIZE, validation_split=.25)
 #
 # def sample(preds, temperature=1.0):
 #     # helper function to sample an index from a probability array
