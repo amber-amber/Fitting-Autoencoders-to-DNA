@@ -126,7 +126,7 @@ vae.compile(optimizer='rmsprop', loss=None, metrics=['accuracy'])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
-vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, metrics=['accuracy'])
+vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25)
 #why is this giving me >>>>> TypeError: unhashable type: 'list' <<<<< omg hot is not a list. can't use this because hot is hashable?!
 
 #vae.fit(dna_train, dna_train, shuffle=True, epochs=epochs, batch_size=batch_size, test_data=(dna_test, dna_test))
