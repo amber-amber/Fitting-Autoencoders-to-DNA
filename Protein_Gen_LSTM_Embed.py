@@ -5,7 +5,6 @@ import warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' #Hide messy TensorFlow warnings
 warnings.filterwarnings("ignore") #Hide messy Numpy warnings
 
-
 from keras.models import Sequential, Model
 from keras.layers import Embedding, LSTM
 from keras.layers import Input, Dense, Activation, RepeatVector
@@ -13,6 +12,8 @@ from keras.utils import to_categorical
 #from keras.optimizers import RMSprop
 #from keras.optimizers import SGD
 from keras.optimizers import Adam
+from keras.callbacks import EarlyStopping, History
+
 
 n_rows = 20000
 MAXLEN = 60
@@ -153,7 +154,23 @@ optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
 
-model.fit(embedding_input, y_train, epochs=epochs, batch_size=BATCH_SIZE, validation_split=.25)
+history = model.fit(embedding_input, y_train, epochs=epochs, batch_size=BATCH_SIZE, validation_split=.25)
+
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
 #
 # def sample(preds, temperature=1.0):
 #     # helper function to sample an index from a probability array
