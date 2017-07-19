@@ -123,7 +123,7 @@ optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
 #tb_callback = TensorBoard(log_dir='./2LayerLSTM_Graph', histogram_freq=0, write_graph=True, write_images=True)
-history = model.fit(hot_x, hot_y, epochs=epochs, batch_size=BATCH_SIZE)
+history = model.fit(hot_x, hot_y, epochs=epochs, batch_size=BATCH_SIZE, validation_split=.25)
 EarlyStopping(monitor='val_loss', min_delta=0.001, patience=3, mode='auto')
 
 plt.plot(history.history['acc'])
