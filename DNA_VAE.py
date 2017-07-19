@@ -121,7 +121,7 @@ class CustomVariationalLayer(Layer):
 #
 y = CustomVariationalLayer()([x, x_decoded_mean])
 vae = Model(x, y)
-vae.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics='accuracy')
+vae.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
 #metrics = correlation?!?!
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
