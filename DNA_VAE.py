@@ -32,9 +32,10 @@ class CharacterTable(object):
 chars='actg'
 ctable= CharacterTable(chars)
 
-n_rows = 40000
+#n_rows = 40000
 MAXLEN = 40
-dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
+#dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
+dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 n,m=dna_data.shape
 dna_data.dna=dna_data.dna.str[:MAXLEN]
 
@@ -121,8 +122,10 @@ class CustomVariationalLayer(Layer):
 #
 y = CustomVariationalLayer()([x, x_decoded_mean])
 vae = Model(x, y)
-vae.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
+#vae.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
+#What does the accuracy even refer to in this case?! btw categorical crossentropy is a disaster
 #metrics = correlation?!?!
+vae.compile(optimizer='rmsprop', loss=None, metrics=['accuracy'])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
