@@ -8,7 +8,7 @@ warnings.filterwarnings("ignore") #Hide messy Numpy warnings
 
 from keras.models import Sequential, Model
 from keras.layers import Embedding, LSTM
-from keras.layers import Input, Dense, Activation, RepeatVector
+from keras.layers import Input, Dense, Activation, RepeatVector, Dropout
 from keras.utils import to_categorical
 #from keras.optimizers import RMSprop
 #from keras.optimizers import SGD
@@ -116,7 +116,8 @@ HIDDEN_SIZE =128
 BATCH_SIZE=128
 EMBEDDING_DIM = 10
 epochs = 50
-learning_rate = .0001
+learning_rate = 0.0001
+dropout_rate = 0.2
 # # LAYERS=1
 #
 print 'Build Model...'
@@ -147,6 +148,7 @@ model = Sequential()
 model.add(Embedding(len(chars), EMBEDDING_DIM))
 #print("Shape of the embedding layer output", model.output_shape)
 model.add(LSTM(HIDDEN_SIZE, return_sequences=True))
+model.add(Dropout(dropout_rate))
 model.add(LSTM(HIDDEN_SIZE))
 #model.add(LSTM(HIDDEN_SIZE, input_shape=(protein_in_len, EMBEDDING_DIM)))
 #model.add(Dense(len(chars),activation='softmax'))
