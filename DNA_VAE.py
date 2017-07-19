@@ -32,8 +32,8 @@ class CharacterTable(object):
 chars='actg'
 ctable= CharacterTable(chars)
 
-n_rows = 10000
-MAXLEN = 30
+n_rows = 40000
+MAXLEN = 40
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 n,m=dna_data.shape
 dna_data.dna=dna_data.dna.str[:MAXLEN]
@@ -126,7 +126,7 @@ vae.compile(optimizer='rmsprop', loss=None, metrics=['accuracy'])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
-vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25)
+vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, metrics=['accuracy'])
 #why is this giving me >>>>> TypeError: unhashable type: 'list' <<<<< omg hot is not a list. can't use this because hot is hashable?!
 
 #vae.fit(dna_train, dna_train, shuffle=True, epochs=epochs, batch_size=batch_size, test_data=(dna_test, dna_test))
