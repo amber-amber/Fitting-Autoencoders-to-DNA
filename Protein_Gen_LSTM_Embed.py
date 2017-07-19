@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import matplotlib as plt 
+import matplotlib as plt
 import os
 import warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' #Hide messy TensorFlow warnings
@@ -148,7 +148,9 @@ model.add(Embedding(len(chars), EMBEDDING_DIM))
 model.add(LSTM(HIDDEN_SIZE, return_sequences=True))
 model.add(LSTM(HIDDEN_SIZE))
 #model.add(LSTM(HIDDEN_SIZE, input_shape=(protein_in_len, EMBEDDING_DIM)))
-model.add(Dense(len(chars),activation='softmax'))
+#model.add(Dense(len(chars),activation='softmax'))
+model.add(Dense(len(chars)))
+model.add(Activation('softmax'))
 # #optimizer = RMSprop(lr=0.01)
 # #optimizer = SGD(lr=.01)
 optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
