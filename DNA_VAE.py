@@ -32,10 +32,10 @@ class CharacterTable(object):
 chars='actg'
 ctable= CharacterTable(chars)
 
-#n_rows = 40000
+n_rows = 100000
 MAXLEN = 40
-#dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
-dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
+dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
+#dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 n,m=dna_data.shape
 dna_data.dna=dna_data.dna.str[:MAXLEN]
 
