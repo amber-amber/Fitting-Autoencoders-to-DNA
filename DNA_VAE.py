@@ -67,7 +67,7 @@ batch_size = 100
 original_dim = hot.shape[1]
 latent_dim = 2
 intermediate_dim = 60
-epochs = 30
+epochs = 100
 epsilon_std = 1.0
 
 #this is how we generate new test samples?
