@@ -127,7 +127,7 @@ vae = Model(x, y)
 #vae.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
 #What does the accuracy even refer to in this case?! btw categorical crossentropy is a disaster
 #metrics = correlation?!?!
-optimizer = SGD(lr=0.001)
+optimizer = SGD(lr=0.0001)
 vae.compile(optimizer= optimizer, loss=None, metrics=['accuracy'])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
