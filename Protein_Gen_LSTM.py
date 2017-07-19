@@ -106,7 +106,7 @@ print "output shape after first LSTM layer", model.output_shape
 
 #Adding LSTM layers
 model.add(RepeatVector(protein_in_len))
-model.add(LSTM(HIDDEN_SIZE,return_sequences=True))
+#model.add(LSTM(HIDDEN_SIZE,return_sequences=True))
 model.add(LSTM(HIDDEN_SIZE))
 model.add(Dense(len(chars)))
 model.add(Activation('softmax'))
