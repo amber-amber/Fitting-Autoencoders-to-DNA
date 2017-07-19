@@ -11,6 +11,7 @@ from keras.layers import Input, Dense, Lambda, Layer
 from keras.models import Model
 from keras import backend as K
 from keras import metrics
+from keras.optimizers import SGD
 
 class CharacterTable(object):
     def __init__(self, chars):
@@ -33,7 +34,7 @@ chars='actg'
 ctable= CharacterTable(chars)
 
 n_rows = 200000
-MAXLEN = 320
+MAXLEN = 80
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 n,m=dna_data.shape
@@ -110,6 +111,7 @@ class CustomVariationalLayer(Layer):
     def vae_loss(self, x, x_decoded_mean):
         xent_loss = MAXLEN * metrics.binary_crossentropy(x, x_decoded_mean)
         kl_loss = - 0.5 * K.sum(1 + z_log_var - K.square(z_mean) - K.exp(z_log_var), axis=-1)
+        #this is like the KL divergence. I'm guessing z_mean and z_log_var are like the 2 distributions
         return K.mean(xent_loss + kl_loss)
 
     def call(self, inputs):
@@ -125,7 +127,8 @@ vae = Model(x, y)
 #vae.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
 #What does the accuracy even refer to in this case?! btw categorical crossentropy is a disaster
 #metrics = correlation?!?!
-vae.compile(optimizer='rmsprop', loss=None, metrics=['accuracy'])
+optimizer = SGD(lr=0.001)
+vae.compile(optimizer= optimizer, loss=None, metrics=['accuracy'])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
