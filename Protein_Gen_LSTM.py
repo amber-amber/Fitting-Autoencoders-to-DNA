@@ -90,7 +90,7 @@ EMBEDDING_DIM = 100
 LAYERS=1
 dropout_rate = 0.2
 learning_rate = 0.0001
-epochs=3
+epochs=50
 
 print 'Build Model...'
 model = Sequential()
@@ -137,7 +137,7 @@ plt.plot(history.history['val_acc'])
 plt.title('model accuracy')
 plt.ylabel('accuracy')
 plt.xlabel('epoch')
-plt.legend(['train', 'test'], loc='upper left')
+plt.legend(['train', 'val'], loc='upper left')
 plt.show()
 
 plt.plot(history.history['loss'])
