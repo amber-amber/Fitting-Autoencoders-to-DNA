@@ -10,7 +10,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' #Hide messy TensorFlow warnings
 warnings.filterwarnings("ignore") #Hide messy Numpy warnings
 
 from keras.models import Sequential
-from keras.layers import LSTM, RepeatVector, Dense, Activation
+from keras.layers import LSTM, RepeatVector, Dense, Activation, Dropout
 #from keras.optimizers import RMSprop
 #from keras.optimizers import SGD
 from keras.optimizers import Adam
@@ -88,6 +88,8 @@ HIDDEN_SIZE =128
 BATCH_SIZE=128
 EMBEDDING_DIM = 100
 LAYERS=1
+dropout_rate = 0.2
+learning_rate = 0.0001
 epochs=50
 
 print 'Build Model...'
@@ -106,6 +108,7 @@ print "output shape after first LSTM layer", model.output_shape
 
 #Adding LSTM layers
 model.add(RepeatVector(protein_in_len))
+model.add(Dropout(dropout_rate))
 #model.add(LSTM(HIDDEN_SIZE,return_sequences=True))
 model.add(LSTM(HIDDEN_SIZE))
 model.add(Dense(len(chars)))
@@ -119,7 +122,7 @@ model.add(Activation('softmax'))
 # #model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
 #optimizer = RMSprop(lr=0.01)
 #optimizer = SGD(lr=.01)
-optimizer = Adam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
+optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
 #tb_callback = TensorBoard(log_dir='./2LayerLSTM_Graph', histogram_freq=0, write_graph=True, write_images=True)
