@@ -114,7 +114,7 @@ y_train = to_categorical(output_vec)
 #
 HIDDEN_SIZE =128
 BATCH_SIZE=128
-EMBEDDING_DIM = 10
+EMBEDDING_DIM = 6
 epochs = 50
 learning_rate = 0.0001
 dropout_rate = 0.2
