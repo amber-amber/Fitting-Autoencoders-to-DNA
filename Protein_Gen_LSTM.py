@@ -127,15 +127,19 @@ history = model.fit(hot_x, hot_y, epochs=epochs, batch_size=BATCH_SIZE, validati
 EarlyStopping(monitor='val_loss', min_delta=0.001, patience=3, mode='auto')
 
 plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
 plt.title('model accuracy')
 plt.ylabel('accuracy')
 plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
 plt.show()
 
 plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
 plt.title('model loss')
 plt.ylabel('loss')
 plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
 plt.show()
 
 def sample(preds, temperature=1.0):
