@@ -38,8 +38,8 @@ dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 dna_data.protein=dna_data.protein.str[:MAXLEN]
 #print(type(dna_data.protein[n_rows]))
-print(dna_data.protein[n_rows-1][MAXLEN-1])
-print(dna_data.protein[n_rows][MAXLEN])
+#print(dna_data.protein[n_rows-1][MAXLEN-1])
+#print(dna_data.protein[n_rows][MAXLEN])
 
 chars=''
 for i in range(100):
