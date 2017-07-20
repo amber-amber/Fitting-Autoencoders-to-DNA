@@ -6,6 +6,7 @@ import warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' #Hide messy TensorFlow warnings
 warnings.filterwarnings("ignore") #Hide messy Numpy warnings
 
+from sklearn import preprocessing
 from keras.layers import Input, Dense, Lambda, Layer
 from keras.models import Model
 from keras import backend as K
@@ -54,6 +55,8 @@ for i in range(n_rows):
         for p in chars:
             if current_prot_str[j] == p:
                 aa_int_index[i][j] = chars.index(p)
+#to standardize the input
+aa_int_index = preprocessing.normalize(aa_int_index, norm='12')
 
 #the VAE
 
