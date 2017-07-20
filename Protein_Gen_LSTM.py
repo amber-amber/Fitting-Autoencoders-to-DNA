@@ -26,18 +26,21 @@ print "DNA shape: ", dna_data.shape
 
 #We need to come up with the list of training patterns
 protein_in_len = 15
-protein_out_len = 1
+#protein_out_len = 1
+protein_out_len = 3
 step = 5
 protein_in = []
 protein_out = []
 chars = ''
 for i in range(n_rows):
-    for j in range(0,len(dna_data.protein[i])-protein_in_len, step):
+    #for j in range(0,len(dna_data.protein[i])-protein_in_len, step):
+    for j in range(0, len(dna_data.protein[i]) - protein_in_len - protein_out_len, step):
          current_protein_in = dna_data.protein[i][j:j+protein_in_len]
          prot_string = str(current_protein_in)
          chars= chars + prot_string
          if (j+protein_in_len) < (MAXLEN-protein_out_len):
-            current_protein_out = dna_data.protein[i][j+protein_in_len]
+            #current_protein_out = dna_data.protein[i][j + protein_in_len]
+            current_protein_out = dna_data.protein[i][j+protein_in_len:j+protein_in_len+protein_out_len]
             protein_in.append(current_protein_in)
             protein_out.append(current_protein_out)
 n_patterns = len(protein_in)
