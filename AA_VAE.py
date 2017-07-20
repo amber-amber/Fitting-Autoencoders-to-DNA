@@ -56,7 +56,7 @@ for i in range(n_rows):
             if current_prot_str[j] == p:
                 aa_int_index[i][j] = chars.index(p)
 #to standardize the input
-#aa_int_index = preprocessing.normalize(aa_int_index, norm='l2')
+aa_int_index = preprocessing.normalize(aa_int_index, norm='l2')
 
 #the VAE
 
