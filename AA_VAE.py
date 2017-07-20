@@ -55,7 +55,7 @@ MAXLEN = 80
 #             if current_prot_str[j] == p:
 #                 aa_int_index[i][j] = chars.index(p)
 
-the VAE
+#the VAE
 
 #some parameters
 batch_size = 100
