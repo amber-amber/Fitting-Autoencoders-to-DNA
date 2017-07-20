@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import random
 import matplotlib.pyplot as plt
 import os
 import warnings
@@ -13,7 +14,7 @@ from keras.utils import to_categorical
 #from keras.optimizers import RMSprop
 #from keras.optimizers import SGD
 from keras.optimizers import Adam
-from keras.callbacks import EarlyStopping, History
+from keras.callbacks import EarlyStopping, History, TensorBoard
 
 
 n_rows = 20000
@@ -160,8 +161,9 @@ optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 model.summary()
 
-history = model.fit(embedding_input, y_train, epochs=epochs, batch_size=BATCH_SIZE, validation_split=.25)
-print(history.history.keys())
+#history = model.fit(embedding_input, y_train, epochs=epochs, batch_size=BATCH_SIZE, validation_split=.25)
+model.fit(embedding_input, y_train, epochs=epochs, batch_size=BATCH_SIZE, callbacks= callback_tensorboard, validation_split=.25)
+#print(history.history.keys())
 
 # plt.plot(history.history['acc'])
 # plt.plot(history.history['val_acc'])
