@@ -52,9 +52,10 @@ print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
 #We will not be using one hot encoding, but rather will look at the integer index of each amino acid base
 aa_int_index = np.zeros((n_rows, MAXLEN),dtype=int)
 for i in range(n_rows-1):
-    for j in range(MAXLEN-1):
+    current_prot_str = str(dna_data.protein[i])
+    for j in range(len(current_prot_str)):
         for p in chars:
-            if dna_data.protein[i][j] == p:
+            if current_prot_str[j] == p:
                 aa_int_index[i][j] = chars.index(p)
 print(aa_int_index[666])
 
