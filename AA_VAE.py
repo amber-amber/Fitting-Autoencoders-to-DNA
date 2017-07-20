@@ -38,7 +38,7 @@ dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 dna_data.protein=dna_data.protein.str[:MAXLEN]
 print(type(dna_data.protein[69]))
-
+print(dna_data.protein[69][69])
 
 chars=''
 for i in range(100):
