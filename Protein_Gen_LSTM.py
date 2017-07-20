@@ -75,18 +75,19 @@ print "Sample of base_out:", protein_out[8289]
 #ONE HOT ENCODING
 print 'VECTORIZATION'
 hot_x=np.zeros((n_patterns,protein_in_len,len(chars)),dtype=np.bool)
-hot_y=np.zeros((n_patterns, len(chars)),dtype=np.bool)
+#hot_y=np.zeros((n_patterns, len(chars)),dtype=np.bool)
+hot_y=np.zeros((n_patterns, protein_out_len, len(chars)),dtype=np.bool)
 print 'Shape of input vector: ', hot_x.shape
 print 'Shape of output vector: ', hot_y.shape
 for i, prot_str in enumerate(protein_in):
-#     hot_x[i]=ctable.encode(prot_str, protein_in_len)
     for t, char in enumerate(prot_str):
-            hot_x[i,t,char_indices[char]] = 1
-    hot_y[i, char_indices[protein_out[i]]] = 1
-# for i, next_prot in enumerate(protein_out):
-#     hot_y[i]=ctable.encode(next_prot,1)
-#print 'example of encoded protein: ', hot_x[8]
-#print 'example of encoded next protein: ', hot_y[8]
+        hot_x[i,t,char_indices[char]] = 1
+    #hot_y[i, char_indices[protein_out[i]]] = 1
+for i, next_prot in enumerate(protein_out):
+    for t, char in enumerate(next_prot):
+        hot_y[i,t, char_indices[char]]=1
+print 'example of encoded protein: ', hot_x[888]
+print 'example of encoded next protein: ', hot_y[888]
 
 HIDDEN_SIZE =128
 BATCH_SIZE=128
@@ -136,21 +137,21 @@ print(history.history.keys())
 print(type(history.history))
 print(history.history.val_acc)
 
-plt.plot(history.history['acc'])
-plt.plot(history.history['val_acc'])
-plt.title('model accuracy')
-plt.ylabel('accuracy')
-plt.xlabel('epoch')
-plt.legend(['train', 'val'], loc='upper left')
-plt.show()
-
-plt.plot(history.history['loss'])
-plt.plot(history.history['val_loss'])
-plt.title('model loss')
-plt.ylabel('loss')
-plt.xlabel('epoch')
-plt.legend(['train', 'test'], loc='upper left')
-plt.show()
+# plt.plot(history.history['acc'])
+# plt.plot(history.history['val_acc'])
+# plt.title('model accuracy')
+# plt.ylabel('accuracy')
+# plt.xlabel('epoch')
+# plt.legend(['train', 'val'], loc='upper left')
+# plt.show()
+#
+# plt.plot(history.history['loss'])
+# plt.plot(history.history['val_loss'])
+# plt.title('model loss')
+# plt.ylabel('loss')
+# plt.xlabel('epoch')
+# plt.legend(['train', 'test'], loc='upper left')
+# plt.show()
 
 # def sample(preds, temperature=1.0):
 #     # helper function to sample an index from a probability array
