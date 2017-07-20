@@ -43,23 +43,20 @@ chars=''
 for i in range(100):
     chars += str(dna_data.protein[i])
 chars = sorted(list(set(chars)))
-print('Number of chars: ', len(chars))
-#
+char_indices = dict((c, i) for i, c in enumerate(chars))
+indices_char = dict((i, c) for i, c in enumerate(chars))
+
 # print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
-# #We will not be using one hot encoding, but rather will look at the integer index of each amino acid base
-# embedding_input = np.zeros((n, MAXLEN),dtype=int)
-# for i, prot_str in enumerate:
-#     for j in range(protein_in_len):
-#         for p in chars:
-#             if prot_str[j] == p:
-#                 embedding_input[i][j] = chars.index(p)
-# for i, prot_name in enumerate(protein_out):
-#     for p in chars:
-#         if prot_name == p:
-#             output_vec[i] = chars.index(p)
-# print 'example of embedding matrix row', embedding_input[1234]
-#
-# #the VAE
+#We will not be using one hot encoding, but rather will look at the integer index of each amino acid base
+aa_int_index = np.zeros((n, MAXLEN),dtype=int)
+for i in range(n):
+    for j in range(MAXLEN):
+        for p in chars:
+            if dna_data.protein[i][j] == p:
+                aa_int_index[i][j] = chars.index(p)
+print(aa_int_index[666])
+
+#the VAE
 #
 # #some parameters
 # batch_size = 100
