@@ -37,9 +37,6 @@ MAXLEN = 80
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 dna_data.protein=dna_data.protein.str[:MAXLEN]
-#print(type(dna_data.protein[n_rows]))
-#print(dna_data.protein[n_rows-1][MAXLEN-1])
-#print(dna_data.protein[n_rows][MAXLEN])
 
 chars=''
 for i in range(100):
@@ -51,7 +48,7 @@ indices_char = dict((i, c) for i, c in enumerate(chars))
 print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
 #We will not be using one hot encoding, but rather will look at the integer index of each amino acid base
 aa_int_index = np.zeros((n_rows, MAXLEN),dtype=int)
-for i in range(n_rows-1):
+for i in range(n_rows):
     current_prot_str = str(dna_data.protein[i])
     for j in range(len(current_prot_str)):
         for p in chars:
