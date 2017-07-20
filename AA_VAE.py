@@ -34,84 +34,82 @@ ctable= CharacterTable(chars)
 
 n_rows = 200000
 MAXLEN = 80
-dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
-#dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
-dna_data.protein=dna_data.protein.str[:MAXLEN]
+# dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
+# #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
+# dna_data.protein=dna_data.protein.str[:MAXLEN]
+#
+# chars=''
+# for i in range(100):
+#     chars += str(dna_data.protein[i])
+# chars = sorted(list(set(chars)))
+# char_indices = dict((c, i) for i, c in enumerate(chars))
+# indices_char = dict((i, c) for i, c in enumerate(chars))
+#
+# print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
+# #We will not be using one hot encoding, but rather will look at the integer index of each amino acid base
+# aa_int_index = np.zeros((n_rows, MAXLEN),dtype=int)
+# for i in range(n_rows):
+#     current_prot_str = str(dna_data.protein[i])
+#     for j in range(len(current_prot_str)):
+#         for p in chars:
+#             if current_prot_str[j] == p:
+#                 aa_int_index[i][j] = chars.index(p)
 
-chars=''
-for i in range(100):
-    chars += str(dna_data.protein[i])
-chars = sorted(list(set(chars)))
-char_indices = dict((c, i) for i, c in enumerate(chars))
-indices_char = dict((i, c) for i, c in enumerate(chars))
+the VAE
 
-print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
-#We will not be using one hot encoding, but rather will look at the integer index of each amino acid base
-aa_int_index = np.zeros((n_rows, MAXLEN),dtype=int)
-for i in range(n_rows):
-    current_prot_str = str(dna_data.protein[i])
-    for j in range(len(current_prot_str)):
-        for p in chars:
-            if current_prot_str[j] == p:
-                aa_int_index[i][j] = chars.index(p)
-print(aa_int_index[666])
+#some parameters
+batch_size = 100
+original_dim = MAXLEN
+latent_dim = 2
+intermediate_dim = int(MAXLEN/2)
+epochs = 100
+epsilon_std = 1.0
 
-#the VAE
-#
-# #some parameters
-# batch_size = 100
-# #original_dim = dna_train.shape[1]
-# original_dim = hot.shape[1]
-# latent_dim = 2
-# intermediate_dim = 60
-# epochs = 100
-# epsilon_std = 1.0
-#
-# #this is how we generate new test samples?
-# def sampling(args):
-#     z_mean, z_log_var = args
-#     epsilon = K.random_normal(shape=(batch_size, latent_dim), mean=0.,
-#                               stddev=epsilon_std)
-#     return z_mean + K.exp(z_log_var / 2) * epsilon
-#
-# #for Q(z|X) the encoder
-# x = Input(batch_shape=(batch_size, original_dim))
-# print 'Input shape: ', x._keras_shape
-# h = Dense(intermediate_dim, activation='relu')(x)
-# print 'Dense shape: ', h._keras_shape
-# z_mean = Dense(latent_dim)(h)
-# z_log_var = Dense(latent_dim)(h)
-# print "z_mean shape: ", z_mean.shape
-# print "z_log_var shape: ", z_log_var.shape
-# z = Lambda(sampling)([z_mean, z_log_var])
-# print "Shape after lambda layer: ", z._keras_shape
-#
-# #for P(X|z) the decoder
-# decoder_h = Dense(intermediate_dim, activation='relu')
-# decoder_mean = Dense(original_dim, activation='sigmoid')
-# h_decoded = decoder_h(z)
-# x_decoded_mean = decoder_mean(h_decoded)
-# print "x_decoded_mean shape: ", x_decoded_mean._keras_shape
-#
-# #Custom loss layer
-# class CustomVariationalLayer(Layer):
-#     def __init__(self, **kwargs):
-#         self.is_placeholder = True
-#         super(CustomVariationalLayer, self).__init__(**kwargs)
-#
-#     def vae_loss(self, x, x_decoded_mean):
-#         xent_loss = MAXLEN * metrics.binary_crossentropy(x, x_decoded_mean)
-#         kl_loss = - 0.5 * K.sum(1 + z_log_var - K.square(z_mean) - K.exp(z_log_var), axis=-1)
-#         #this is like the KL divergence. I'm guessing z_mean and z_log_var are like the 2 distributions
-#         return K.mean(xent_loss + kl_loss)
-#
-#     def call(self, inputs):
-#         x = inputs[0]
-#         x_decoded_mean = inputs[1]
-#         loss = self.vae_loss(x, x_decoded_mean)
-#         self.add_loss(loss, inputs=inputs)
-#         # We won't actually use the output.
-#         return x
+#this is how we generate new test samples?
+def sampling(args):
+    z_mean, z_log_var = args
+    epsilon = K.random_normal(shape=(batch_size, latent_dim), mean=0.,
+                              stddev=epsilon_std)
+    return z_mean + K.exp(z_log_var / 2) * epsilon
+
+#for Q(z|X) the encoder
+x = Input(batch_shape=(batch_size, original_dim))
+print 'Input shape: ', x._keras_shape
+h = Dense(intermediate_dim, activation='relu')(x)
+print 'Dense shape: ', h._keras_shape
+z_mean = Dense(latent_dim)(h)
+z_log_var = Dense(latent_dim)(h)
+print "z_mean shape: ", z_mean.shape
+print "z_log_var shape: ", z_log_var.shape
+z = Lambda(sampling)([z_mean, z_log_var])
+print "Shape after lambda layer: ", z._keras_shape
+
+#for P(X|z) the decoder
+decoder_h = Dense(intermediate_dim, activation='relu')
+decoder_mean = Dense(original_dim, activation='sigmoid')
+h_decoded = decoder_h(z)
+x_decoded_mean = decoder_mean(h_decoded)
+print "x_decoded_mean shape: ", x_decoded_mean._keras_shape
+
+#Custom loss layer
+class CustomVariationalLayer(Layer):
+    def __init__(self, **kwargs):
+        self.is_placeholder = True
+        super(CustomVariationalLayer, self).__init__(**kwargs)
+
+    def vae_loss(self, x, x_decoded_mean):
+        xent_loss = MAXLEN * metrics.binary_crossentropy(x, x_decoded_mean)
+        kl_loss = - 0.5 * K.sum(1 + z_log_var - K.square(z_mean) - K.exp(z_log_var), axis=-1)
+        #this is like the KL divergence. I'm guessing z_mean and z_log_var are like the 2 distributions
+        return K.mean(xent_loss + kl_loss)
+
+    def call(self, inputs):
+        x = inputs[0]
+        x_decoded_mean = inputs[1]
+        loss = self.vae_loss(x, x_decoded_mean)
+        self.add_loss(loss, inputs=inputs)
+        # We won't actually use the output.
+        return x
 #
 # #What happens whe we use the categorical accuracy metric?
 # def categorical_accuracy(y_true, y_pred):
