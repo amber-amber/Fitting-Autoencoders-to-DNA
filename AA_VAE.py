@@ -47,15 +47,15 @@ chars = sorted(list(set(chars)))
 char_indices = dict((c, i) for i, c in enumerate(chars))
 indices_char = dict((i, c) for i, c in enumerate(chars))
 
-# print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
+print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
 #We will not be using one hot encoding, but rather will look at the integer index of each amino acid base
-# aa_int_index = np.zeros((n_rows, MAXLEN),dtype=int)
-# for i in range(n_rows):
-#     for j in range(MAXLEN):
-#         for p in chars:
-#             if dna_data.protein[i][j] == p:
-#                 aa_int_index[i][j] = chars.index(p)
-# print(aa_int_index[666])
+aa_int_index = np.zeros((n_rows, MAXLEN),dtype=int)
+for i in range(n_rows-1):
+    for j in range(MAXLEN-1):
+        for p in chars:
+            if dna_data.protein[i][j] == p:
+                aa_int_index[i][j] = chars.index(p)
+print(aa_int_index[666])
 
 #the VAE
 #
