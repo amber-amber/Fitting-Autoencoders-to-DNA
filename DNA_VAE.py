@@ -108,7 +108,8 @@ class CustomVariationalLayer(Layer):
         xent_loss = MAXLEN * metrics.binary_crossentropy(x, x_decoded_mean)
         kl_loss = - 0.5 * K.sum(1 + z_log_var - K.square(z_mean) - K.exp(z_log_var), axis=-1)
         #this is like the KL divergence. I'm guessing z_mean and z_log_var are like the 2 distributions
-        return K.mean(xent_loss + kl_loss)
+        #return K.mean(xent_loss + kl_loss)
+        return kl_loss
 
     def call(self, inputs):
         x = inputs[0]
