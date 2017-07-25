@@ -138,7 +138,7 @@ class CustomVariationalLayerKL(Layer):
     def call(self, inputs):
         x = inputs[0]
         #x_decoded_mean = inputs[1]
-        loss = self.vae_loss()
+        loss = self.vae_loss
         self.add_loss(loss, inputs=inputs)
         # We won't actually use the output.
         return x
