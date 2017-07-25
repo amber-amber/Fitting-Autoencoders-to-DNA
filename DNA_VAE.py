@@ -170,9 +170,10 @@ def xent(y_true, y_pred):
 
 #The actual VAE
 
-y = CustomVariationalLayer()([x, x_decoded_mean])
+#y = CustomVariationalLayer()([x, x_decoded_mean])
 #y = CustomVariationalLayerKL()([x,x_decoded_mean])
-vae = Model(x, y)
+#vae = Model(x, y)
+vae = Model(x, x_decoded_mean)
 
 learning_rate = 0.0001
 #optimizer = SGD(lr=learning_rate)
