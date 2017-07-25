@@ -104,26 +104,32 @@ h_decoded = decoder_h(z)
 x_decoded_mean = decoder_mean(h_decoded)
 #print "x_decoded_mean shape: ", x_decoded_mean._keras_shape
 
-#Custom loss layer
-class CustomVariationalLayer(Layer):
-    def __init__(self, **kwargs):
-        self.is_placeholder = True
-        super(CustomVariationalLayer, self).__init__(**kwargs)
+# #Custom loss layer
 
-    def vae_loss(self, x, x_decoded_mean):
-        xent_loss = MAXLEN * metrics.binary_crossentropy(x, x_decoded_mean)
-        kl_loss = - 0.5 * K.sum(1 + z_log_var - K.square(z_mean) - K.exp(z_log_var), axis=-1)
-        #this is like the KL divergence. I'm guessing z_mean and z_log_var are like the 2 distributions
-        return K.mean(xent_loss + kl_loss)
-        #return kl_loss
+def vae_loss(y_true, y_pred):
+    recon_loss = MAXLEN * binary_crossentropy(y_true, y_pred)
+    KL_loss = 0.5 * K.sum(1 + z_log_var - K.square(z_mean) - K.exp(z_log_var), axis=-1)
+    return recon_loss+KL_loss
 
-    def call(self, inputs):
-        x = inputs[0]
-        x_decoded_mean = inputs[1]
-        loss = self.vae_loss(x, x_decoded_mean)
-        self.add_loss(loss, inputs=inputs)
-        # We won't actually use the output.
-        return x
+# class CustomVariationalLayer(Layer):
+#     def __init__(self, **kwargs):
+#         self.is_placeholder = True
+#         super(CustomVariationalLayer, self).__init__(**kwargs)
+#
+#     def vae_loss(self, x, x_decoded_mean):
+#         xent_loss = MAXLEN * metrics.binary_crossentropy(x, x_decoded_mean)
+#         kl_loss = - 0.5 * K.sum(1 + z_log_var - K.square(z_mean) - K.exp(z_log_var), axis=-1)
+#         #this is like the KL divergence. I'm guessing z_mean and z_log_var are like the 2 distributions
+#         return K.mean(xent_loss + kl_loss)
+#         #return kl_loss
+#
+#     def call(self, inputs):
+#         x = inputs[0]
+#         x_decoded_mean = inputs[1]
+#         loss = self.vae_loss(x, x_decoded_mean)
+#         self.add_loss(loss, inputs=inputs)
+#         # We won't actually use the output.
+#         return x
 
 # class CustomVariationalLayerKL(Layer):
 #     def __init__(self, **kwargs):
@@ -172,8 +178,8 @@ learning_rate = 0.0001
 #optimizer = SGD(lr=learning_rate)
 #optimizer = RMSprop(lr=learning_rate)
 optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
-#vae.compile(optimizer= optimizer, loss=kullback_leibler_divergence, metrics=[xent])
-vae.compile(optimizer= optimizer, loss=None, metrics=[corr, xent])
+vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[xent])
+#vae.compile(optimizer= optimizer, loss=None, metrics=[corr, xent])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
