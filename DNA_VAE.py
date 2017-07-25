@@ -103,7 +103,7 @@ h_decoded = decoder_h(z)
 x_decoded_mean = decoder_mean(h_decoded)
 print "x_decoded_mean shape: ", x_decoded_mean._keras_shape
 
-Custom loss layer
+#Custom loss layer
 class CustomVariationalLayer(Layer):
     def __init__(self, **kwargs):
         self.is_placeholder = True
