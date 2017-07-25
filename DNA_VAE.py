@@ -172,9 +172,12 @@ encoder = Model(x, z_mean)
 
 #We want to somehow determine the generated DNA seqences
 #Based off the Variational Autoencoders tutorial, we should be sampling from a normal distribution to get the test samples
-decoder_input = Input(shape=(latent_dim,)
+#this is the decoder that will generate the sample
+decoder_input = Input(shape=(latent_dim,))
 _h_decoded = decoder_h(decoder_input)
+#print "Test sample in the intermediate dim: ", _h_decoded._keras_shape
 _x_decoded_mean = decoder_mean(_h_decoded)
+#print "Test sample in the orginal dim", _x_decoded_mean._keras_shape
 generator = Model(decoder_input, _x_decoded_mean)
 
 def main(epochs):
@@ -194,13 +197,13 @@ def main(epochs):
 if __name__ == '__main__':
             args = sys.argv[1:]
             main(int(args[0]))
-
+#
 # print('GENERATING TEST SAMPLES...')
 # #this is the decoder that will generate the sample
 # decoder_input = Input(shape=(latent_dim,))
 # _h_decoded = decoder_h(decoder_input)
 # #print "Test sample in the intermediate dim: ", _h_decoded._keras_shape
-#  _x_decoded_mean = decoder_mean(_h_decoded)
+# _x_decoded_mean = decoder_mean(_h_decoded)
 # #print "Test sample in the orginal dim", _x_decoded_mean._keras_shape
 # generator = Model(decoder_input, _x_decoded_mean)
 #
