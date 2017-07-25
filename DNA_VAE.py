@@ -195,7 +195,7 @@ def main(epochs):
         sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
         print(ctable.decode(sample_decoded))
         i+=1
-if __name__ == '__main__':
+    if __name__ == '__main__':
             args = sys.argv[1:]
             main(int(args[0]))
 #
