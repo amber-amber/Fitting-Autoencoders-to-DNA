@@ -149,7 +149,8 @@ def categorical_accuracy(y_true, y_pred):
 
 #The actual VAE
 
-y = CustomVariationalLayer()([x, x_decoded_mean])
+#y = CustomVariationalLayer()([x, x_decoded_mean])
+y = CustomVariationalLayerKL()([x,x_decoded_mean])
 vae = Model(x, y)
 
 learning_rate = 0.0001
