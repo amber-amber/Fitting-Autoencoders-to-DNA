@@ -17,8 +17,9 @@ warnings.filterwarnings("ignore") #Hide messy Numpy warnings
 from keras.layers import Input, Dense, Lambda, Layer, LSTM, RepeatVector
 from keras.models import Model
 from keras import backend as K
-from keras import metrics
+from keras.metrics import categorical_accuracy
 from keras.optimizers import SGD, Adam, RMSprop
+from keras.losses import kullback_leibler_divergence
 
 class CharacterTable(object):
     def __init__(self, chars):
@@ -79,7 +80,7 @@ inputs = Input(batch_shape=(n_rows, MAXLEN,len(chars)))
 #inputs = Input(batch_shape=(MAXLEN,len(chars)))
 print('Input into the LSTM layer', inputs._keras_shape)
 x = LSTM(batch_size, input_shape = (MAXLEN,len(chars)))
-#print('Output shape of the LSTM Layer', x._keras_shape)
+print('Output shape of the LSTM Layer', x._keras_shape)
 #output shape IS NOT (None, batch_size) but rather (n_rows, batch_size)
 #want to add a Dense layer
 h = Dense(intermediate_dim)(x)
@@ -92,6 +93,9 @@ print('z_log_var shape: ', z_log_var._keras_shape)
 #should be (batch_size, latent_dim) NOT (n_rows, latent_dim)
 
 encoder = Model(x, z_mean)
+
+optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
+encoder.compile(optimizer= optimizer, loss=kullback_leibler_divergence, metrics=['categorical_accuracy'])
 
 #z = Lambda(sampling)([z_mean, z_log_var])
 
