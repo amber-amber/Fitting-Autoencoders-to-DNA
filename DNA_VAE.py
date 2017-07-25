@@ -186,15 +186,16 @@ encoder = Model(x, z_mean)
 #this is the decoder that will generate the sample
 decoder_input = Input(shape=(latent_dim,))
 _h_decoded = decoder_h(decoder_input)
-#print "Test sample in the intermediate dim: ", _h_decoded._keras_shape
 _x_decoded_mean = decoder_mean(_h_decoded)
-#print "Test sample in the orginal dim", _x_decoded_mean._keras_shape
 generator = Model(decoder_input, _x_decoded_mean)
 
 for iteration in range(epochs):
     print()
     print('-'*50)
     vae.fit(hot, hot, shuffle=True, epochs=1, batch_size=batch_size, validation_split=.25)
+    print('NOT SURE WHAT THIS IS...')
+    #encoder = Model(x,z_mean)
+    #x_test_encoded = encoder.predict()
     print('GENERATING TEST SAMPLES...')
     num_test_samples = 5
     for i in range(num_test_samples):
