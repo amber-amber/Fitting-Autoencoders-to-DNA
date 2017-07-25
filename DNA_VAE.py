@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import numpy as np
 import pandas as pd
 
@@ -181,7 +179,6 @@ _x_decoded_mean = decoder_mean(_h_decoded)
 #print "Test sample in the orginal dim", _x_decoded_mean._keras_shape
 generator = Model(decoder_input, _x_decoded_mean)
 
-
 for iteration in range(epochs):
     print()
     print('-'*50)
@@ -197,7 +194,6 @@ for iteration in range(epochs):
         print(ctable.decode(sample_decoded))
         i+=1
 
-#
 # print('GENERATING TEST SAMPLES...')
 # #this is the decoder that will generate the sample
 # decoder_input = Input(shape=(latent_dim,))
