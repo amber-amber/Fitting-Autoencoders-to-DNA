@@ -34,7 +34,7 @@ class CharacterTable(object):
 chars='actg'
 ctable= CharacterTable(chars)
 
-n_rows = 2000
+n_rows = 200000
 MAXLEN = 80
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
@@ -179,7 +179,7 @@ learning_rate = 0.0001
 #optimizer = SGD(lr=learning_rate)
 #optimizer = RMSprop(lr=learning_rate)
 optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
-vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[xent])
+vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[corr, xent])
 #vae.compile(optimizer= optimizer, loss=None, metrics=[corr, xent])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
@@ -200,7 +200,7 @@ for iteration in range(epochs):
     print()
     print('-'*50)
     vae.fit(hot, hot, shuffle=True, epochs=1, batch_size=batch_size, validation_split=.25)
-    print('NOT SURE WHAT THIS IS...')
+    #print('NOT SURE WHAT THIS IS...')
     #encoder = Model(x,z_mean)
     #x_test_encoded = encoder.predict()
     print('GENERATING TEST SAMPLES...')
