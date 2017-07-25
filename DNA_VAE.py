@@ -184,7 +184,7 @@ vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[corr, xent])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
-#vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25)
+vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25)
 
 encoder = Model(x, z_mean)
 
@@ -196,41 +196,41 @@ _h_decoded = decoder_h(decoder_input)
 _x_decoded_mean = decoder_mean(_h_decoded)
 generator = Model(decoder_input, _x_decoded_mean)
 
-for iteration in range(epochs):
-    print()
-    print('-'*50)
-    vae.fit(hot, hot, shuffle=True, epochs=1, batch_size=batch_size, validation_split=.25)
-    #print('NOT SURE WHAT THIS IS...')
-    #encoder = Model(x,z_mean)
-    #x_test_encoded = encoder.predict()
-    print('GENERATING TEST SAMPLES...')
-    num_test_samples = 5
-    for i in range(num_test_samples):
-        Gaussian_sample_x = np.random.normal(0,1)
-        Gaussian_sample_y = np.random.normal(0,1)
-        z_sample = np.array([[Gaussian_sample_x,Gaussian_sample_y]])
-        sample_decoded = generator.predict(z_sample)
-        sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
-        print(ctable.decode(sample_decoded))
-        i+=1
+# for iteration in range(epochs):
+#     print()
+#     print('-'*50)
+#     vae.fit(hot, hot, shuffle=True, epochs=1, batch_size=batch_size, validation_split=.25)
+#     #print('NOT SURE WHAT THIS IS...')
+#     #encoder = Model(x,z_mean)
+#     #x_test_encoded = encoder.predict()
+#     print('GENERATING TEST SAMPLES...')
+#     num_test_samples = 5
+#     for i in range(num_test_samples):
+#         Gaussian_sample_x = np.random.normal(0,1)
+#         Gaussian_sample_y = np.random.normal(0,1)
+#         z_sample = np.array([[Gaussian_sample_x,Gaussian_sample_y]])
+#         sample_decoded = generator.predict(z_sample)
+#         sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
+#         print(ctable.decode(sample_decoded))
+#         i+=1
 
-# print('GENERATING TEST SAMPLES...')
-# #this is the decoder that will generate the sample
-# decoder_input = Input(shape=(latent_dim,))
-# _h_decoded = decoder_h(decoder_input)
-# #print "Test sample in the intermediate dim: ", _h_decoded._keras_shape
-# _x_decoded_mean = decoder_mean(_h_decoded)
-# #print "Test sample in the orginal dim", _x_decoded_mean._keras_shape
-# generator = Model(decoder_input, _x_decoded_mean)
-#
-# #let's sample some random Gaussians which we will plug into the decoder
-# num_test_samples = 5
-# for i in range(num_test_samples):
-#     Gaussian_sample_x = np.random.normal(0,1)
-#     Gaussian_sample_y = np.random.normal(0,1)
-#     z_sample = np.array([[Gaussian_sample_x,Gaussian_sample_y]])
-#     sample_decoded = generator.predict(z_sample)
-#     sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
-#     print(ctable.decode(sample_decoded))
-#     i+=1
+print('GENERATING TEST SAMPLES...')
+#this is the decoder that will generate the sample
+decoder_input = Input(shape=(latent_dim,))
+_h_decoded = decoder_h(decoder_input)
+#print "Test sample in the intermediate dim: ", _h_decoded._keras_shape
+_x_decoded_mean = decoder_mean(_h_decoded)
+#print "Test sample in the orginal dim", _x_decoded_mean._keras_shape
+generator = Model(decoder_input, _x_decoded_mean)
+
+#let's sample some random Gaussians which we will plug into the decoder
+num_test_samples = 5
+for i in range(num_test_samples):
+    Gaussian_sample_x = np.random.normal(0,1)
+    Gaussian_sample_y = np.random.normal(0,1)
+    z_sample = np.array([[Gaussian_sample_x,Gaussian_sample_y]])
+    sample_decoded = generator.predict(z_sample)
+    sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
+    print(ctable.decode(sample_decoded))
+    i+=1
 
