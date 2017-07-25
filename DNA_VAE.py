@@ -194,7 +194,7 @@ def main(epochs):
 if __name__ == '__main__':
             args = sys.argv[1:]
             main(int(args[0]))
-            
+
 # print('GENERATING TEST SAMPLES...')
 # #this is the decoder that will generate the sample
 # decoder_input = Input(shape=(latent_dim,))
