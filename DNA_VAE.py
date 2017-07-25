@@ -108,7 +108,7 @@ x_decoded_mean = decoder_mean(h_decoded)
 
 def vae_loss(y_true, y_pred):
     recon_loss = MAXLEN * binary_crossentropy(y_true, y_pred)
-    KL_loss = 0.5 * K.sum(1 + z_log_var - K.square(z_mean) - K.exp(z_log_var), axis=-1)
+    KL_loss = -0.5 * K.sum(1 + z_log_var - K.square(z_mean) - K.exp(z_log_var), axis=-1)
     return recon_loss+KL_loss
 
 # class CustomVariationalLayer(Layer):
