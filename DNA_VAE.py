@@ -172,7 +172,7 @@ learning_rate = 0.0001
 #optimizer = SGD(lr=learning_rate)
 #optimizer = RMSprop(lr=learning_rate)
 optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
-vae.compile(optimizer= optimizer, loss=kullback_leibler_divergence, metrics=['xent'])
+vae.compile(optimizer= optimizer, loss=kullback_leibler_divergence, metrics=[xent])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
