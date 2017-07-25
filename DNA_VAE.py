@@ -74,7 +74,7 @@ original_dim = hot.shape[1]
 latent_dim = 2
 #why is the latent dimension so small in comparison to the intermediate dim?
 intermediate_dim = 60
-#epochs = 50
+epochs = 22
 epsilon_std = 1.0
 
 #this is how we generate new test samples
@@ -181,10 +181,11 @@ _x_decoded_mean = decoder_mean(_h_decoded)
 #print "Test sample in the orginal dim", _x_decoded_mean._keras_shape
 generator = Model(decoder_input, _x_decoded_mean)
 
-def main(epochs):
+
+for iteration in range(epochs):
     print()
     print('-'*50)
-    vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25)
+    vae.fit(hot, hot, shuffle=True, epochs=1, batch_size=batch_size, validation_split=.25)
     print('GENERATING TEST SAMPLES...')
     num_test_samples = 5
     for i in range(num_test_samples):
@@ -195,9 +196,7 @@ def main(epochs):
         sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
         print(ctable.decode(sample_decoded))
         i+=1
-    if __name__ == '__main__':
-            args = sys.argv[1:]
-            main(int(args[0]))
+
 #
 # print('GENERATING TEST SAMPLES...')
 # #this is the decoder that will generate the sample
