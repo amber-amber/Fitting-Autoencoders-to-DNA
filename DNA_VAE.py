@@ -11,6 +11,7 @@ from keras.models import Model
 from keras import backend as K
 from keras import metrics
 from keras.optimizers import SGD, Adam, RMSprop
+from keras.losses import kullback_leibler_divergence
 
 class CharacterTable(object):
     def __init__(self, chars):
@@ -102,46 +103,46 @@ h_decoded = decoder_h(z)
 x_decoded_mean = decoder_mean(h_decoded)
 print "x_decoded_mean shape: ", x_decoded_mean._keras_shape
 
-#Custom loss layer
-# class CustomVariationalLayer(Layer):
-#     def __init__(self, **kwargs):
-#         self.is_placeholder = True
-#         super(CustomVariationalLayer, self).__init__(**kwargs)
-#
-#     def vae_loss(self, x, x_decoded_mean):
-#         xent_loss = MAXLEN * metrics.binary_crossentropy(x, x_decoded_mean)
-#         kl_loss = - 0.5 * K.sum(1 + z_log_var - K.square(z_mean) - K.exp(z_log_var), axis=-1)
-#         #this is like the KL divergence. I'm guessing z_mean and z_log_var are like the 2 distributions
-#         return K.mean(xent_loss + kl_loss)
-#         #return kl_loss
-#
-#     def call(self, inputs):
-#         x = inputs[0]
-#         x_decoded_mean = inputs[1]
-#         loss = self.vae_loss(x, x_decoded_mean)
-#         self.add_loss(loss, inputs=inputs)
-#         # We won't actually use the output.
-#         return x
-
-class CustomVariationalLayerKL(Layer):
+Custom loss layer
+class CustomVariationalLayer(Layer):
     def __init__(self, **kwargs):
         self.is_placeholder = True
-        super(CustomVariationalLayerKL, self).__init__(**kwargs)
+        super(CustomVariationalLayer, self).__init__(**kwargs)
 
-    def vae_loss(self):
-        #xent_loss = MAXLEN * metrics.binary_crossentropy(x, x_decoded_mean)
+    def vae_loss(self, x, x_decoded_mean):
+        xent_loss = MAXLEN * metrics.binary_crossentropy(x, x_decoded_mean)
         kl_loss = - 0.5 * K.sum(1 + z_log_var - K.square(z_mean) - K.exp(z_log_var), axis=-1)
         #this is like the KL divergence. I'm guessing z_mean and z_log_var are like the 2 distributions
-        return kl_loss
+        return K.mean(xent_loss + kl_loss)
         #return kl_loss
 
     def call(self, inputs):
         x = inputs[0]
-        #x_decoded_mean = inputs[1]
-        loss = self.vae_loss
+        x_decoded_mean = inputs[1]
+        loss = self.vae_loss(x, x_decoded_mean)
         self.add_loss(loss, inputs=inputs)
         # We won't actually use the output.
         return x
+
+# class CustomVariationalLayerKL(Layer):
+#     def __init__(self, **kwargs):
+#         self.is_placeholder = True
+#         super(CustomVariationalLayerKL, self).__init__(**kwargs)
+#
+#     def vae_loss(self):
+#         #xent_loss = MAXLEN * metrics.binary_crossentropy(x, x_decoded_mean)
+#         kl_loss = - 0.5 * K.sum(1 + z_log_var - K.square(z_mean) - K.exp(z_log_var), axis=-1)
+#         #this is like the KL divergence. I'm guessing z_mean and z_log_var are like the 2 distributions
+#         return kl_loss
+#         #return kl_loss
+#
+#     def call(self, inputs):
+#         x = inputs[0]
+#         #x_decoded_mean = inputs[1]
+#         loss = self.vae_loss
+#         self.add_loss(loss, inputs=inputs)
+#         # We won't actually use the output.
+#         return x
 
 #What happens whe we use the categorical accuracy metric?
 def categorical_accuracy(y_true, y_pred):
@@ -149,15 +150,15 @@ def categorical_accuracy(y_true, y_pred):
 
 #The actual VAE
 
-#y = CustomVariationalLayer()([x, x_decoded_mean])
-y = CustomVariationalLayerKL()([x,x_decoded_mean])
+y = CustomVariationalLayer()([x, x_decoded_mean])
+#y = CustomVariationalLayerKL()([x,x_decoded_mean])
 vae = Model(x, y)
 
 learning_rate = 0.0001
 #optimizer = SGD(lr=learning_rate)
 #optimizer = RMSprop(lr=learning_rate)
 optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
-vae.compile(optimizer= optimizer, loss=None, metrics=['categorical_accuracy'])
+vae.compile(optimizer= optimizer, loss=kullback_leibler_divergence, metrics=['categorical_accuracy'])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
