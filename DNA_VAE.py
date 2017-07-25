@@ -126,7 +126,7 @@ print "x_decoded_mean shape: ", x_decoded_mean._keras_shape
 class CustomVariationalLayerKL(Layer):
     def __init__(self, **kwargs):
         self.is_placeholder = True
-        super(CustomVariationalLayer, self).__init__(**kwargs)
+        super(CustomVariationalLayerKL, self).__init__(**kwargs)
 
     def vae_loss(self):
         #xent_loss = MAXLEN * metrics.binary_crossentropy(x, x_decoded_mean)
