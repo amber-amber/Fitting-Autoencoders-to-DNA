@@ -36,7 +36,7 @@ chars='actg'
 ctable= CharacterTable(chars)
 
 n_rows = 200000
-MAXLEN = 120
+MAXLEN = 150
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 n,m=dna_data.shape
@@ -70,9 +70,9 @@ print type(hot)
 batch_size = 200
 #original_dim = dna_train.shape[1]
 original_dim = hot.shape[1]
-latent_dim = 8
+latent_dim = 20
 #why is the latent dimension so small in comparison to the intermediate dim?
-intermediate_dim = 100
+intermediate_dim = 200
 epochs = 200
 epsilon_std = 1.0
 
