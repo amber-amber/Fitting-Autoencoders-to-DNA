@@ -177,9 +177,9 @@ def xent(y_true, y_pred):
 vae = Model(x, x_decoded_mean)
 
 learning_rate = 0.0001
-#optimizer = SGD(lr=learning_rate)
+optimizer = SGD(lr=learning_rate)
 #optimizer = RMSprop(lr=learning_rate)
-optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
+#optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 
 for_tb = TensorBoard(log_dir='./DNA_VAE',histogram_freq=0, write_graph=True, write_images=True)
 vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[corr, xent])
