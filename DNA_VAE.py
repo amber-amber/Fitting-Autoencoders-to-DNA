@@ -13,6 +13,7 @@ from keras import backend as K
 from keras import metrics
 from keras.optimizers import SGD, Adam, RMSprop
 from keras.losses import kullback_leibler_divergence, binary_crossentropy
+from keras.callbacks import TensorBoard
 
 class CharacterTable(object):
     def __init__(self, chars):
@@ -66,7 +67,7 @@ print type(hot)
 #the VAE
 
 #some parameters
-batch_size = 100
+batch_size = 300
 #original_dim = dna_train.shape[1]
 original_dim = hot.shape[1]
 latent_dim = 2
@@ -179,12 +180,14 @@ learning_rate = 0.0001
 #optimizer = SGD(lr=learning_rate)
 #optimizer = RMSprop(lr=learning_rate)
 optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
+
+for_tb = TensorBoard(log_dir='./DNA_VAE',histogram_freq=0, write_graph=True, write_images=True)
 vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[corr, xent])
 #vae.compile(optimizer= optimizer, loss=None, metrics=[corr, xent])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
-vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25)
+vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
 
 encoder = Model(x, z_mean)
 
