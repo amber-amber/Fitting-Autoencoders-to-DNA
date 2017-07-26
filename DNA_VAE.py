@@ -67,7 +67,7 @@ print type(hot)
 #the VAE
 
 #some parameters
-batch_size = 300
+batch_size = 200
 #original_dim = dna_train.shape[1]
 original_dim = hot.shape[1]
 latent_dim = 2
