@@ -87,7 +87,7 @@ def sampling(args):
 #for Q(z|X) the encoder
 #this is a neural net with ONE hidden layer
 x = Input(batch_shape=(batch_size, original_dim))
-#print 'Input shape: ', x._keras_shape
+print('Input shape: ', x._keras_shape)
 h = Dense(intermediate_dim, activation='relu')(x)
 #print 'Dense shape: ', h._keras_shape
 z_mean = Dense(latent_dim)(h)
@@ -165,6 +165,7 @@ def covar_matrix(x,y):
 
 
 def corr_matrix(x,y):
+    #x = np.array(x, dtype=)
     return np.corrcoef(x,y)
 
 def corr(y_true, y_pred):
