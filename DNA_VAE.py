@@ -70,10 +70,10 @@ print type(hot)
 batch_size = 200
 #original_dim = dna_train.shape[1]
 original_dim = hot.shape[1]
-latent_dim = 8
+latent_dim = 24
 #why is the latent dimension so small in comparison to the intermediate dim?
-intermediate_dim = 60
-epochs = 200
+intermediate_dim = 100
+epochs = 75
 epsilon_std = 1.0
 
 #this is how we generate new test samples
@@ -109,6 +109,7 @@ x_decoded_mean = decoder_mean(h_decoded)
 
 def vae_loss(y_true, y_pred):
     recon_loss = MAXLEN * binary_crossentropy(y_true, y_pred)
+    #loss obviously depends on MAXLEN. but it seems like binary crossentropy stays approx the same regardless
     KL_loss = -0.5 * K.sum(1 + z_log_var - K.square(z_mean) - K.exp(z_log_var), axis=-1)
     return recon_loss+KL_loss
 
@@ -165,9 +166,9 @@ def corr(y_true, y_pred):
     var2 = covariance(y_pred, y_pred)
     return cov / (K.sqrt(var1 * var2) + K.epsilon())
 
+
 def xent(y_true, y_pred):
     return binary_crossentropy(y_true, y_pred)
-
 
 #The actual VAE
 
