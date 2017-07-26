@@ -73,7 +73,7 @@ original_dim = hot.shape[1]
 latent_dim = 2
 #why is the latent dimension so small in comparison to the intermediate dim?
 intermediate_dim = 60
-epochs = 22
+epochs = 75
 epsilon_std = 1.0
 
 #this is how we generate new test samples
