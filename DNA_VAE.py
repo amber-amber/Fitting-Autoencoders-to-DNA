@@ -216,7 +216,9 @@ generator = Model(decoder_input, _x_decoded_mean)
 #         sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
 #         print(ctable.decode(sample_decoded))
 #         i+=1
-
+print('MAXLEN WAS... ', MAXLEN)
+print('THE INTERMEDIATE DIM WAS...', intermediate_dim)
+print('THE LATENT DIM WAS...', latent_dim)
 print('GENERATING TEST SAMPLES...')
 #this is the decoder that will generate the sample
 decoder_input = Input(shape=(latent_dim,))
