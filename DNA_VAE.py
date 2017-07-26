@@ -72,7 +72,7 @@ batch_size = 200
 original_dim = hot.shape[1]
 latent_dim = 8
 #why is the latent dimension so small in comparison to the intermediate dim?
-intermediate_dim = 60
+intermediate_dim = 100
 epochs = 200
 epsilon_std = 1.0
 
