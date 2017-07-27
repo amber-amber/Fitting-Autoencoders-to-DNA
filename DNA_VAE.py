@@ -7,7 +7,7 @@ import warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' #Hide messy TensorFlow warnings
 warnings.filterwarnings("ignore") #Hide messy Numpy warnings
 
-from keras.layers import Input, Dense, Lambda, Layer
+from keras.layers import Input, Dense, Lambda, Layer, LSTM
 from keras.models import Model
 from keras import backend as K
 from keras import metrics
@@ -60,9 +60,9 @@ for i, dna_str in enumerate(dna_data.dna):
 # print "New training set shape", dna_train.shape
 # print "New test set shape", dna_test.shape
 
-hot = hot.reshape(len(hot), np.prod(hot.shape[1:]))
-print "New Shape of encoded data: ", hot.shape
-print type(hot)
+# hot = hot.reshape(len(hot), np.prod(hot.shape[1:]))
+# print "New Shape of encoded data: ", hot.shape
+# print type(hot)
 
 #the VAE
 
@@ -86,9 +86,16 @@ def sampling(args):
 
 #for Q(z|X) the encoder
 #this is a neural net with ONE hidden layer
-x = Input(batch_shape=(batch_size, original_dim))
-print('Input shape: ', x._keras_shape)
+# x = Input(batch_shape=(batch_size, original_dim))
+# print('Input shape: ', x._keras_shape)
+# h = Dense(intermediate_dim, activation='relu')(x)
+
+x = Input(batch_shape=(MAXLEN,len(chars)))
+h = LSTM(batch_size)(x)
 h = Dense(intermediate_dim, activation='relu')(x)
+
+
+
 #print 'Dense shape: ', h._keras_shape
 z_mean = Dense(latent_dim)(h)
 z_log_var = Dense(latent_dim)(h)
