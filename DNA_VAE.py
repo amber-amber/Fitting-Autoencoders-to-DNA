@@ -73,7 +73,7 @@ original_dim = hot.shape[1]
 latent_dim = 24
 #why is the latent dimension so small in comparison to the intermediate dim?
 intermediate_dim = 100
-epochs = 75
+epochs = 74
 epsilon_std = 1.0
 
 #this is how we generate new test samples
@@ -95,7 +95,6 @@ print('Input shape: ', x._keras_shape)
 x = LSTM(batch_size, input_shape=(MAXLEN, len(chars)))
 print('Shape after LSTM Layer: ', x._keras_shape)
 h = Dense(intermediate_dim, activation='relu')(x)
-
 
 
 #print 'Dense shape: ', h._keras_shape
