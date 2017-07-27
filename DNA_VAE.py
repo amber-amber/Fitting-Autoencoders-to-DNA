@@ -113,8 +113,8 @@ decoder_h = Dense(intermediate_dim, activation='relu')
 decoder_mean = Dense(original_dim*len(chars), activation='sigmoid')
 h_decoded = decoder_h(z)
 print('h_decoded shape: ', h_decoded._keras_shape)
-x_decoded_mean = decoder_mean(h_decoded)
-#x_decoded_mean = decoder_h(h_decoded).reshape(batch_size,MAXLEN*len(char))
+#x_decoded_mean = decoder_mean(h_decoded)
+x_decoded_mean = decoder_h(h_decoded).reshape(batch_size,MAXLEN,len(char))
 print("x_decoded_mean shape: ", x_decoded_mean._keras_shape)
 
 # #Custom loss layer
