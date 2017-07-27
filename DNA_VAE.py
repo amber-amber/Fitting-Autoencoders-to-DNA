@@ -185,7 +185,7 @@ def xent(y_true, y_pred):
 #vae = Model(x, y)
 vae = Model(x, x_decoded_mean)
 
-learning_rate = 0.0001
+learning_rate = 0.00001
 #optimizer = SGD(lr=learning_rate)
 #optimizer = RMSprop(lr=learning_rate)
 optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
