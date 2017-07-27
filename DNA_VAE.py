@@ -157,11 +157,11 @@ def vae_loss(y_true, y_pred):
 # def categorical_accuracy(y_true, y_pred):
 #     return K.mean(K.equal(K.argmax(y_true, axis=-1), K.argmax(y_pred, axis=-1)))
 
-#def covariance(x, y):
-#    return K.mean(x * y) - K.mean(x) * K.mean(y)
+def covariance(x, y):
+    return K.mean(x * y) - K.mean(x) * K.mean(y)
 
-def covar_matrix(x,y):
-    return np.cov(x,y)
+#def covar_matrix(x,y):
+#    return np.cov(x,y)
 
 
 def corr_matrix(x,y):
@@ -191,7 +191,7 @@ learning_rate = 0.00001
 optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 
 for_tb = TensorBoard(log_dir='./DNA_VAE',histogram_freq=0, write_graph=True, write_images=True)
-vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[corr_matrix])
+vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[corr,xent])
 #vae.compile(optimizer= optimizer, loss=None, metrics=[corr, xent])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
