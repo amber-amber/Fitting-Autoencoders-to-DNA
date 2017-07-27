@@ -60,9 +60,9 @@ for i, dna_str in enumerate(dna_data.dna):
 # print "New training set shape", dna_train.shape
 # print "New test set shape", dna_test.shape
 
-# hot = hot.reshape(len(hot), np.prod(hot.shape[1:]))
-# print "New Shape of encoded data: ", hot.shape
-# print type(hot)
+hot = hot.reshape(len(hot), np.prod(hot.shape[1:]))
+print "New Shape of encoded data: ", hot.shape
+print type(hot)
 
 #the VAE
 
@@ -87,10 +87,10 @@ def sampling(args):
 #for Q(z|X) the encoder
 #this is a neural net with ONE hidden layer
 #x = Input(batch_shape=(batch_size, original_dim))
-x = Input(shape=(MAXLEN, len(chars)))
+x = Input(shape=(MAXLEN*len(chars)))
 print('Input shape: ', x._keras_shape)
 #h = Dense(intermediate_dim, activation='relu')(x)
-h = LSTM(intermediate_dim, input_shape=(MAXLEN, len(chars)))(x)
+h = LSTM(intermediate_dim, input_shape=(MAXLEN*len(chars)))(x)
 
 # x = Input(shape=(n_rows, MAXLEN,len(chars)))
 # print('Input shape: ', x._keras_shape)
