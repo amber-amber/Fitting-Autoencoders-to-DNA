@@ -91,7 +91,8 @@ def sampling(args):
 # h = Dense(intermediate_dim, activation='relu')(x)
 
 x = Input(batch_shape=(MAXLEN,len(chars)))
-h = LSTM(batch_size)(x)
+print('Input shape: ', x._keras_shape)
+h = LSTM(batch_size, input_shape=(MAXLEN, len(chars)))(x)
 h = Dense(intermediate_dim, activation='relu')(x)
 
 
