@@ -90,7 +90,7 @@ def sampling(args):
 x = Input(shape=(original_dim,))
 print('Input shape: ', x._keras_shape)
 #h = Dense(intermediate_dim, activation='relu')(x)
-h = LSTM(intermediate_dim, input_shape=(original_dim))(x)
+h = LSTM(intermediate_dim, input_len =original_dim)(x)
 
 # x = Input(shape=(n_rows, MAXLEN,len(chars)))
 # print('Input shape: ', x._keras_shape)
