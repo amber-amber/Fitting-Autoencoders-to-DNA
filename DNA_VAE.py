@@ -110,7 +110,7 @@ z = Lambda(sampling)([z_mean, z_log_var])
 
 #for P(X|z) the decoder
 decoder_h = Dense(intermediate_dim, activation='relu')
-decoder_mean = Dense(original_dim, activation='sigmoid')
+decoder_mean = Dense(original_dim*len(chars), activation='sigmoid')
 h_decoded = decoder_h(z)
 print('h_decoded shape: ', h_decoded._keras_shape)
 x_decoded_mean = decoder_mean(h_decoded)
@@ -171,9 +171,6 @@ def vae_loss(y_true, y_pred):
 
 def covariance(x, y):
     return K.mean(x * y) - K.mean(x) * K.mean(y)
-
-#def covar_matrix(x,y):
-#    return np.cov(x,y)
 
 
 def corr_matrix(x,y):
