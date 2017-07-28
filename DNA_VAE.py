@@ -105,8 +105,8 @@ print('Shape after LSTM Layer: ', h._keras_shape)
 z_mean = Dense(latent_dim)(h)
 z_log_var = Dense(latent_dim)(h)
 #WHY ARE THESE THE EXACT SAME?!?!!
-print "z_mean shape: ", z_mean.shape
-print "z_log_var shape: ", z_log_var.shape
+print "z_mean shape: ", z_mean._keras_shape
+print "z_log_var shape: ", z_log_var._keras_shape
 z = Lambda(sampling)([z_mean, z_log_var])
 print "Shape after lambda layer: ", z._keras_shape
 
