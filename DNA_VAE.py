@@ -69,6 +69,7 @@ for i, dna_str in enumerate(dna_data.dna):
 #some parameters
 batch_size = 200
 #original_dim = dna_train.shape[1]
+print("ORIGINAL DIM: ", hot.shape[1] )
 original_dim = hot.shape[1]
 latent_dim = 24
 #why is the latent dimension so small in comparison to the intermediate dim?
@@ -91,6 +92,7 @@ x = Input(shape=(MAXLEN,len(chars)))
 print('Input shape: ', x._keras_shape)
 #h = Dense(intermediate_dim, activation='relu')(x)
 h = LSTM(intermediate_dim, input_shape =(MAXLEN,len(chars)))(x)
+print('Shape after LSTM Layer: ', h._keras_shape)
 
 # x = Input(shape=(n_rows, MAXLEN,len(chars)))
 # print('Input shape: ', x._keras_shape)
@@ -103,14 +105,16 @@ h = LSTM(intermediate_dim, input_shape =(MAXLEN,len(chars)))(x)
 z_mean = Dense(latent_dim)(h)
 z_log_var = Dense(latent_dim)(h)
 #WHY ARE THESE THE EXACT SAME?!?!!
-#print "z_mean shape: ", z_mean.shape
-#print "z_log_var shape: ", z_log_var.shape
+print "z_mean shape: ", z_mean.shape
+print "z_log_var shape: ", z_log_var.shape
 z = Lambda(sampling)([z_mean, z_log_var])
-#print "Shape after lambda layer: ", z._keras_shape
+print "Shape after lambda layer: ", z._keras_shape
 
 #for P(X|z) the decoder
 decoder_h = Dense(intermediate_dim, activation='relu')
+print("Shape after first NN layer of the decoder: ", decoder_h._keras_shape)
 decoder_mean = Dense(original_dim*len(chars), activation='sigmoid')
+print("Shpae after second NN layer of the decoder: ", decoder_mean._keras_shape)
 h_decoded = decoder_h(z)
 print('h_decoded shape: ', h_decoded._keras_shape)
 x_decoded_mean = decoder_mean(h_decoded)
