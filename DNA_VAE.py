@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import tensorflow as tf
 
 import sys
 import os
@@ -13,7 +14,7 @@ from keras import backend as K
 from keras import metrics
 from keras.optimizers import SGD, Adam, RMSprop
 from keras.losses import kullback_leibler_divergence, binary_crossentropy
-from keras.callbacks import TensorBoard
+from keras.callbacks import TensorBoard, EarlyStopping
 
 class CharacterTable(object):
     def __init__(self, chars):
@@ -187,6 +188,18 @@ def corr_matrix(x,y):
     matrix = np.corrcoef(x,y)
     return np.argmax(matrix)
 
+# def hamming_distance(x,y):
+#     x = tf.reshape(x, shape=(n_rows, MAXLEN*len(chars)))
+#     x = x.eval(session=sess)
+#     y = tf.reshape(y, shape=(n_rows, MAXLEN * len(chars)))
+#     y = y.eval(session=sess)
+#     row = np.random.randint(0,n_rows)
+#     num_incorrect = 0
+#     for i, value in enumerate(x[row]):
+#         if value != y[row][i]:
+#             num_incorrect+=1
+#     return num_incorrect/(MAXLEN*len(chars))
+
 def corr(y_true, y_pred):
     cov = covariance(y_true, y_pred)
     var1 = covariance(y_true, y_true)
@@ -210,8 +223,8 @@ learning_rate = 0.00001
 optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 
 for_tb = TensorBoard(log_dir='./DNA_VAE',histogram_freq=0, write_graph=True, write_images=True)
+#vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[hamming_distance])
 vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[corr,xent])
-#vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[corr_matrix])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
