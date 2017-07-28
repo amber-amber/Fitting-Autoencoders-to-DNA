@@ -7,7 +7,7 @@ import warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' #Hide messy TensorFlow warnings
 warnings.filterwarnings("ignore") #Hide messy Numpy warnings
 
-from keras.layers import Input, Dense, Lambda, Layer, LSTM
+from keras.layers import Input, Dense, Lambda, LSTM, Dropout
 from keras.models import Model
 from keras import backend as K
 from keras import metrics
@@ -35,7 +35,7 @@ class CharacterTable(object):
 chars='actg'
 ctable= CharacterTable(chars)
 
-n_rows = 200000
+n_rows = 2000
 MAXLEN = 200
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
@@ -76,6 +76,7 @@ latent_dim = 24
 intermediate_dim = 100
 epochs = 75
 epsilon_std = 1.0
+dropout_rate = 0.4
 
 #this is how we generate new test samples
 #we will sample an epsilon from ~N(0,1) then convert
@@ -90,9 +91,11 @@ def sampling(args):
 #x = Input(batch_shape=(batch_size, original_dim))
 x = Input(shape=(MAXLEN,len(chars)))
 print('Input shape: ', x._keras_shape)
+#x =Dropout(dropout_rate, input_shape=(MAXLEN,len(chars)))(x) CANNOT USE DROPOUT ON THE INPUT LAYER ?!?!?!
 #h = Dense(intermediate_dim, activation='relu')(x)
 #h = LSTM(intermediate_dim, input_shape =(MAXLEN,len(chars)))(x)
 h = LSTM(batch_size, input_shape =(MAXLEN,len(chars)))(x)
+h = Dropout(dropout_rate)(h)
 print('Shape after LSTM Layer: ', h._keras_shape)
 h = Dense(intermediate_dim)(h)
 #print('Shape after Dense Layer: ', h.output_shape)
@@ -179,10 +182,10 @@ def vae_loss(y_true, y_pred):
 def covariance(x, y):
     return K.mean(x * y) - K.mean(x) * K.mean(y)
 
-
 def corr_matrix(x,y):
     #x = np.array(x, dtype=)
-    return np.corrcoef(x,y)
+    matrix = np.corrcoef(x,y)
+    return np.argmax(matrix)
 
 def corr(y_true, y_pred):
     cov = covariance(y_true, y_pred)
@@ -208,7 +211,7 @@ optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 
 for_tb = TensorBoard(log_dir='./DNA_VAE',histogram_freq=0, write_graph=True, write_images=True)
 vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[corr,xent])
-#vae.compile(optimizer= optimizer, loss=None, metrics=[corr, xent])
+#vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[corr_matrix])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
