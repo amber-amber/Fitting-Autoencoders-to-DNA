@@ -36,7 +36,7 @@ class CharacterTable(object):
 chars='actg'
 ctable= CharacterTable(chars)
 
-n_rows = 2000
+n_rows = 200000
 MAXLEN = 200
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
@@ -208,7 +208,7 @@ def corr(y_true, y_pred):
 
 
 def xent(y_true, y_pred):
-    return categorical_crossentropy(y_true, y_pred)
+    return binary_crossentropy(y_true, y_pred)
 
 #The actual VAE
 
