@@ -75,7 +75,7 @@ original_dim = hot.shape[1]
 latent_dim = 24
 #why is the latent dimension so small in comparison to the intermediate dim?
 intermediate_dim = 100
-epochs = 75
+epochs = 8
 epsilon_std = 1.0
 dropout_rate = 0.4
 lstm_size = 100
