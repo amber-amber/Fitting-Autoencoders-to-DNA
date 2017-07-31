@@ -8,7 +8,7 @@ import warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' #Hide messy TensorFlow warnings
 warnings.filterwarnings("ignore") #Hide messy Numpy warnings
 
-from keras.layers import Input, Dense, Lambda, LSTM, Dropout
+from keras.layers import Input, Dense, Lambda, LSTM, Dropout, Reshape
 from keras.models import Model
 from keras import backend as K
 from keras import metrics
@@ -37,7 +37,7 @@ chars='actg'
 ctable= CharacterTable(chars)
 
 n_rows = 200000
-MAXLEN = 200
+MAXLEN = 20
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 n,m=dna_data.shape
@@ -45,7 +45,7 @@ dna_data.dna=dna_data.dna.str[:MAXLEN]
 
 print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
 hot=np.zeros((n,MAXLEN,len(chars)), dtype=np.bool)
-print 'Shape of encoded data: ',hot.shape
+print('Shape of encoded data: ',hot.shape)
 for i, dna_str in enumerate(dna_data.dna):
     hot[i]=ctable.encode(dna_str, MAXLEN)
 #Do we need to one hot vectorize if we are using variational autoencoder?
@@ -62,8 +62,8 @@ for i, dna_str in enumerate(dna_data.dna):
 # print "New test set shape", dna_test.shape
 
 hot_reshaped = hot.reshape(len(hot), np.prod(hot.shape[1:]))
-print "New Shape of encoded data: ", hot_reshaped.shape
-print type(hot)
+print("New Shape of encoded data: ", hot_reshaped.shape)
+print(type(hot))
 
 #the VAE
 
@@ -78,6 +78,7 @@ intermediate_dim = 100
 epochs = 75
 epsilon_std = 1.0
 dropout_rate = 0.4
+lstm_size = 100
 
 #this is how we generate new test samples
 #we will sample an epsilon from ~N(0,1) then convert
@@ -89,13 +90,15 @@ def sampling(args):
 
 #for Q(z|X) the encoder
 #this is a neural net with ONE hidden layer
-#x = Input(batch_shape=(batch_size, original_dim))
-x = Input(shape=(MAXLEN,len(chars)))
+# x = Input(batch_shape=(batch_size, original_dim))
+x = Input(shape=(MAXLEN, len(chars)))
+# x = Input(shape=(batch_size, MAXLEN, len(chars)))
 print('Input shape: ', x._keras_shape)
 #x =Dropout(dropout_rate, input_shape=(MAXLEN,len(chars)))(x) CANNOT USE DROPOUT ON THE INPUT LAYER ?!?!?!
-#h = Dense(intermediate_dim, activation='relu')(x)
-#h = LSTM(intermediate_dim, input_shape =(MAXLEN,len(chars)))(x)
-h = LSTM(batch_size, input_shape =(MAXLEN,len(chars)))(x)
+h = Reshape((MAXLEN * len(chars),))(x)
+h = Dense(intermediate_dim, activation='relu')(h)
+# h = LSTM(intermediate_dim, input_shape =(MAXLEN,len(chars)))(x)
+# h = LSTM(lstm_size, input_shape =(MAXLEN,len(chars)))(x)
 h = Dropout(dropout_rate)(h)
 print('Shape after LSTM Layer: ', h._keras_shape)
 h = Dense(intermediate_dim)(h)
@@ -112,29 +115,32 @@ h = Dense(intermediate_dim)(h)
 z_mean = Dense(latent_dim)(h)
 z_log_var = Dense(latent_dim)(h)
 #WHY ARE THESE THE EXACT SAME?!?!!
-print "z_mean shape: ", z_mean._keras_shape
-print "z_log_var shape: ", z_log_var._keras_shape
+print("z_mean shape: ", z_mean._keras_shape)
+print("z_log_var shape: ", z_log_var._keras_shape)
 z = Lambda(sampling)([z_mean, z_log_var])
-print "Shape after lambda layer: ", z._keras_shape
+print("Shape after lambda layer: ", z._keras_shape)
 
 #for P(X|z) the decoder
 decoder_h = Dense(intermediate_dim, activation='relu')
 #print("Shape after first NN layer of the decoder: ", decoder_h._keras_shape)
 decoder_mean = Dense(original_dim*len(chars), activation='sigmoid')
+decoder_mean_reshaped = Reshape((original_dim, len(chars)))
 #print("Shpae after second NN layer of the decoder: ", decoder_mean._keras_shape)
 h_decoded = decoder_h(z)
 #print('h_decoded shape: ', h_decoded._keras_shape)
 x_decoded_mean = decoder_mean(h_decoded)
+x_decoded_mean_reshaped = decoder_mean_reshaped(x_decoded_mean)
 #x_decoded_mean = decoder_h(h_decoded).reshape(batch_size,MAXLEN,len(char))
 print("x_decoded_mean shape: ", x_decoded_mean._keras_shape)
 
 # #Custom loss layer
 
 def vae_loss(y_true, y_pred):
-    recon_loss = MAXLEN * binary_crossentropy(y_true, y_pred)
+    recon_loss = binary_crossentropy(K.flatten(y_true), K.flatten(y_pred))
     #loss obviously depends on MAXLEN. but it seems like binary crossentropy stays approx the same regardless
     KL_loss = -0.5 * K.sum(1 + z_log_var - K.square(z_mean) - K.exp(z_log_var), axis=-1)
-    return recon_loss+KL_loss
+    return recon_loss
+    # return recon_loss + KL_loss/MAXLEN
 
 # class CustomVariationalLayer(Layer):
 #     def __init__(self, **kwargs):
@@ -215,7 +221,8 @@ def xent(y_true, y_pred):
 #y = CustomVariationalLayer()([x, x_decoded_mean])
 #y = CustomVariationalLayerKL()([x,x_decoded_mean])
 #vae = Model(x, y)
-vae = Model(x, x_decoded_mean)
+# vae = Model(x, x_decoded_mean)
+vae = Model(x, x_decoded_mean_reshaped)
 
 learning_rate = 0.00001
 #optimizer = SGD(lr=learning_rate)
@@ -224,11 +231,12 @@ optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 
 for_tb = TensorBoard(log_dir='./DNA_VAE',histogram_freq=0, write_graph=True, write_images=True)
 #vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[hamming_distance])
-vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[corr,xent])
+vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[xent, corr, 'acc'])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
-vae.fit(hot, hot_reshaped, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
+# vae.fit(hot, hot_reshaped, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
+vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
 
 encoder = Model(x, z_mean)
 
@@ -279,4 +287,3 @@ for i in range(num_test_samples):
     sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
     print(ctable.decode(sample_decoded))
     i+=1
-
