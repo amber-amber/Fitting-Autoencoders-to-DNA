@@ -13,7 +13,7 @@ from keras.models import Model
 from keras import backend as K
 from keras import metrics
 from keras.optimizers import SGD, Adam, RMSprop
-from keras.losses import kullback_leibler_divergence, categorical_crossentropy
+from keras.losses import kullback_leibler_divergence, categorical_crossentropy, binary_crossentropy
 from keras.callbacks import TensorBoard, EarlyStopping
 
 class CharacterTable(object):
