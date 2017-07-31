@@ -210,13 +210,13 @@ def to_int_index(some_str):
 
 
 def adapted_cat_accuracy(x,y):
-    a= x.shape[0]
+    #a= x.shape[0]
     y = Reshape((MAXLEN,len(chars)))
-    integer_indiced_x = np.array((a,MAXLEN),dtype=str)
-    integer_indiced_y = np.array((a,MAXLEN),dtype=str)
-    output_x = np.array((a, MAXLEN), dtype=int)
-    output_y = np.array((a, MAXLEN), dtype=int)
-    for i in range(a):
+    integer_indiced_x = np.array((n_rows,MAXLEN),dtype=str)
+    integer_indiced_y = np.array((n_rows,MAXLEN),dtype=str)
+    output_x = np.array((n_rows, MAXLEN), dtype=int)
+    output_y = np.array((n_rows, MAXLEN), dtype=int)
+    for i in range(n_rows):
         integer_indiced_x[i]=ctable.decode(x[i])
         integer_indiced_y[i]=ctable.decode(y[i])
         output_x[i]=to_int_index(integer_indiced_x[i])
