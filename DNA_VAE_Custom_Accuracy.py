@@ -210,7 +210,7 @@ def to_int_index(some_str):
 
 
 def adapted_cat_accuracy(x,y):
-    a= x._keras_shape[0]
+    a= x.shape[0]
     y = Reshape((MAXLEN,len(chars)))
     integer_indiced_x = np.array((a,MAXLEN),dtype=str)
     integer_indiced_y = np.array((a,MAXLEN),dtype=str)
