@@ -36,7 +36,7 @@ class CharacterTable(object):
 chars='acgt'
 ctable= CharacterTable(chars)
 
-n_rows = 20000
+n_rows = 2000
 MAXLEN = 70
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
@@ -210,8 +210,10 @@ def to_int_index(some_str):
 
 
 def adapted_cat_accuracy(x,y):
-    #a= x.shape[0]
-    y = Reshape((MAXLEN,len(chars)))
+    sess = tf.Session()
+    with sess.as_default():
+        x=x.eval()
+        y = Reshape((MAXLEN,len(chars)))(y).eval()
     integer_indiced_x = np.array((n_rows,MAXLEN),dtype=str)
     integer_indiced_y = np.array((n_rows,MAXLEN),dtype=str)
     output_x = np.array((n_rows, MAXLEN), dtype=int)
