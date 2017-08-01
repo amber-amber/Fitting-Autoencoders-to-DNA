@@ -225,7 +225,7 @@ def xent(y_true, y_pred):
 vae = Model(x, x_decoded_mean_reshaped)
 
 learning_rate = 0.00001
-lr_sched = LearningRateScheduler(monitor='vae_loss', min_delta =.001, patience=5)
+#lr_sched = LearningRateScheduler(monitor='vae_loss', min_delta =.001, patience=5)
 #optimizer = SGD(lr=learning_rate)
 #optimizer = RMSprop(lr=learning_rate)
 optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
@@ -236,7 +236,7 @@ print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
 # vae.fit(hot, hot_reshaped, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
-vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb, lr_sched])
+vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
 #
 # encoder = Model(x, z_mean)
 #
