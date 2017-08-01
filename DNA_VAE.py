@@ -61,8 +61,8 @@ for i, dna_str in enumerate(dna_data.dna):
 # print "New training set shape", dna_train.shape
 # print "New test set shape", dna_test.shape
 
-hot_reshaped = hot.reshape(len(hot), np.prod(hot.shape[1:]))
-print("New Shape of encoded data: ", hot_reshaped.shape)
+# hot_reshaped = hot.reshape(len(hot), np.prod(hot.shape[1:]))
+# print("New Shape of encoded data: ", hot_reshaped.shape)
 #print(type(hot))
 
 #the VAE
@@ -230,13 +230,12 @@ learning_rate = 0.00001
 optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 
 for_tb = TensorBoard(log_dir='DNA_VAE',histogram_freq=0, write_graph=True, write_images=True)
-#vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[hamming_distance])
 vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[xent, corr, 'acc'])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
 # vae.fit(hot, hot_reshaped, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
-vae.fit(hot_reshaped, hot_reshaped, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
+vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
 
 encoder = Model(x, z_mean)
 
@@ -246,7 +245,8 @@ encoder = Model(x, z_mean)
 decoder_input = Input(shape=(latent_dim,))
 _h_decoded = decoder_h(decoder_input)
 _x_decoded_mean = decoder_mean(_h_decoded)
-generator = Model(decoder_input, _x_decoded_mean)
+x_decoded_mean_reshaped = decoder_mean_reshaped(x_decoded_mean)
+generator = Model(decoder_input, _x_decoded_mean_reshaped)
 
 # for iteration in range(epochs):
 #     print()
@@ -284,6 +284,6 @@ for i in range(num_test_samples):
     Gaussian_sample_y = np.random.normal(0,1)
     z_sample = np.array([[Gaussian_sample_x,Gaussian_sample_y]])
     sample_decoded = generator.predict(z_sample)
-    sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
+    #sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
     print(ctable.decode(sample_decoded))
     i+=1
