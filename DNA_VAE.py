@@ -75,7 +75,7 @@ original_dim = hot.shape[1]
 latent_dim = 24
 #why is the latent dimension so small in comparison to the intermediate dim?
 intermediate_dim = 100
-epochs = 2
+epochs = 80
 epsilon_std = 1.0
 dropout_rate = 0.4
 lstm_size = 100
@@ -236,26 +236,26 @@ vae.summary()
 
 # vae.fit(hot, hot_reshaped, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
 vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
-
-encoder = Model(x, z_mean)
-
-#We want to somehow determine the generated DNA seqences
-#Based off the Variational Autoencoders tutorial, we should be sampling from a normal distribution to get the test samples
-#this is the decoder that will generate the sample
-decoder_input = Input(shape=(latent_dim,))
-_h_decoded = decoder_h(decoder_input)
-_x_decoded_mean = decoder_mean(_h_decoded)
-x_decoded_mean_reshaped = decoder_mean_reshaped(x_decoded_mean)
-generator = Model(decoder_input, x_decoded_mean_reshaped)
-
-
-#let's sample some random Gaussians which we will plug into the decoder
-num_test_samples = 5
-for i in range(num_test_samples):
-    Gaussian_sample_x = np.random.normal(0,1)
-    Gaussian_sample_y = np.random.normal(0,1)
-    z_sample = np.array([[Gaussian_sample_x,Gaussian_sample_y]])
-    sample_decoded = generator.predict(z_sample)
-    #sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
-    print(ctable.decode(sample_decoded))
-    i+=1
+#
+# encoder = Model(x, z_mean)
+#
+# #We want to somehow determine the generated DNA seqences
+# #Based off the Variational Autoencoders tutorial, we should be sampling from a normal distribution to get the test samples
+# #this is the decoder that will generate the sample
+# decoder_input = Input(shape=(latent_dim,))
+# _h_decoded = decoder_h(decoder_input)
+# _x_decoded_mean = decoder_mean(_h_decoded)
+# x_decoded_mean_reshaped = decoder_mean_reshaped(x_decoded_mean)
+# generator = Model(decoder_input, x_decoded_mean_reshaped)
+#
+#
+# #let's sample some random Gaussians which we will plug into the decoder
+# num_test_samples = 5
+# for i in range(num_test_samples):
+#     Gaussian_sample_x = np.random.normal(0,1)
+#     Gaussian_sample_y = np.random.normal(0,1)
+#     z_sample = np.array([[Gaussian_sample_x,Gaussian_sample_y]])
+#     sample_decoded = generator.predict(z_sample)
+#     #sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
+#     print(ctable.decode(sample_decoded))
+#     i+=1
