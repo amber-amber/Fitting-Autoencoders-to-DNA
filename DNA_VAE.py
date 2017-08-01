@@ -75,7 +75,7 @@ original_dim = hot.shape[1]
 latent_dim = 24
 #why is the latent dimension so small in comparison to the intermediate dim?
 intermediate_dim = 100
-epochs = 8
+epochs = 80
 epsilon_std = 1.0
 dropout_rate = 0.4
 lstm_size = 100
@@ -231,7 +231,7 @@ learning_rate = 0.00001
 optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 
 #for_tb = TensorBoard(log_dir='DNA_VAE',histogram_freq=0, write_graph=True, write_images=True)
-results = CSVLogger('DNA_VAE_log.csv', append=False, separator=',')
+results = CSVLogger('DNA_VAE_forRAN_log.csv', append=False, separator=',')
 vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[xent, corr, 'acc'])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
