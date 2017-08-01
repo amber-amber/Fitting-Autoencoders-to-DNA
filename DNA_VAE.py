@@ -14,7 +14,7 @@ from keras import backend as K
 from keras import metrics
 from keras.optimizers import SGD, Adam, RMSprop
 from keras.losses import kullback_leibler_divergence, categorical_crossentropy, binary_crossentropy
-from keras.callbacks import TensorBoard, EarlyStopping, LearningRateScheduler
+from keras.callbacks import TensorBoard, CSVLogger, LearningRateScheduler
 
 class CharacterTable(object):
     def __init__(self, chars):
@@ -230,13 +230,14 @@ learning_rate = 0.00001
 #optimizer = RMSprop(lr=learning_rate)
 optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 
-for_tb = TensorBoard(log_dir='DNA_VAE',histogram_freq=0, write_graph=True, write_images=True)
+#for_tb = TensorBoard(log_dir='DNA_VAE',histogram_freq=0, write_graph=True, write_images=True)
+results = CSVLogger('DNA_VAE_log')
 vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[xent, corr, 'acc'])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
 # vae.fit(hot, hot_reshaped, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
-vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
+vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[results])
 #
 # encoder = Model(x, z_mean)
 #
