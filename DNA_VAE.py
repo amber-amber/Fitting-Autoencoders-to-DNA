@@ -75,7 +75,7 @@ original_dim = hot.shape[1]
 latent_dim = 24
 #why is the latent dimension so small in comparison to the intermediate dim?
 intermediate_dim = 100
-epochs = 8
+epochs = 2
 epsilon_std = 1.0
 dropout_rate = 0.4
 lstm_size = 100
@@ -246,36 +246,8 @@ decoder_input = Input(shape=(latent_dim,))
 _h_decoded = decoder_h(decoder_input)
 _x_decoded_mean = decoder_mean(_h_decoded)
 x_decoded_mean_reshaped = decoder_mean_reshaped(x_decoded_mean)
-generator = Model(decoder_input, _x_decoded_mean_reshaped)
+generator = Model(decoder_input, x_decoded_mean_reshaped)
 
-# for iteration in range(epochs):
-#     print()
-#     print('-'*50)
-#     vae.fit(hot, hot, shuffle=True, epochs=1, batch_size=batch_size, validation_split=.25)
-#     #print('NOT SURE WHAT THIS IS...')
-#     #encoder = Model(x,z_mean)
-#     #x_test_encoded = encoder.predict()
-#     print('GENERATING TEST SAMPLES...')
-#     num_test_samples = 5
-#     for i in range(num_test_samples):
-#         Gaussian_sample_x = np.random.normal(0,1)
-#         Gaussian_sample_y = np.random.normal(0,1)
-#         z_sample = np.array([[Gaussian_sample_x,Gaussian_sample_y]])
-#         sample_decoded = generator.predict(z_sample)
-#         sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
-#         print(ctable.decode(sample_decoded))
-#         i+=1
-# print('MAXLEN WAS... ', MAXLEN)
-# print('THE INTERMEDIATE DIM WAS...', intermediate_dim)
-# print('THE LATENT DIM WAS...', latent_dim)
-# print('GENERATING TEST SAMPLES...')
-#this is the decoder that will generate the sample
-decoder_input = Input(shape=(latent_dim,))
-_h_decoded = decoder_h(decoder_input)
-#print "Test sample in the intermediate dim: ", _h_decoded._keras_shape
-_x_decoded_mean = decoder_mean(_h_decoded)
-#print "Test sample in the orginal dim", _x_decoded_mean._keras_shape
-generator = Model(decoder_input, _x_decoded_mean)
 
 #let's sample some random Gaussians which we will plug into the decoder
 num_test_samples = 5
