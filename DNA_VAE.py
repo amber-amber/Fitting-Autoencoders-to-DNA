@@ -14,7 +14,7 @@ from keras import backend as K
 from keras import metrics
 from keras.optimizers import SGD, Adam, RMSprop
 from keras.losses import kullback_leibler_divergence, categorical_crossentropy, binary_crossentropy
-from keras.callbacks import TensorBoard, EarlyStopping
+from keras.callbacks import TensorBoard, EarlyStopping, LearningRateScheduler
 
 class CharacterTable(object):
     def __init__(self, chars):
@@ -225,6 +225,7 @@ def xent(y_true, y_pred):
 vae = Model(x, x_decoded_mean_reshaped)
 
 learning_rate = 0.00001
+lr_sched = LearningRateScheduler(monitor='vae_loss', min_delta =.001, patience=5)
 #optimizer = SGD(lr=learning_rate)
 #optimizer = RMSprop(lr=learning_rate)
 optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
@@ -235,7 +236,7 @@ print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
 # vae.fit(hot, hot_reshaped, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
-vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
+vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb, lr_sched])
 #
 # encoder = Model(x, z_mean)
 #
