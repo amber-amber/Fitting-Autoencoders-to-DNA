@@ -75,7 +75,7 @@ original_dim = hot.shape[1]
 latent_dim = 24
 #why is the latent dimension so small in comparison to the intermediate dim?
 intermediate_dim = 100
-epochs = 80
+epochs = 15
 epsilon_std = 1.0
 dropout_rate = 0.4
 lstm_size = 100
@@ -230,14 +230,29 @@ learning_rate = 0.00001
 #optimizer = RMSprop(lr=learning_rate)
 optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 
+class TimeHistory(keras.callbacks.Callback):
+    def on_train_begin(self, logs={}):
+        self.times = []
+
+    def on_epoch_begin(self, batch, logs={}):
+        self.epoch_time_start = time.time()
+
+    def on_epoch_end(self, batch, logs={}):
+        self.times.append(time.time() - self.epoch_time_start)
+
 #for_tb = TensorBoard(log_dir='DNA_VAE',histogram_freq=0, write_graph=True, write_images=True)
-results = CSVLogger('DNA_VAE_forRAN_log.csv', append=False, separator=',')
+time_cb = TimeHistory()
+results = CSVLogger('DNA_VAE.csv', append=False, separator=',')
 vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[xent, corr, 'acc'])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
 # vae.fit(hot, hot_reshaped, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
-vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[results])
+vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[results, time_cb])
+
+#print times for each epoch
+times = time_cb.times
+print times
 #
 # encoder = Model(x, z_mean)
 #
