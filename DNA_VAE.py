@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+import time
+import csv
 
 import sys
 import os
@@ -14,7 +16,7 @@ from keras import backend as K
 from keras import metrics
 from keras.optimizers import SGD, Adam, RMSprop
 from keras.losses import kullback_leibler_divergence, categorical_crossentropy, binary_crossentropy
-from keras.callbacks import TensorBoard, CSVLogger, LearningRateScheduler
+from keras.callbacks import TensorBoard, CSVLogger, LearningRateScheduler, Callback
 
 class CharacterTable(object):
     def __init__(self, chars):
@@ -230,7 +232,7 @@ learning_rate = 0.00001
 #optimizer = RMSprop(lr=learning_rate)
 optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 
-class TimeHistory(keras.callbacks.Callback):
+class TimeHistory(Callback):
     def on_train_begin(self, logs={}):
         self.times = []
 
@@ -252,27 +254,10 @@ vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation
 
 #print times for each epoch
 times = time_cb.times
-print times
-#
-# encoder = Model(x, z_mean)
-#
-# #We want to somehow determine the generated DNA seqences
-# #Based off the Variational Autoencoders tutorial, we should be sampling from a normal distribution to get the test samples
-# #this is the decoder that will generate the sample
-# decoder_input = Input(shape=(latent_dim,))
-# _h_decoded = decoder_h(decoder_input)
-# _x_decoded_mean = decoder_mean(_h_decoded)
-# x_decoded_mean_reshaped = decoder_mean_reshaped(x_decoded_mean)
-# generator = Model(decoder_input, x_decoded_mean_reshaped)
-#
-#
-# #let's sample some random Gaussians which we will plug into the decoder
-# num_test_samples = 5
-# for i in range(num_test_samples):
-#     Gaussian_sample_x = np.random.normal(0,1)
-#     Gaussian_sample_y = np.random.normal(0,1)
-#     z_sample = np.array([[Gaussian_sample_x,Gaussian_sample_y]])
-#     sample_decoded = generator.predict(z_sample)
-#     #sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
-#     print(ctable.decode(sample_decoded))
-#     i+=1
+
+# with open('epoch_time.csv', "wb") as csv_file:
+#     writer = csv.writer(csv_file, delimiter=',')
+#     for epoch_time in times:
+#         writer.writerow(epoch_time)
+
+print times 
