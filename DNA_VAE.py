@@ -77,7 +77,7 @@ original_dim = hot.shape[1]
 latent_dim = 24
 #why is the latent dimension so small in comparison to the intermediate dim?
 intermediate_dim = 100
-epochs = 15
+epochs = 80
 epsilon_std = 1.0
 dropout_rate = 0.4
 lstm_size = 100
@@ -260,4 +260,4 @@ times = time_cb.times
 #     for epoch_time in times:
 #         writer.writerow(epoch_time)
 
-print times 
+print times
