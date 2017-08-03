@@ -35,6 +35,8 @@ class CharacterTable(object):
             x = x. argmax(axis=-1)
         return ''.join(self.indices_char[x] for x in x)
 
+start_time = time.time()
+
 chars='actg'
 ctable= CharacterTable(chars)
 
@@ -260,4 +262,5 @@ times = time_cb.times
 #     for epoch_time in times:
 #         writer.writerow(epoch_time)
 
-print times
+print "Total time: ", time.time() - start_time
+print "Epoch times: ", times
