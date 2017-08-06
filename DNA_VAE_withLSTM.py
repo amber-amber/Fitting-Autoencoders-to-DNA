@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+import time
 
 import sys
 import os
@@ -32,6 +33,8 @@ class CharacterTable(object):
         if calc_argmax:
             x = x. argmax(axis=-1)
         return ''.join(self.indices_char[x] for x in x)
+
+start_time = time.time()
 
 chars='actg'
 ctable= CharacterTable(chars)
@@ -75,7 +78,7 @@ original_dim = hot.shape[1]
 latent_dim = 24
 #why is the latent dimension so small in comparison to the intermediate dim?
 intermediate_dim = 100
-epochs = 75
+epochs = 80
 epsilon_std = 1.0
 dropout_rate = 0.4
 
@@ -218,66 +221,82 @@ def xent(y_true, y_pred):
 #vae = Model(x, y)
 vae = Model(x, x_decoded_mean)
 
+class TimeHistory(Callback):
+    def on_train_begin(self, logs={}):
+        self.times = []
+
+    def on_epoch_begin(self, batch, logs={}):
+        self.epoch_time_start = time.time()
+
+    def on_epoch_end(self, batch, logs={}):
+        self.times.append(time.time() - self.epoch_time_start)
+
 learning_rate = 0.00001
 #optimizer = SGD(lr=learning_rate)
 #optimizer = RMSprop(lr=learning_rate)
 optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 
-for_tb = TensorBoard(log_dir='./DNA_VAE',histogram_freq=0, write_graph=True, write_images=True)
+#for_tb = TensorBoard(log_dir='./DNA_VAE',histogram_freq=0, write_graph=True, write_images=True)
 #vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[hamming_distance])
-vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[corr,xent])
+time_cb = TimeHistory()
+vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[corr,xent, 'acc'])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
-vae.fit(hot, hot_reshaped, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
+vae.fit(hot, hot_reshaped, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[time_cb])
 
-encoder = Model(x, z_mean)
+times = time_cb.times
 
-#We want to somehow determine the generated DNA seqences
-#Based off the Variational Autoencoders tutorial, we should be sampling from a normal distribution to get the test samples
-#this is the decoder that will generate the sample
-decoder_input = Input(shape=(latent_dim,))
-_h_decoded = decoder_h(decoder_input)
-_x_decoded_mean = decoder_mean(_h_decoded)
-generator = Model(decoder_input, _x_decoded_mean)
+print "Total times: ", time.time()- start_time
+print "Epoch times: ", times 
 
-# for iteration in range(epochs):
-#     print()
-#     print('-'*50)
-#     vae.fit(hot, hot, shuffle=True, epochs=1, batch_size=batch_size, validation_split=.25)
-#     #print('NOT SURE WHAT THIS IS...')
-#     #encoder = Model(x,z_mean)
-#     #x_test_encoded = encoder.predict()
-#     print('GENERATING TEST SAMPLES...')
-#     num_test_samples = 5
-#     for i in range(num_test_samples):
-#         Gaussian_sample_x = np.random.normal(0,1)
-#         Gaussian_sample_y = np.random.normal(0,1)
-#         z_sample = np.array([[Gaussian_sample_x,Gaussian_sample_y]])
-#         sample_decoded = generator.predict(z_sample)
-#         sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
-#         print(ctable.decode(sample_decoded))
-#         i+=1
-# print('MAXLEN WAS... ', MAXLEN)
-# print('THE INTERMEDIATE DIM WAS...', intermediate_dim)
-# print('THE LATENT DIM WAS...', latent_dim)
-# print('GENERATING TEST SAMPLES...')
-#this is the decoder that will generate the sample
-decoder_input = Input(shape=(latent_dim,))
-_h_decoded = decoder_h(decoder_input)
-#print "Test sample in the intermediate dim: ", _h_decoded._keras_shape
-_x_decoded_mean = decoder_mean(_h_decoded)
-#print "Test sample in the orginal dim", _x_decoded_mean._keras_shape
-generator = Model(decoder_input, _x_decoded_mean)
+# encoder = Model(x, z_mean)
 
-#let's sample some random Gaussians which we will plug into the decoder
-num_test_samples = 5
-for i in range(num_test_samples):
-    Gaussian_sample_x = np.random.normal(0,1)
-    Gaussian_sample_y = np.random.normal(0,1)
-    z_sample = np.array([[Gaussian_sample_x,Gaussian_sample_y]])
-    sample_decoded = generator.predict(z_sample)
-    sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
-    print(ctable.decode(sample_decoded))
-    i+=1
+# #We want to somehow determine the generated DNA seqences
+# #Based off the Variational Autoencoders tutorial, we should be sampling from a normal distribution to get the test samples
+# #this is the decoder that will generate the sample
+# decoder_input = Input(shape=(latent_dim,))
+# _h_decoded = decoder_h(decoder_input)
+# _x_decoded_mean = decoder_mean(_h_decoded)
+# generator = Model(decoder_input, _x_decoded_mean)
+#
+# # for iteration in range(epochs):
+# #     print()
+# #     print('-'*50)
+# #     vae.fit(hot, hot, shuffle=True, epochs=1, batch_size=batch_size, validation_split=.25)
+# #     #print('NOT SURE WHAT THIS IS...')
+# #     #encoder = Model(x,z_mean)
+# #     #x_test_encoded = encoder.predict()
+# #     print('GENERATING TEST SAMPLES...')
+# #     num_test_samples = 5
+# #     for i in range(num_test_samples):
+# #         Gaussian_sample_x = np.random.normal(0,1)
+# #         Gaussian_sample_y = np.random.normal(0,1)
+# #         z_sample = np.array([[Gaussian_sample_x,Gaussian_sample_y]])
+# #         sample_decoded = generator.predict(z_sample)
+# #         sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
+# #         print(ctable.decode(sample_decoded))
+# #         i+=1
+# # print('MAXLEN WAS... ', MAXLEN)
+# # print('THE INTERMEDIATE DIM WAS...', intermediate_dim)
+# # print('THE LATENT DIM WAS...', latent_dim)
+# # print('GENERATING TEST SAMPLES...')
+# #this is the decoder that will generate the sample
+# decoder_input = Input(shape=(latent_dim,))
+# _h_decoded = decoder_h(decoder_input)
+# #print "Test sample in the intermediate dim: ", _h_decoded._keras_shape
+# _x_decoded_mean = decoder_mean(_h_decoded)
+# #print "Test sample in the orginal dim", _x_decoded_mean._keras_shape
+# generator = Model(decoder_input, _x_decoded_mean)
+#
+# #let's sample some random Gaussians which we will plug into the decoder
+# num_test_samples = 5
+# for i in range(num_test_samples):
+#     Gaussian_sample_x = np.random.normal(0,1)
+#     Gaussian_sample_y = np.random.normal(0,1)
+#     z_sample = np.array([[Gaussian_sample_x,Gaussian_sample_y]])
+#     sample_decoded = generator.predict(z_sample)
+#     sample_decoded = sample_decoded.reshape(MAXLEN, len(chars))
+#     print(ctable.decode(sample_decoded))
+#     i+=1
 
