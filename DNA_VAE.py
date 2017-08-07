@@ -256,7 +256,7 @@ def fit(vae, hot, epochs, batch_size):
     vae.fit(hot, hot, shuffle = True, epochs = epochs, batch_size = batch_size, validation_split = .25, callbacks = [results, time_cb])
 
 # vae.fit(hot, hot_reshaped, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
-mem_usage = memory_usage((vae.fit, (vae, hot, epochs, batch_size)), interval=1)
+mem_usage = memory_usage((fit, (vae, hot, epochs, batch_size)), interval=1)
 print "MAX MEMORY USAGE", max(mem_usage)
 #print times for each epoch
 #times = time_cb.times
