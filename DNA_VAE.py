@@ -72,7 +72,7 @@ for i, dna_str in enumerate(dna_data.dna):
 #the VAE
 
 #some parameters
-batch_size = 100
+batch_size = 250
 #original_dim = dna_train.shape[1]
 print("ORIGINAL DIM: ", hot.shape[1] )
 original_dim = hot.shape[1]
