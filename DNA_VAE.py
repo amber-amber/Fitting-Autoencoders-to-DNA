@@ -3,6 +3,7 @@ import pandas as pd
 import tensorflow as tf
 import time
 import csv
+from memory_profiler import memory_usage
 
 import sys
 import os
@@ -251,16 +252,19 @@ vae.compile(optimizer= optimizer, loss=vae_loss, metrics=[xent, corr, 'acc'])
 print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
-# vae.fit(hot, hot_reshaped, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
-vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[results, time_cb])
+def fit(vae, hot, epochs, batch_size):
+    vae.fit(hot, hot, shuffle = True, epochs = epochs, batch_size = batch_size, validation_split = .25, callbacks = [results, time_cb])
 
+# vae.fit(hot, hot_reshaped, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
+mem_usage = memory_usage((vae.fit, (vae, hot, epochs, batch_size)), interval=1)
+print mem_usage
 #print times for each epoch
-times = time_cb.times
+#times = time_cb.times
 
 # with open('epoch_time.csv', "wb") as csv_file:
 #     writer = csv.writer(csv_file, delimiter=',')
 #     for epoch_time in times:
 #         writer.writerow(epoch_time)
 
-print "Total time: ", time.time() - start_time
-print "Epoch times: ", times
+# print "Total time: ", time.time() - start_time
+# print "Epoch times: ", times
