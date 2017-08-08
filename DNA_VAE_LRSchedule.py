@@ -15,7 +15,7 @@ from keras import backend as K
 from keras import metrics
 from keras.optimizers import SGD, Adam, RMSprop
 from keras.losses import kullback_leibler_divergence, categorical_crossentropy, binary_crossentropy
-from keras.callbacks import TensorBoard, CSVLogger, LearningRateScheduler, Callback
+from keras.callbacks import TensorBoard, CSVLogger, LearningRateScheduler, Callback, ReduceLROnPlateau
 
 class CharacterTable(object):
     def __init__(self, chars):
@@ -222,15 +222,20 @@ def xent(y_true, y_pred):
 #The actual VAE
 
 vae = Model(x, x_decoded_mean_reshaped)
+learning_rate = 0.001 #initial learning rate
+#LEARNING RATE SCHEDULE
+# def step_decay(epoch):
+#     initial_lr = learning_rate
+#     drop = 0.5
+#     epochs_drop = 20.0
+#     lr = initial_lr*math.pow(drop, math.floor((1+epoch)/epochs_drop))
+#     return lr
+# lrate = LearningRateScheduler(step_decay)
 
-learning_rate = 0.0001 #initial learning rate
-def step_decay(epoch):
-    initial_lr = learning_rate
-    drop = 0.5
-    epochs_drop = 20.0
-    lr = initial_lr*math.pow(drop, math.floor((1+epoch)/epochs_drop))
-    return lr
-lrate = LearningRateScheduler(step_decay)
+#Reduce learning rate based on correlation
+reduce_lr = ReduceLROnPlateau(monitor='corr', factor=0.5, patience=5, min_lr=0.00001)
+
+
 
 optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
 
@@ -251,7 +256,7 @@ print('THE VARIATIONAL AUTOENCODER MODEL...')
 vae.summary()
 
 # vae.fit(hot, hot_reshaped, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[for_tb])
-vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[results, time_cb, lrate])
+vae.fit(hot, hot, shuffle=True, epochs=epochs, batch_size=batch_size, validation_split=.25, callbacks=[results, time_cb, reduce_lr])
 
 #print times for each epoch
 times = time_cb.times
