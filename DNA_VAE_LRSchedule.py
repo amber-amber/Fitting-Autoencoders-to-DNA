@@ -40,7 +40,7 @@ chars='actg'
 ctable= CharacterTable(chars)
 
 n_rows = 200000
-MAXLEN = 20
+MAXLEN = 40
 dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], nrows= n_rows, delimiter ='\t', header =0)
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 n,m=dna_data.shape
@@ -234,7 +234,6 @@ learning_rate = 0.001 #initial learning rate
 
 #Reduce learning rate based on correlation
 reduce_lr = ReduceLROnPlateau(monitor='corr', factor=0.5, patience=5, min_lr=0.00001)
-
 
 
 optimizer = Adam(lr=learning_rate, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
