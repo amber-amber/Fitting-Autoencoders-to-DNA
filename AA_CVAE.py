@@ -10,7 +10,7 @@ import warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' #Hide messy TensorFlow warnings
 warnings.filterwarnings("ignore") #Hide messy Numpy warnings
 
-from keras.layers import Input, Dense, Lambda, LSTM, Dropout, Reshape
+from keras.layers import Input, Dense, Lambda, LSTM, Dropout, Reshape, concatenate
 from keras.utils import to_categorical
 from keras.models import Model
 from keras import backend as K
@@ -67,16 +67,10 @@ ctable1= CharacterTable(chars)
 #should also hot-encode the function index
 print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
 hot_x=np.zeros((n,MAXLEN,len(chars)), dtype=np.bool)
-#hot_y=np.zeros((n,1,len(functions)), dtype=np.bool)
-#print('Shape of encoded X: ',hot.shape)
 for i, a_str in enumerate(dna_data.protein):
     hot_x[i]=ctable1.encode(a_str, MAXLEN)
-#for i, index in enumerate(dna_data.function_index):
-#    hot_y[i]=ctable2.encode(index,1)
 hot_y = to_categorical(dna_data.function_index)
-#print('SHAPE OF TARGET DATA', hot_y.shape)
-print hot_y[8]
-#Target is an array of dim (n, 1)
+
 
 #Do we need to one hot vectorize if we are using variational autoencoder?
 
@@ -101,7 +95,8 @@ print hot_y[8]
 batch_size = 150
 #original_dim = dna_train.shape[1]
 #print("ORIGINAL DIM: ", hot.shape[1])
-#original_dim = hot.shape[1]
+original_dim = hot_x.shape[1]
+cond_dim = hot_y.shape[1]
 latent_dim = 24
 intermediate_dim = 100
 epochs = 80
@@ -119,10 +114,9 @@ def sampling(args):
 
 #for Q(z|X) the encoder
 #this is a neural net with ONE hidden layer
-# x = Input(batch_shape=(batch_size, original_dim))
-# x = Input(shape=(MAXLEN, len(chars)))
-# cond = Input(shape=(1,))
-# inputs = np.concatenate((x,cond), axis=1)
+x = Input(shape=(MAXLEN, len(chars)))
+cond = Input(shape=(cond_dim,))
+inputs = concatenate([x,cond])
 #inputs = pd.DataFrame.merge([x,cond], mode='concat', concat_axis = 1)
 
 #
