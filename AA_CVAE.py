@@ -50,7 +50,7 @@ chars=''
 functions = ''
 for i in range(2000):
     chars=chars + str(dna_data.protein[i])
-    functions = functions + dna_data.function_index[i]
+    functions = functions + str(dna_data.function_index[i])
 chars = chars + 'X'
 chars = list(sorted(set(chars)))
 functions = list(sorted(set(functions)))
