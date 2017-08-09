@@ -72,7 +72,7 @@ for i, a_str in enumerate(dna_data.protein):
     hot_x[i]=ctable1.encode(a_str, MAXLEN)
 #for i, index in enumerate(dna_data.function_index):
 #    hot_y[i]=ctable2.encode(index,1)
-hot_y = to_categorical(dna_data.function_index)
+hot_y = to_categorical(dna_data.function_index, num_classes=len(functions))
 print('SHAPE OF TARGET DATA', hot_y.shape)
 print hot_y[0:10]
 #Target is an array of dim (n, 1)
