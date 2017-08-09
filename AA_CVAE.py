@@ -44,6 +44,7 @@ dna_data = pd.read_csv('coreseed.train.tsv', names=["function_index","dna","prot
 n,m=dna_data.shape #m = 3
 dna_data.protein=dna_data.protein.str[:MAXLEN]
 print('SHAPE OF AA', dna_data.protein.shape)
+print('SHAPE OF FUNCTION INDEX', dna_data.function_index.shape)
 
 chars=''
 for i in range(2000):
@@ -55,6 +56,7 @@ print('number of amino acids', len(chars))
 ctable= CharacterTable(chars)
 
 #should we integer index encoder or one hot encode? try one hot encode first
+#should also hot-encode the function index
 print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
 hot=np.zeros((n,MAXLEN,len(chars)), dtype=np.bool)
 print('Shape of encoded data: ',hot.shape)
@@ -84,10 +86,9 @@ for i, a_str in enumerate(dna_data.protein):
 #some parameters
 batch_size = 150
 #original_dim = dna_train.shape[1]
-print("ORIGINAL DIM: ", hot.shape[1] )
+#print("ORIGINAL DIM: ", hot.shape[1])
 original_dim = hot.shape[1]
 latent_dim = 24
-#why is the latent dimension so small in comparison to the intermediate dim?
 intermediate_dim = 100
 epochs = 80
 epsilon_std = 1.0
