@@ -56,6 +56,7 @@ chars = list(sorted(set(chars)))
 functions = list(sorted(set(functions)))
 print('Number of amino acids', len(chars))
 print('Number of amino acid functions', len(functions))
+print functions
 
 ctable1= CharacterTable(chars)
 ctable2= CharacterTable(functions)
@@ -65,7 +66,7 @@ ctable2= CharacterTable(functions)
 print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
 hot_x=np.zeros((n,MAXLEN,len(chars)), dtype=np.bool)
 hot_y=np.zeros((n,1,len(functions)), dtype=np.bool)
-print('Shape of encoded X: ',hot.shape)
+#print('Shape of encoded X: ',hot.shape)
 for i, a_str in enumerate(dna_data.protein):
     hot_x[i]=ctable1.encode1(a_str, MAXLEN)
 for i, index in enumerate(dna_data.function_index):
