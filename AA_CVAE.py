@@ -46,7 +46,7 @@ aa=dna_data.protein.str[:MAXLEN]
 
 chars=''
 for i in range(25):
-    chars=chars + dna_data.aa[i]
+    chars=chars + aa[i]
 chars = sorted(set(chars))
 
 ctable= CharacterTable(chars)
