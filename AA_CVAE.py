@@ -73,6 +73,7 @@ for i, a_str in enumerate(dna_data.protein):
 #for i, index in enumerate(dna_data.function_index):
 #    hot_y[i]=ctable2.encode(index,1)
 hot_y = to_categorical(dna_data.function_index)
+print('SHAPE OF TARGET DATA', hot_y.shape)
 #Target is an array of dim (n, 1)
 
 #Do we need to one hot vectorize if we are using variational autoencoder?
@@ -98,7 +99,7 @@ hot_y = to_categorical(dna_data.function_index)
 batch_size = 150
 #original_dim = dna_train.shape[1]
 #print("ORIGINAL DIM: ", hot.shape[1])
-original_dim = hot.shape[1]
+#original_dim = hot.shape[1]
 latent_dim = 24
 intermediate_dim = 100
 epochs = 80
@@ -117,9 +118,9 @@ def sampling(args):
 #for Q(z|X) the encoder
 #this is a neural net with ONE hidden layer
 # x = Input(batch_shape=(batch_size, original_dim))
-x = Input(shape=(MAXLEN, len(chars)))
-cond = Input(shape=(1,))
-inputs = np.concatenate((x,cond), axis=1)
+# x = Input(shape=(MAXLEN, len(chars)))
+# cond = Input(shape=(1,))
+# inputs = np.concatenate((x,cond), axis=1)
 #inputs = pd.DataFrame.merge([x,cond], mode='concat', concat_axis = 1)
 
 #
