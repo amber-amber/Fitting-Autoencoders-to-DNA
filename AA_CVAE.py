@@ -68,7 +68,7 @@ hot_x=np.zeros((n,MAXLEN,len(chars)), dtype=np.bool)
 hot_y=np.zeros((n,1,len(functions)), dtype=np.bool)
 #print('Shape of encoded X: ',hot.shape)
 for i, a_str in enumerate(dna_data.protein):
-    hot_x[i]=ctable1.encode1(a_str, MAXLEN)
+    hot_x[i]=ctable1.encode(a_str, MAXLEN)
 for i, index in enumerate(dna_data.function_index):
     hot_y[i]=ctable2.encode(index,1)
 #Target is an array of dim (n, 1)
