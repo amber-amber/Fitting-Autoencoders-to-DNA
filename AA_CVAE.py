@@ -46,7 +46,7 @@ dna_data.protein=dna_data.protein.str[:MAXLEN]
 print('SHAPE OF AA', dna_data.protein.shape)
 
 chars=''
-for i in range(25):
+for i in range(50):
     chars=chars + dna_data.protein[i]
 chars = sorted(set(chars))
 print('number of amino acids', len(chars))
