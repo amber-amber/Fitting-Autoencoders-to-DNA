@@ -11,6 +11,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' #Hide messy TensorFlow warnings
 warnings.filterwarnings("ignore") #Hide messy Numpy warnings
 
 from keras.layers import Input, Dense, Lambda, LSTM, Dropout, Reshape
+from keras.utils import to_categorical
 from keras.models import Model
 from keras import backend as K
 from keras import metrics
@@ -65,12 +66,13 @@ ctable2= CharacterTable(functions)
 #should also hot-encode the function index
 print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
 hot_x=np.zeros((n,MAXLEN,len(chars)), dtype=np.bool)
-hot_y=np.zeros((n,1,len(functions)), dtype=np.bool)
+#hot_y=np.zeros((n,1,len(functions)), dtype=np.bool)
 #print('Shape of encoded X: ',hot.shape)
 for i, a_str in enumerate(dna_data.protein):
     hot_x[i]=ctable1.encode(a_str, MAXLEN)
-for i, index in enumerate(dna_data.function_index):
-    hot_y[i]=ctable2.encode(index,1)
+#for i, index in enumerate(dna_data.function_index):
+#    hot_y[i]=ctable2.encode(index,1)
+hot_y = to_categorical(dna_data.function_index)
 #Target is an array of dim (n, 1)
 
 #Do we need to one hot vectorize if we are using variational autoencoder?
