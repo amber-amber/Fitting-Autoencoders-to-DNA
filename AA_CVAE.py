@@ -47,7 +47,7 @@ print('SHAPE OF AA', dna_data.protein.shape)
 
 chars=''
 for i in range(n):
-    chars=chars + dna_data.protein[i]
+    chars=chars + str(dna_data.protein[i])
     chars = set(chars)
     if len(chars) == 21:
         break
