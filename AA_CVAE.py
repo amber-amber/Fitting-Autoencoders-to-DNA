@@ -45,7 +45,7 @@ n,m=dna_data.shape
 aa=dna_data.protein.str[:MAXLEN]
 
 chars=''
-for i in range(25)
+for i in range(25):
     chars=chars + dna_data.aa[i]
 chars = sorted(set(chars))
 
@@ -56,7 +56,7 @@ print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
 hot=np.zeros((n,MAXLEN,len(chars)), dtype=np.bool)
 print('Shape of encoded data: ',hot.shape)
 for i, a_str in enumerate(aa):
-    hot[i]=ctable.encode(dna_str, MAXLEN)
+    hot[i]=ctable.encode(a_str, MAXLEN)
 #Target is an array of dim (n, 1)
 
 #Do we need to one hot vectorize if we are using variational autoencoder?
