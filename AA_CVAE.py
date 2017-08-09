@@ -47,10 +47,13 @@ print('SHAPE OF AA', dna_data.protein.shape)
 print('SHAPE OF FUNCTION INDEX', dna_data.function_index.shape)
 
 chars=''
+functions = ''
 for i in range(2000):
     chars=chars + str(dna_data.protein[i])
+    functions = functions + dna_data.function_index[i]
 chars = chars + 'X'
 chars = list(sorted(set(chars)))
+functions = list(sorted(set(functions)))
 print('number of amino acids', len(chars))
 
 ctable= CharacterTable(chars)
