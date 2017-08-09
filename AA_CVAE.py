@@ -43,8 +43,8 @@ dna_data = pd.read_csv('coreseed.train.tsv', names=["function_index","dna","prot
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 n,m=dna_data.shape #m = 3
 dna_data.protein=dna_data.protein.str[:MAXLEN]
-print('SHAPE OF AA', dna_data.protein.shape)
-print('SHAPE OF FUNCTION INDEX', dna_data.function_index.shape)
+#print('SHAPE OF AA', dna_data.protein.shape)
+#print('SHAPE OF FUNCTION INDEX', dna_data.function_index.shape)
 
 chars=''
 functions = ''
@@ -54,17 +54,22 @@ for i in range(2000):
 chars = chars + 'X'
 chars = list(sorted(set(chars)))
 functions = list(sorted(set(functions)))
-print('number of amino acids', len(chars))
+print('Number of amino acids', len(chars))
+print('Number of amino acid functions', len(functions))
 
-ctable= CharacterTable(chars)
+ctable1= CharacterTable(chars)
+ctable2= CharacterTable(functions)
 
 #should we integer index encoder or one hot encode? try one hot encode first
 #should also hot-encode the function index
 print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
-hot=np.zeros((n,MAXLEN,len(chars)), dtype=np.bool)
-print('Shape of encoded data: ',hot.shape)
+hot_x=np.zeros((n,MAXLEN,len(chars)), dtype=np.bool)
+hot_y=np.zeros((n,1,len(functions)), dtype=np.bool)
+print('Shape of encoded X: ',hot.shape)
 for i, a_str in enumerate(dna_data.protein):
-    hot[i]=ctable.encode(a_str, MAXLEN)
+    hot_x[i]=ctable1.encode1(a_str, MAXLEN)
+for i, index in enumerate(dna_data.function_index):
+    hot_y[i]=ctable2.encode(index,1)
 #Target is an array of dim (n, 1)
 
 #Do we need to one hot vectorize if we are using variational autoencoder?
