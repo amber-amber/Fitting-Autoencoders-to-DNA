@@ -107,7 +107,8 @@ def sampling(args):
 # x = Input(batch_shape=(batch_size, original_dim))
 x = Input(shape=(MAXLEN, len(chars)))
 cond = Input(shape=(1,))
-inputs = pd.concat([x,cond], axis=1)
+#inputs = pd.concat([x,cond], axis=1)
+inputs = merge([x,cond], mode='concat', concat_axis = 1)
 
 #
 #
