@@ -42,12 +42,12 @@ MAXLEN = 30
 dna_data = pd.read_csv('coreseed.train.tsv', names=["function_index","dna","protein"], usecols=[1,5,6], nrows= n_rows, delimiter ='\t', header =0)
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 n,m=dna_data.shape #m = 3
-dna_data.aa=dna_data.protein.str[:MAXLEN]
-print('SHAPE OF AA', dna_data.aa.shape)
+dna_data.protein=dna_data.protein.str[:MAXLEN]
+print('SHAPE OF AA', dna_data.protein.shape)
 
 chars=''
 for i in range(25):
-    chars=chars + dna_data.aa[i]
+    chars=chars + dna_data.protein[i]
 chars = sorted(set(chars))
 print('number of amino acids', len(chars))
 
@@ -57,7 +57,7 @@ ctable= CharacterTable(chars)
 print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
 hot=np.zeros((n,MAXLEN,len(chars)), dtype=np.bool)
 print('Shape of encoded data: ',hot.shape)
-for i, a_str in enumerate(dna_data.aa):
+for i, a_str in enumerate(dna_data.protein):
     hot[i]=ctable.encode(a_str, MAXLEN)
 #Target is an array of dim (n, 1)
 
