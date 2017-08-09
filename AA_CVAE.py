@@ -46,6 +46,7 @@ n,m=dna_data.shape #m = 3
 dna_data.protein=dna_data.protein.str[:MAXLEN]
 #print('SHAPE OF AA', dna_data.protein.shape)
 #print('SHAPE OF FUNCTION INDEX', dna_data.function_index.shape)
+print(dna_data.function_index[0])
 
 chars=''
 functions = ''
@@ -72,9 +73,9 @@ for i, a_str in enumerate(dna_data.protein):
     hot_x[i]=ctable1.encode(a_str, MAXLEN)
 #for i, index in enumerate(dna_data.function_index):
 #    hot_y[i]=ctable2.encode(index,1)
-hot_y = to_categorical(dna_data.function_index)
-print('SHAPE OF TARGET DATA', hot_y.shape)
-print hot_y[8]
+#hot_y = to_categorical(dna_data.function_index)
+#print('SHAPE OF TARGET DATA', hot_y.shape)
+#print hot_y[8]
 #Target is an array of dim (n, 1)
 
 #Do we need to one hot vectorize if we are using variational autoencoder?
