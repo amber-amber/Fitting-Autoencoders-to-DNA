@@ -48,10 +48,9 @@ print('SHAPE OF AA', dna_data.protein.shape)
 chars=''
 for i in range(n):
     chars=chars + str(dna_data.protein[i])
-    chars = set(chars)
+    chars = list(set(chars))
     if len(chars) == 21:
         break
-chars = sorted(chars)
 print('number of amino acids', len(chars))
 
 ctable= CharacterTable(chars)
