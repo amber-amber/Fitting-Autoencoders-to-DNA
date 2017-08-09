@@ -49,19 +49,19 @@ dna_data.protein=dna_data.protein.str[:MAXLEN]
 print(dna_data.function_index[0])
 
 chars=''
-functions = ''
+#functions = ''
 for i in range(2000):
     chars=chars + str(dna_data.protein[i])
     functions = functions + str(dna_data.function_index[i])
 chars = chars + 'X'
 chars = list(sorted(set(chars)))
-functions = list(sorted(set(functions)))
+#functions = list(sorted(set(functions)))
 print('Number of amino acids', len(chars))
-print('Number of amino acid functions', len(functions))
-print functions
+#print('Number of amino acid functions', len(functions))
+#print functions
 
 ctable1= CharacterTable(chars)
-ctable2= CharacterTable(functions)
+#ctable2= CharacterTable(functions)
 
 #should we integer index encoder or one hot encode? try one hot encode first
 #should also hot-encode the function index
@@ -73,9 +73,9 @@ for i, a_str in enumerate(dna_data.protein):
     hot_x[i]=ctable1.encode(a_str, MAXLEN)
 #for i, index in enumerate(dna_data.function_index):
 #    hot_y[i]=ctable2.encode(index,1)
-#hot_y = to_categorical(dna_data.function_index)
+hot_y = to_categorical(dna_data.function_index)
 #print('SHAPE OF TARGET DATA', hot_y.shape)
-#print hot_y[8]
+print hot_y[8]
 #Target is an array of dim (n, 1)
 
 #Do we need to one hot vectorize if we are using variational autoencoder?
