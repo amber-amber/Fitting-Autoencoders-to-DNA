@@ -46,14 +46,17 @@ n,m=dna_data.shape #m = 3
 dna_data.protein=dna_data.protein.str[:MAXLEN]
 #print('SHAPE OF AA', dna_data.protein.shape)
 #print('SHAPE OF FUNCTION INDEX', dna_data.function_index.shape)
-print(dna_data.function_index[0:100])
+#print(dna_data.function_index[0:100])
 
-chars=''
-#functions = ''
-for i in range(2000):
+chars='X'
+functions = []
+prev_function_index = 0
+for i in range(n_rows):
     chars=chars + str(dna_data.protein[i])
-    #functions = functions + str(dna_data.function_index[i])
-chars = chars + 'X'
+    if dna_data.function_index[i] != prev_function_index:
+        functions.append(dna_data.function_index[i])
+    if len(functions)==10:
+        break
 chars = list(sorted(set(chars)))
 #functions = list(sorted(set(functions)))
 print('Number of amino acids', len(chars))
