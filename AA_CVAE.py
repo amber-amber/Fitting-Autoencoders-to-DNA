@@ -43,9 +43,6 @@ MAXLEN = 30
 dna_data = pd.read_csv('coreseed.train.tsv', names=["function_index","dna","protein"], usecols=[1,5,6], nrows= n_rows, delimiter ='\t', header =0)
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 dna_data.protein=dna_data.protein.str[:MAXLEN]
-#print('SHAPE OF AA', dna_data.protein.shape)
-#print('SHAPE OF FUNCTION INDEX', dna_data.function_index.shape)
-#print(dna_data.function_index[0:100])
 
 chars='X'
 functions = []
@@ -68,6 +65,7 @@ print(functions)
 less_index_dna= dna_data[:stop_here]
 n,m = less_index_dna.shape
 print(n,m)
+less_index_dna.function_index=less_index_dna.function_index.str 
 
 ctable1= CharacterTable(chars)
 #ctable2= CharacterTable(functions)
@@ -78,8 +76,7 @@ print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
 hot_x=np.zeros((stop_here,MAXLEN,len(chars)), dtype=np.bool)
 for i, a_str in enumerate(less_index_dna.protein):
     hot_x[i]=ctable1.encode(a_str, MAXLEN)
-hot_y = to_categorical(less_index_dna.function_index)
-print(hot_y[8])
+#hot_y = to_categorical(less_index_dna.function_index) Can't use this since it gives me like
 
 #Do we need to one hot vectorize if we are using variational autoencoder?
 
