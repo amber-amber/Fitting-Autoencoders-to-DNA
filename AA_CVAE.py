@@ -42,7 +42,6 @@ n_rows = 200000
 MAXLEN = 30
 dna_data = pd.read_csv('coreseed.train.tsv', names=["function_index","dna","protein"], usecols=[1,5,6], nrows= n_rows, delimiter ='\t', header =0)
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
-n,m=dna_data.shape #m = 3
 dna_data.protein=dna_data.protein.str[:MAXLEN]
 #print('SHAPE OF AA', dna_data.protein.shape)
 #print('SHAPE OF FUNCTION INDEX', dna_data.function_index.shape)
@@ -51,19 +50,24 @@ dna_data.protein=dna_data.protein.str[:MAXLEN]
 chars='X'
 functions = []
 prev_function_index = 0
+stop_here = 0
 for i in range(n_rows):
     chars=chars + str(dna_data.protein[i])
     if dna_data.function_index[i] != prev_function_index:
         functions.append(dna_data.function_index[i])
     prev_function_index = dna_data.function_index[i]
-    if len(functions)==10:
+    if len(functions)==11:
         print("This is where we stopped: ", i)
+        stop_here=i-1
         break
 chars = list(sorted(set(chars)))
 #functions = list(sorted(set(functions)))
 print('Number of amino acids', len(chars))
-#print('Number of amino acid functions', len(functions))
-print functions
+print(functions)
+
+less_index_dna= dna_data[:stop_here]
+n,m = less_index_dna.shape
+print(n,m)
 
 ctable1= CharacterTable(chars)
 #ctable2= CharacterTable(functions)
@@ -71,7 +75,7 @@ ctable1= CharacterTable(chars)
 #should we integer index encoder or one hot encode? try one hot encode first
 #should also hot-encode the function index
 print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
-hot_x=np.zeros((n,MAXLEN,len(chars)), dtype=np.bool)
+hot_x=np.zeros((stop_here,MAXLEN,len(chars)), dtype=np.bool)
 for i, a_str in enumerate(dna_data.protein):
     hot_x[i]=ctable1.encode(a_str, MAXLEN)
 hot_y = to_categorical(dna_data.function_index)
