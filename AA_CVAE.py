@@ -53,8 +53,6 @@ class ModCharacterTable(object):
             x = x. argmax(axis=-1)
         return ''.join(self.indices_char[x] for x in x)
 
-start_time = time.time()
-
 n_rows = 200000
 MAXLEN = 30
 dna_data = pd.read_csv('coreseed.train.tsv', names=["function_index","dna","protein"], usecols=[1,5,6], nrows= n_rows, delimiter ='\t', header =0, dtype=str)
