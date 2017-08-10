@@ -66,6 +66,7 @@ functions = list(set(functions))
 print('Number of amino acids', len(chars))
 print(chars)
 print(functions)
+digits = '0123456789'
 
 less_index_dna= dna_data[:stop_here]
 n,m = less_index_dna.shape
@@ -74,7 +75,7 @@ print(n,m)
 #      print less_index_dna[i][0]
 
 ctable1= CharacterTable(chars)
-ctable2= CharacterTable(functions)
+ctable2= CharacterTable(digits)
 
 #should we integer index encoder or one hot encode? try one hot encode first
 #should also hot-encode the function index
