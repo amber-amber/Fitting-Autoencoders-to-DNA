@@ -39,7 +39,7 @@ class CharacterTable(object):
 start_time = time.time()
 
 n_rows = 200000
-MAXLEN = 32
+MAXLEN = 30
 dna_data = pd.read_csv('coreseed.train.tsv', names=["function_index","dna","protein"], usecols=[1,5,6], nrows= n_rows, delimiter ='\t', header =0, dtype=str)
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 dna_data.protein=dna_data.protein.str[:MAXLEN]
@@ -60,11 +60,12 @@ for i in range(n_rows):
             print("This is where we stopped: ", i)
             stop_here=i-1
             break
-chars = chars + 'U'
+chars = chars
 chars = list(sorted(set(chars)))
 functions = list(set(functions))
 print('Number of amino acids', len(chars))
 print(chars)
+print(functions)
 
 #less_index_dna= dna_data[:stop_here]
 #n,m = less_index_dna.shape
@@ -73,7 +74,7 @@ print(chars)
 #      print less_index_dna[i][0]
 
 ctable1= CharacterTable(chars)
-#ctable2= CharacterTable(functions)
+ctable2= CharacterTable(functions)
 
 #should we integer index encoder or one hot encode? try one hot encode first
 #should also hot-encode the function index
@@ -84,8 +85,8 @@ for i, a_str in enumerate(dna_data.protein):
     hot_x[i]=ctable1.encode(a_str, MAXLEN)
 # for i, index in enumerate(less_index_dna.function_index):
 #     hot_y[i]=ctable2.encode(index,1)
-hot_y = to_categorical(dna_data.function_index)
-print(hot_y[[8]])
+#hot_y = to_categorical(dna_data.function_index)
+#print(hot_y[[8]])
 
 #Do we need to one hot vectorize if we are using variational autoencoder?
 
