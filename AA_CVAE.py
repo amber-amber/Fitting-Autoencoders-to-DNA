@@ -83,6 +83,7 @@ for i, a_str in enumerate(less_index_dna.protein):
 # for i, index in enumerate(less_index_dna.function_index):
 #     hot_y[i]=ctable2.encode(index,1)
 hot_y = to_categorical(less_index_dna.function_index)
+print(hot_y[[8]])
 
 #Do we need to one hot vectorize if we are using variational autoencoder?
 
