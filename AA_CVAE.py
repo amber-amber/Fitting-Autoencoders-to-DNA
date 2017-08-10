@@ -39,7 +39,7 @@ class CharacterTable(object):
 start_time = time.time()
 
 n_rows = 200000
-MAXLEN = 30
+MAXLEN = 32
 dna_data = pd.read_csv('coreseed.train.tsv', names=["function_index","dna","protein"], usecols=[1,5,6], nrows= n_rows, delimiter ='\t', header =0, dtype=str)
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 dna_data.protein=dna_data.protein.str[:MAXLEN]
