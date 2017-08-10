@@ -44,8 +44,8 @@ class ModCharacterTable(object):
 
     def encode(self, C):
         x = np.zeros(len(self.chars))
-        for i,c in enumerate(C):
-            x[i, self.char_indices[c]]=1
+        for c in enumerate(C):
+            x[self.char_indices[c]]=1
         return x
 
     def decode(self, x, calc_argmax=True):
