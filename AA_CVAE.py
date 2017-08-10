@@ -44,6 +44,7 @@ dna_data = pd.read_csv('coreseed.train.tsv', names=["function_index","dna","prot
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 dna_data.protein=dna_data.protein.str[:MAXLEN]
 
+num_functions = 10
 chars='X'
 functions = []
 prev_function_index = 0
@@ -53,7 +54,7 @@ for i in range(n_rows):
     if dna_data.function_index[i] != prev_function_index:
         functions.append(dna_data.function_index[i])
     prev_function_index = dna_data.function_index[i]
-    if len(functions)==11:
+    if len(functions)==(num_functions+):
         print("This is where we stopped: ", i)
         stop_here=i-1
         break
@@ -65,18 +66,21 @@ print(functions)
 less_index_dna= dna_data[:stop_here]
 n,m = less_index_dna.shape
 print(n,m)
-less_index_dna.function_index=less_index_dna.function_index.str 
+less_index_dna.function_index=less_index_dna.function_index.str
 
 ctable1= CharacterTable(chars)
-#ctable2= CharacterTable(functions)
+ctable2= CharacterTable(functions)
 
 #should we integer index encoder or one hot encode? try one hot encode first
 #should also hot-encode the function index
 print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
 hot_x=np.zeros((stop_here,MAXLEN,len(chars)), dtype=np.bool)
+hot_y=np.zeros((stop_here,1,num_functions), dtype=np.bool)
 for i, a_str in enumerate(less_index_dna.protein):
     hot_x[i]=ctable1.encode(a_str, MAXLEN)
-#hot_y = to_categorical(less_index_dna.function_index) Can't use this since it gives me like
+for i, index in enumerate(less.index_dna.function_index):
+    hot_y[i]=ctable2.encode(index,1)
+#hot_y = to_categorical(less_index_dna.function_index) 
 
 #Do we need to one hot vectorize if we are using variational autoencoder?
 
