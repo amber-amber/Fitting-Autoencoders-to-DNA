@@ -63,7 +63,7 @@ chars = list(sorted(set(chars)))
 #functions = list(sorted(set(functions)))
 print('Number of amino acids', len(chars))
 #print('Number of amino acid functions', len(functions))
-#print functions
+print functions
 
 ctable1= CharacterTable(chars)
 #ctable2= CharacterTable(functions)
