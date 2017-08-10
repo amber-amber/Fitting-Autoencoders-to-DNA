@@ -67,9 +67,9 @@ print('Number of amino acids', len(chars))
 print(chars)
 print(functions)
 
-#less_index_dna= dna_data[:stop_here]
-#n,m = less_index_dna.shape
-#print(n,m)
+less_index_dna= dna_data[:stop_here]
+n,m = less_index_dna.shape
+print(n,m)
 # for i in range(100):
 #      print less_index_dna[i][0]
 
@@ -79,12 +79,12 @@ ctable2= CharacterTable(functions)
 #should we integer index encoder or one hot encode? try one hot encode first
 #should also hot-encode the function index
 print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
-hot_x=np.zeros((n_rows,MAXLEN,len(chars)), dtype=np.bool)
-#hot_y=np.zeros((stop_here,1,num_functions), dtype=np.bool)
-for i, a_str in enumerate(dna_data.protein):
+hot_x=np.zeros((n,MAXLEN,len(chars)), dtype=np.bool)
+hot_y=np.zeros((n,1,len(functions)), dtype=np.bool)
+for i, a_str in enumerate(less_index_dna.protein):
     hot_x[i]=ctable1.encode(a_str, MAXLEN)
-# for i, index in enumerate(less_index_dna.function_index):
-#     hot_y[i]=ctable2.encode(index,1)
+for i, index in enumerate(less_index_dna.function_index):
+    hot_y[i]=ctable2.encode(index,1)
 #hot_y = to_categorical(dna_data.function_index)
 #print(hot_y[[8]])
 
