@@ -66,9 +66,8 @@ print(functions)
 less_index_dna= dna_data[:stop_here]
 n,m = less_index_dna.shape
 print(n,m)
-for i in range(n):
-    a= str(less_index_dna[i][0])
-    less_index_dna[i][0]=a
+# for i in range(n):
+#     less_index_dna[i][0]= str(less_index_dna[i][0])
 
 ctable1= CharacterTable(chars)
 ctable2= CharacterTable(functions)
@@ -82,7 +81,7 @@ for i, a_str in enumerate(less_index_dna.protein):
     hot_x[i]=ctable1.encode(a_str, MAXLEN)
 for i, index in enumerate(less.index_dna.function_index):
     hot_y[i]=ctable2.encode(index,1)
-#hot_y = to_categorical(less_index_dna.function_index)
+hot_y = to_categorical(less_index_dna.function_index,num_classes=num_functions)
 
 #Do we need to one hot vectorize if we are using variational autoencoder?
 
