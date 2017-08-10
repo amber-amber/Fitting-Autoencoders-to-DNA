@@ -38,7 +38,7 @@ class CharacterTable(object):
 
 start_time = time.time()
 
-n_rows = 5293
+n_rows = 200000
 MAXLEN = 32
 dna_data = pd.read_csv('coreseed.train.tsv', names=["function_index","dna","protein"], usecols=[1,5,6], nrows= n_rows, delimiter ='\t', header =0, dtype=str)
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
@@ -46,24 +46,24 @@ dna_data.protein=dna_data.protein.str[:MAXLEN]
 print(type(dna_data.function_index[69]))
 #dna_data.function_index=dna_data.function_index.str()
 
-#num_functions = 10
+num_functions = 10
 chars='X'
-#functions = []
-#prev_function_index = 0
+functions = []
+prev_function_index = '666'
 stop_here = 0
 for i in range(n_rows):
     chars=chars + str(dna_data.protein[i])
-#    if dna_data.function_index[i] != prev_function_index:
-#        functions.append(dna_data.function_index[i])
-#    prev_function_index = dna_data.function_index[i]
-#    if len(functions)==(num_functions+1):
-#        print("This is where we stopped: ", i)
-#        stop_here=i-1
-#       break
+       if dna_data.function_index[i] != prev_function_index:
+           functions.append(dna_data.function_index[i])
+       prev_function_index = dna_data.function_index[i]
+       if len(functions)==(num_functions+1):
+           print("This is where we stopped: ", i)
+           stop_here=i-1
+          break
 chars = list(sorted(set(chars)))
-#functions = list(sorted(set(functions)))
+functions = list(sorted(set(functions)))
 print('Number of amino acids', len(chars))
-#print(functions)
+print(functions)
 
 #less_index_dna= dna_data[:stop_here]
 #n,m = less_index_dna.shape
