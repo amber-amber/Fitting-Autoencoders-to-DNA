@@ -60,6 +60,7 @@ for i in range(n_rows):
             print("This is where we stopped: ", i)
             stop_here=i-1
             break
+chars = chars + 'U'
 chars = list(sorted(set(chars)))
 functions = list(set(functions))
 print('Number of amino acids', len(chars))
