@@ -92,6 +92,7 @@ print(n,m)
 
 ctable1= CharacterTable(chars)
 ctable2= ModCharacterTable(functions)
+print ctable2
 
 #should we integer index encoder or one hot encode? try one hot encode first
 #should also hot-encode the function index
