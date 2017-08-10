@@ -46,7 +46,7 @@ n,m=dna_data.shape #m = 3
 dna_data.protein=dna_data.protein.str[:MAXLEN]
 #print('SHAPE OF AA', dna_data.protein.shape)
 #print('SHAPE OF FUNCTION INDEX', dna_data.function_index.shape)
-print(dna_data.function_index[0])
+print(dna_data.function_index[0:100])
 
 chars=''
 #functions = ''
