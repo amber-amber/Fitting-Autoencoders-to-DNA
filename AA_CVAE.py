@@ -55,6 +55,7 @@ for i in range(n_rows):
     chars=chars + str(dna_data.protein[i])
     if dna_data.function_index[i] != prev_function_index:
         functions.append(dna_data.function_index[i])
+    prev_function_index = dna_data.function_index[i]
     if len(functions)==10:
         print("This is where we stopped: ", i)
         break
