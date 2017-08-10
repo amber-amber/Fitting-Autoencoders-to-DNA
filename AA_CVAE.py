@@ -53,15 +53,15 @@ prev_function_index = '666'
 stop_here = 0
 for i in range(n_rows):
     chars=chars + str(dna_data.protein[i])
-       if dna_data.function_index[i] != prev_function_index:
-           functions.append(dna_data.function_index[i])
-       prev_function_index = dna_data.function_index[i]
-       if len(functions)==(num_functions+1):
-           print("This is where we stopped: ", i)
-           stop_here=i-1
-          break
+    if dna_data.function_index[i] != prev_function_index:
+        functions.append(dna_data.function_index[i])
+        prev_function_index = dna_data.function_index[i]
+        if len(functions)==(num_functions+1):
+            print("This is where we stopped: ", i)
+            stop_here=i-1
+            break
 chars = list(sorted(set(chars)))
-functions = list(sorted(set(functions)))
+functions = list(set(functions))
 print('Number of amino acids', len(chars))
 print(functions)
 
