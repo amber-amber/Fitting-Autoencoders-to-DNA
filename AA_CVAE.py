@@ -67,7 +67,8 @@ less_index_dna= dna_data[:stop_here]
 n,m = less_index_dna.shape
 print(n,m)
 for i in range(n):
-    less_index_dna[i][0]=str(less_index_dna[i][0])
+    a= str(less_index_dna[i][0])
+    less_index_dna[i][0]=a
 
 ctable1= CharacterTable(chars)
 ctable2= CharacterTable(functions)
