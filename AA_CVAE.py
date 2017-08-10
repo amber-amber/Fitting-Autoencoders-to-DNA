@@ -76,7 +76,7 @@ ctable1= CharacterTable(chars)
 #should also hot-encode the function index
 print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
 hot_x=np.zeros((stop_here,MAXLEN,len(chars)), dtype=np.bool)
-for i, a_str in enumerate(dna_data.protein):
+for i, a_str in enumerate(less_index_dna.protein):
     hot_x[i]=ctable1.encode(a_str, MAXLEN)
 hot_y = to_categorical(dna_data.function_index)
 
