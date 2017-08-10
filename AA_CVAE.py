@@ -78,6 +78,7 @@ for i in range(n_rows):
 chars = chars
 chars = list(sorted(set(chars)))
 functions = list(set(functions))
+functions.append('5')
 print('Number of amino acids', len(chars))
 print(chars)
 print(functions)
