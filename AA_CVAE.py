@@ -43,6 +43,7 @@ MAXLEN = 32
 dna_data = pd.read_csv('coreseed.train.tsv', names=["function_index","dna","protein"], usecols=[1,5,6], nrows= n_rows, delimiter ='\t', header =0, dtype=str)
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 dna_data.protein=dna_data.protein.str[:MAXLEN]
+print(type(dna_data.function_index[69]))
 #dna_data.function_index=dna_data.function_index.str()
 
 num_functions = 10
