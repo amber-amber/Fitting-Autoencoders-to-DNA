@@ -79,11 +79,11 @@ ctable1= CharacterTable(chars)
 print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
 hot_x=np.zeros((n_rows,MAXLEN,len(chars)), dtype=np.bool)
 #hot_y=np.zeros((stop_here,1,num_functions), dtype=np.bool)
-for i, a_str in enumerate(less_index_dna.protein):
+for i, a_str in enumerate(dna_data.protein):
     hot_x[i]=ctable1.encode(a_str, MAXLEN)
 # for i, index in enumerate(less_index_dna.function_index):
 #     hot_y[i]=ctable2.encode(index,1)
-hot_y = to_categorical(less_index_dna.function_index)
+hot_y = to_categorical(dna_data.function_index)
 print(hot_y[[8]])
 
 #Do we need to one hot vectorize if we are using variational autoencoder?
