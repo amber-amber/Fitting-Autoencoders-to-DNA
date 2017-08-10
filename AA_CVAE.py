@@ -36,6 +36,23 @@ class CharacterTable(object):
             x = x. argmax(axis=-1)
         return ''.join(self.indices_char[x] for x in x)
 
+class ModCharacterTable(object):
+    def __init__(self, chars):
+        self.chars=sorted(set(chars))
+        self.char_indices=dict((c,i) for i,c in enumerate(self.chars))
+        self.indices_char=dict((i,c) for i,c in enumerate(self.chars))
+
+    def encode(self, C):
+        x = np.zeros(len(self.chars))
+        for i,c in enumerate(C):
+            x[i, self.char_indices[c]]=1
+        return x
+
+    def decode(self, x, calc_argmax=True):
+        if calc_argmax:
+            x = x. argmax(axis=-1)
+        return ''.join(self.indices_char[x] for x in x)
+
 start_time = time.time()
 
 n_rows = 200000
@@ -66,7 +83,7 @@ functions = list(set(functions))
 print('Number of amino acids', len(chars))
 print(chars)
 print(functions)
-digits = '0123456789'
+#digits = '0123456789'
 
 less_index_dna= dna_data[:stop_here]
 n,m = less_index_dna.shape
@@ -75,7 +92,7 @@ print(n,m)
 #      print less_index_dna[i][0]
 
 ctable1= CharacterTable(chars)
-ctable2= CharacterTable(digits)
+ctable2= ModCharacterTable(functions)
 
 #should we integer index encoder or one hot encode? try one hot encode first
 #should also hot-encode the function index
@@ -85,7 +102,7 @@ hot_y=np.zeros((n,1,len(functions)), dtype=np.bool)
 for i, a_str in enumerate(less_index_dna.protein):
     hot_x[i]=ctable1.encode(a_str, MAXLEN)
 for i, index in enumerate(less_index_dna.function_index):
-    hot_y[i]=ctable2.encode(index,3)
+    hot_y[i]=ctable2.encode(index)
 #hot_y = to_categorical(dna_data.function_index)
 #print(hot_y[[8]])
 
