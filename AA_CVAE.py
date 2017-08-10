@@ -40,7 +40,7 @@ start_time = time.time()
 
 n_rows = 200000
 MAXLEN = 30
-dna_data = pd.read_csv('coreseed.train.tsv', names=["function_index","dna","protein"], usecols=[1,5,6], nrows= n_rows, delimiter ='\t', header =0)
+dna_data = pd.read_csv('coreseed.train.tsv', names=["function_index","dna","protein"], usecols=[1,5,6], nrows= n_rows, delimiter ='\t', header =0, dtype=str)
 #dna_data = pd.read_csv('coreseed.train.tsv', names=["dna","protein"], usecols=[5,6], delimiter ='\t', header =0)
 dna_data.protein=dna_data.protein.str[:MAXLEN]
 #dna_data.function_index=dna_data.function_index.str()
@@ -67,8 +67,8 @@ print(functions)
 less_index_dna= dna_data[:stop_here]
 n,m = less_index_dna.shape
 print(n,m)
-for i in range(100):
-     print less_index_dna[i][0]
+# for i in range(100):
+#      print less_index_dna[i][0]
 
 ctable1= CharacterTable(chars)
 #ctable2= CharacterTable(functions)
@@ -82,7 +82,7 @@ for i, a_str in enumerate(less_index_dna.protein):
     hot_x[i]=ctable1.encode(a_str, MAXLEN)
 # for i, index in enumerate(less_index_dna.function_index):
 #     hot_y[i]=ctable2.encode(index,1)
-#hot_y = to_categorical(less_index_dna.function_index,num_classes=num_functions)
+hot_y = to_categorical(less_index_dna.function_index)
 
 #Do we need to one hot vectorize if we are using variational autoencoder?
 
