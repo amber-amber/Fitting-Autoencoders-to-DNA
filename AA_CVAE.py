@@ -63,7 +63,7 @@ for i in range(n_rows):
 chars = list(sorted(set(chars)))
 functions = list(set(functions))
 print('Number of amino acids', len(chars))
-print(functions)
+print(chars)
 
 #less_index_dna= dna_data[:stop_here]
 #n,m = less_index_dna.shape
