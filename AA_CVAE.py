@@ -56,6 +56,7 @@ for i in range(n_rows):
     if dna_data.function_index[i] != prev_function_index:
         functions.append(dna_data.function_index[i])
     if len(functions)==10:
+        print("This is where we stopped: ", i)
         break
 chars = list(sorted(set(chars)))
 #functions = list(sorted(set(functions)))
@@ -119,7 +120,7 @@ def sampling(args):
 #this is a neural net with ONE hidden layer
 x = Input(shape=(MAXLEN, len(chars)))
 cond = Input(shape=(cond_dim,))
-inputs = concatenate([x,cond])
+#inputs = concatenate([x,cond])
 #inputs = pd.DataFrame.merge([x,cond], mode='concat', concat_axis = 1)
 
 #
