@@ -109,7 +109,7 @@ for i, a_str in enumerate(less_index_dna.protein):
 
 enc = OneHotEncoder(n_values='auto', categorical_features='all')
 hot_y = enc.fit(less_index_dna.function_index)
-print("Shape of hot_y: ", hot_y.shape)
+print hot_y
 
 #Do we need to one hot vectorize if we are using variational autoencoder?
 
