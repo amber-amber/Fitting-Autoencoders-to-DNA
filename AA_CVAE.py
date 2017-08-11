@@ -107,9 +107,10 @@ for i, a_str in enumerate(less_index_dna.protein):
 #hot_y = to_categorical(dna_data.function_index)
 #print(hot_y[[8]])
 
-enc = OneHotEncoder(n_values='auto', categorical_features='all')
-hot_y = enc.fit(less_index_dna.function_index)
-print hot_y
+enc = OneHotEncoder()
+enc.fit(less_index_dna.function_index)
+onehotlabels= enc.transform((less_index_dna.function_index).toarray())
+print onehotlabels.shape
 
 #Do we need to one hot vectorize if we are using variational autoencoder?
 
