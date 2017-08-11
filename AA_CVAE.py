@@ -10,6 +10,7 @@ import warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' #Hide messy TensorFlow warnings
 warnings.filterwarnings("ignore") #Hide messy Numpy warnings
 
+from sklearn.preprocessing import OneHotEncoder
 from keras.layers import Input, Dense, Lambda, LSTM, Dropout, Reshape, concatenate
 from keras.utils import to_categorical
 from keras.models import Model
@@ -78,7 +79,7 @@ for i in range(n_rows):
 chars = chars
 chars = list(sorted(set(chars)))
 functions = list(set(functions))
-functions.append('5')
+#functions.append('5')
 print('Number of amino acids', len(chars))
 print(chars)
 print(functions)
@@ -98,13 +99,17 @@ print ctable2
 #should also hot-encode the function index
 print('VECTORIZATION and/or CREATING TRAIN/TEST SETS.......')
 hot_x=np.zeros((n,MAXLEN,len(chars)), dtype=np.bool)
-hot_y=np.zeros((n,1,len(functions)), dtype=np.bool)
+#hot_y=np.zeros((n,1,len(functions)), dtype=np.bool)
 for i, a_str in enumerate(less_index_dna.protein):
     hot_x[i]=ctable1.encode(a_str, MAXLEN)
-for i, index in enumerate(less_index_dna.function_index):
-    hot_y[i]=ctable2.encode(index)
+# for i, index in enumerate(less_index_dna.function_index):
+#     hot_y[i]=ctable2.encode(index)
 #hot_y = to_categorical(dna_data.function_index)
 #print(hot_y[[8]])
+
+enc = OneHotEncoder(n_values='auto', categorical_features='all')
+hot_y = enc.fit(less_index_dna.functions_index)
+
 
 #Do we need to one hot vectorize if we are using variational autoencoder?
 
